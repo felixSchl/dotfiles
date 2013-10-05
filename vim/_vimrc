@@ -1,0 +1,224 @@
+" vim:foldmethod=marker
+" Init vundle {{{
+" -------------------------------------------------------------------------------
+let s:isWin=0
+let s:isLinux=0
+if has('win32') || has('win64')
+  set rtp+=~/vimfiles/bundle/vundle/
+  call vundle#rc('$HOME/vimfiles/bundle/')
+  let s:isWin=1
+else
+  " Usual quickstart instructions
+  set rtp+=~/.vim/bundle/vundle/
+  call vundle#rc()
+  let s:isLinux=1
+endif
+" }}}
+" Mandatory settings {{{
+" ------------------------------------------------------------------------------
+set nocompatible
+filetype indent plugin on
+" }}}
+" Mappings {{{
+" ------------------------------------------------------------------------------
+let mapleader = ","
+if (s:isWin)
+    nmap <F2>           :e ~/_vimrc<CR>
+    nmap <F3>           :so ~/_vimrc<CR>
+    nmap <leader>E      :Start explorer %s:h<CR>
+else
+    nmap <F2>           :e ~/.vimrc<CR>
+    nmap <F3>           :so ~/.vimrc<CR>
+endif
+nmap Q              <Nop>
+
+" Easier copying and pasting
+nmap <leader>p      "*p
+nmap <leader>P      "*P
+imap <C-_>          <C-R>
+vmap <leader>y      "*y
+nmap <leader>yy     "*yy
+
+" Start the current file as a command
+nmap <leader>e      :Start %s<CR>
+
+" Easier window navigation
+nmap <C-H>          <C-W>h
+nmap <C-J>          <C-W>j
+nmap <C-K>          <C-W>k
+nmap <C-L>          <C-W>l
+
+" Easier saving and closing
+nmap <C-Z>          :w<CR>
+nmap <C-Q>          <C-W>q
+
+" }}}
+" Bundles {{{
+Bundle 'flazz/vim-colorschemes'
+Bundle 'tpope/vim-dispatch'
+Bundle 'airblade/vim-gitgutter'
+Bundle 'endel/actionscript.vim'
+Bundle 'tsaleh/vim-matchit'
+Bundle "MarcWeber/vim-addon-mw-utils"
+Bundle "tomtom/tlib_vim"
+Bundle 'garbas/vim-snipmate'
+Bundle 'honza/vim-snippets'
+Bundle 'Lokaltog/vim-easymotion'
+Bundle 'tpope/vim-surround'
+Bundle 'Townk/vim-autoclose'
+Bundle 'maciakl/vim-neatstatus'
+Bundle 'ervandew/supertab'
+Bundle 'vim-scripts/mru.vim'
+nmap <C-\>      :Mru<CR>
+
+Bundle 'vim-scripts/glsl.vim'
+au BufNewFile,BufRead *.shader set filetype=glsl.c
+
+Bundle 'nosami/Omnisharp'
+au filetype cs nmap <buffer> <leader>gs :OmniSharpStartServer<CR>
+au filetype cs nmap <buffer> <leader>gt :OmniSharpHighlightTypes<CR>
+au filetype cs nmap <buffer> <leader>gd :OmniSharpGotoDefinition<CR>
+au filetype cs nmap <buffer> <leader>gu :OmniSharpFindUsages<CR>
+au filetype cs nmap <buffer> <leader>gr :OmniSharpGetCodeActions<CR>
+au filetype cs nmap <buffer> <leader>ge :OmniSharpFindSyntaxErrors<CR>
+
+Bundle 'scrooloose/syntastic'
+let g:syntastic_python_checkers=['flake8', 'pylint']
+let g:syntastic_python_checker_args='--ignore=E501,E225'
+
+" Bundle 'klen/python-mode'
+" let g:pymode_rope = 0
+" 
+" Bundle 'davidhalter/jedi-vim'
+" let g:jedi#use_tabs_not_buffers = 0
+
+Bundle 'tomtom/tcomment_vim'
+nmap <C-K> gcc
+vmap <C-K> gc
+
+Bundle 'scrooloose/nerdtree'
+nmap <F6> :NERDTreeToggle<CR>
+let g:NERDTreeHighlightCursorline=1
+let g:NERDTreeWinPos="right"
+
+Bundle 'majutsushi/tagbar'
+nmap <leader>t :TagbarToggle<CR>
+
+Bundle 'thinca/vim-visualstar'
+nmap * <Plug>(visualstar-*)N
+
+Bundle 'milkypostman/vim-togglelist'
+nmap <script> <silent> <leader>l :call ToggleLocationList()<CR>
+nmap <script> <silent> <leader>q :call ToggleQuickfixList()<CR>
+
+Bundle 'vim-scripts/toggle_words.vim'
+nmap <leader>\ :ToggleWord<CR>
+
+Bundle 'sjl/gundo.vim'
+nmap <leader>u :GundoToggle<CR>
+"
+Bundle 'tyru/open-browser.vim'
+let g:netrw_nogx = 1
+nmap gx <Plug>(openbrowser-smart-search)
+vmap gx <Plug>(openbrowser-smart-search)
+
+Bundle 'kien/ctrlp.vim'
+let g:ctrlp_map = '<c-p>'
+" }}}
+" Global preferences {{{
+" ------------------------------------------------------------------------------
+syntax on
+set sessionoptions-=options
+set sessionoptions-=folds
+set viminfo='50,<1000,s100,n~/.viminfo
+set autoindent
+set backspace=indent,eol,start
+set complete-=1
+set showmatch
+set smarttab
+set nrformats-=octal
+set shiftround
+set ttimeout
+set ttimeoutlen=50
+set exrc
+set hidden
+set nospell
+set showcmd
+set incsearch
+set hlsearch
+set number
+set norelativenumber
+set nowrap
+set ruler
+set linebreak
+set showbreak=>>
+set cursorline
+set ignorecase
+set smartcase
+set expandtab
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set textwidth=80
+set foldmethod=syntax
+set formatoptions-=t
+set foldcolumn=3
+autocmd FileType qf wincmd J " quickfix list at bottom
+set wildignore=*.o,*.obj,*.bak,*.exe,*.pyc,*.swp
+set suffixes+=.class,.exe,.o,.obj,.dat,.dll,.aux,.pdf,.gch
+set wildmenu
+set wildmode=longest:list,full
+" }}}
+" Theme  {{{
+" ------------------------------------------------------------------------------
+set colorcolumn=+1
+if has("gui_running")
+    colorscheme molokai
+    highlight ColorColumn guibg=#2d2d2d ctermbg=255
+    highlight CursorLine guibg=#333333
+    autocmd InsertEnter * highlight CursorLine guibg=#113254 guifg=NONE
+    autocmd InsertLeave * highlight CursorLine guibg=#333333 guifg=NONE
+    " TagHighlight classes
+    highlight Class guifg=#5199C0
+    highlight LocalVariable guifg=#ffffff
+    highlight Function guifg=#F4F885
+    if (s:isWin)
+        set guifont=Consolas:h11:cANSI
+    else
+        set guifont=DejaVu\ \Sans\ Mono\ for\ Powerline\ 9 
+    endif
+else
+    set t_Co=256
+    colorscheme xoria256
+    highlight ColorColumn guibg=#2d2d2d ctermbg=0
+endif
+" }}}
+" Filetypes {{{
+" ------------------------------------------------------------------------------
+" Adobe extend script 
+autocmd BufRead,BufNewFile *.jsx setlocal filetype=javascript
+autocmd BufRead,BufNewFile *.jsxinc setlocal filetype=javascript
+
+" CSharp
+autocmd BufRead,BufNewFile *.cshtml setlocal filetype=xml.javascript
+
+" ActionScript3
+autocmd BufRead,BufNewFile *.as set filetype=as3
+
+" Markdown
+autocmd BufRead,BufNewFile *.md set filetype=markdown
+
+" Java
+let java_highlight_all=1
+let java_highlight_debug=1
+autocmd filetype java setlocal suffixesadd+=.java
+" }}}
+" ------------------------------------------------------------------------------ 
+" Custard Square {{{
+" ------------------------------------------------------------------------------
+" Start the smartfox server
+func! StartSFS2X()
+    execute 'Start ' . $SFS2X . '/restartSFS2X.bat' 
+endfunc
+nmap <silent> <leader>ws         :call StartSFS2X()<CR>
+" }}}
