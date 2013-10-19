@@ -10,9 +10,9 @@
   <colors>
     <option name="ADDED_LINES_COLOR" value="85b28c" />
     <option name="CARET_COLOR" value="97a0ca" />
-    <option name="CARET_ROW_COLOR" value="28282d" />
+    <option name="CARET_ROW_COLOR" value="19272d" />
     <option name="CONSOLE_BACKGROUND_KEY" value="15191a" />
-    <option name="GUTTER_BACKGROUND" value="c0f0f" />
+    <option name="GUTTER_BACKGROUND" value="232526" />
     <option name="HTML_TAG_TREE_LEVEL0" value="fefffd" />
     <option name="HTML_TAG_TREE_LEVEL1" value="d6cfd6" />
     <option name="HTML_TAG_TREE_LEVEL2" value="a1a19e" />
@@ -20,7 +20,7 @@
     <option name="HTML_TAG_TREE_LEVEL4" value="5d5f62" />
     <option name="HTML_TAG_TREE_LEVEL5" value="625e6a" />
     <option name="INDENT_GUIDE" value="444a4f" />
-    <option name="LINE_NUMBERS_COLOR" value="85cc4c" />
+    <option name="LINE_NUMBERS_COLOR" value="bcbcbc" />
     <option name="METHOD_SEPARATORS_COLOR" value="30354f" />
     <option name="MODIFIED_LINES_COLOR" value="89a9ce" />
     <option name="RECURSIVE_CALL_ATTRIBUTES" value="978358" />
@@ -572,6 +572,13 @@
         <option name="EFFECT_TYPE" value="1" />
       </value>
     </option>
+    <option name="GENERIC_SERVER_ERROR_OR_WARNING">
+      <value>
+        <option name="EFFECT_COLOR" value="7b7a79" />
+        <option name="EFFECT_TYPE" value="2" />
+        <option name="ERROR_STRIPE_COLOR" value="64605d" />
+      </value>
+    </option>
     <option name="GQL_ID">
       <value>
         <option name="FOREGROUND" value="678cb1" />
@@ -965,27 +972,27 @@
     </option>
     <option name="PY.BUILTIN_NAME">
       <value>
-        <option name="FOREGROUND" value="bd9164" />
+        <option name="FOREGROUND" value="f4f885" />
         <option name="EFFECT_TYPE" value="-1" />
       </value>
     </option>
     <option name="PY.CLASS_DEFINITION">
       <value>
-        <option name="FOREGROUND" value="bd9164" />
+        <option name="FOREGROUND" value="f4f885" />
         <option name="FONT_TYPE" value="1" />
         <option name="EFFECT_TYPE" value="-1" />
       </value>
     </option>
     <option name="PY.DECORATOR">
       <value>
-        <option name="FOREGROUND" value="29ff50" />
+        <option name="FOREGROUND" value="f92672" />
         <option name="FONT_TYPE" value="3" />
         <option name="EFFECT_TYPE" value="-1" />
       </value>
     </option>
     <option name="PY.DOC_COMMENT">
       <value>
-        <option name="FOREGROUND" value="494b49" />
+        <option name="FOREGROUND" value="475357" />
         <option name="FONT_TYPE" value="2" />
       </value>
     </option>
@@ -997,20 +1004,20 @@
     </option>
     <option name="PY.FUNC_DEFINITION">
       <value>
-        <option name="FOREGROUND" value="bd9164" />
+        <option name="FOREGROUND" value="f4f885" />
         <option name="FONT_TYPE" value="1" />
         <option name="EFFECT_TYPE" value="-1" />
       </value>
     </option>
     <option name="PY.INVALID_STRING_ESCAPE">
       <value>
-        <option name="BACKGROUND" value="8c6456" />
+        <option name="BACKGROUND" value="8c0a20" />
         <option name="EFFECT_TYPE" value="1" />
       </value>
     </option>
     <option name="PY.KEYWORD">
       <value>
-        <option name="FOREGROUND" value="f460cd" />
+        <option name="FOREGROUND" value="f92672" />
         <option name="FONT_TYPE" value="1" />
       </value>
     </option>
@@ -1033,7 +1040,7 @@
     </option>
     <option name="PY.PREDEFINED_DEFINITION">
       <value>
-        <option name="FOREGROUND" value="bd9164" />
+        <option name="FOREGROUND" value="f4f885" />
         <option name="FONT_TYPE" value="3" />
         <option name="EFFECT_TYPE" value="-1" />
       </value>
@@ -1047,25 +1054,25 @@
     </option>
     <option name="PY.SELF_PARAMETER">
       <value>
-        <option name="FOREGROUND" value="f45bd9" />
+        <option name="FOREGROUND" value="f92672" />
         <option name="FONT_TYPE" value="1" />
         <option name="EFFECT_TYPE" value="1" />
       </value>
     </option>
     <option name="PY.STRING.B">
       <value>
-        <option name="FOREGROUND" value="f49e67" />
+        <option name="FOREGROUND" value="e6db74" />
       </value>
     </option>
     <option name="PY.STRING.U">
       <value>
-        <option name="FOREGROUND" value="f49e67" />
+        <option name="FOREGROUND" value="e6db74" />
         <option name="EFFECT_TYPE" value="-1" />
       </value>
     </option>
     <option name="PY.VALID_STRING_ESCAPE">
       <value>
-        <option name="FOREGROUND" value="f49e67" />
+        <option name="FOREGROUND" value="e6db74" />
         <option name="FONT_TYPE" value="3" />
       </value>
     </option>
