@@ -16,6 +16,7 @@ endif
 " }}}
 " Mandatory settings {{{
 " ------------------------------------------------------------------------------
+set guioptions+=M
 set nocompatible
 filetype indent plugin on
 " }}}
@@ -46,68 +47,56 @@ imap <C-_>          <C-R>
 vmap <leader>y      "*yy
 
 " Start the current file as a command
-nmap <leader>e      :Start %s<CR>
-
+nmap <leader>e      :Start %s:h<CR>
 " Easier window navigation
 nmap <C-H>          <C-W>h
 nmap <C-J>          <C-W>j
 nmap <C-K>          <C-W>k
 nmap <C-L>          <C-W>l
-
-" Easier saving and closing
-nmap <C-Z>          :w<CR>
-nmap <C-Q>          <C-W>q
-
+" Mouse scrolling
+map <ScrollWheelUp> <C-Y>
+map <S-ScrollWheelUp> <C-U>
+map <ScrollWheelDown> <C-E>
+map <S-ScrollWheelDown> <C-D>
 " }}}
 " Bundles {{{
 Bundle 'flazz/vim-colorschemes'
 Bundle 'tpope/vim-dispatch'
-Bundle 'airblade/vim-gitgutter'
 Bundle 'endel/actionscript.vim'
+Bundle 'tpope/vim-fugitive'
 Bundle 'tsaleh/vim-matchit'
-Bundle "MarcWeber/vim-addon-mw-utils"
-Bundle "tomtom/tlib_vim"
+Bundle 'MarcWeber/vim-addon-mw-utils'
+Bundle 'tomtom/tlib_vim'
 Bundle 'garbas/vim-snipmate'
 Bundle 'honza/vim-snippets'
-Bundle 'Lokaltog/vim-easymotion'
 Bundle 'tpope/vim-surround'
 Bundle 'Townk/vim-autoclose'
 Bundle 'ervandew/supertab'
-Bundle 'bling/vim-airline'
-Bundle 'tpope/vim-rails'
-Bundle 'slim-template/vim-slim'
-Bundle 'tpope/vim-bundler.git'
-
-Bundle 'mattn/emmet-vim.git'
-let g:user_emmet_expandabbr_key='<c-e>'
-let g:use_emmet_complete_tag=1
+Bundle 'vim-scripts/cg.vim'
 
 Bundle 'vim-scripts/mru.vim'
-nmap <C-\>      :Mru<CR>
+nmap <leader>r      :MRU<CR>
 
 Bundle 'vim-scripts/glsl.vim'
 au BufNewFile,BufRead *.shader set filetype=glsl.c
 
-Bundle 'nosami/Omnisharp'
-au filetype cs nmap <buffer> <leader>gs :OmniSharpStartServer<CR>
-au filetype cs nmap <buffer> <leader>gt :OmniSharpHighlightTypes<CR>
-au filetype cs nmap <buffer> <leader>gd :OmniSharpGotoDefinition<CR>
-au filetype cs nmap <buffer> <leader>gu :OmniSharpFindUsages<CR>
-au filetype cs nmap <buffer> <leader>gr :OmniSharpGetCodeActions<CR>
-au filetype cs nmap <buffer> <leader>ge :OmniSharpFindSyntaxErrors<CR>
+" Bundle 'nosami/Omnisharp'
+" au filetype cs nmap <buffer> <leader>gs :OmniSharpStartServer<CR>
+" au filetype cs nmap <buffer> <leader>gt :OmniSharpHighlightTypes<CR>
+" au filetype cs nmap <buffer> <leader>gd :OmniSharpGotoDefinition<CR>
+" au filetype cs nmap <buffer> <leader>gu :OmniSharpFindUsages<CR>
+" au filetype cs nmap <buffer> <leader>gr :OmniSharpGetCodeActions<CR>
+" au filetype cs nmap <buffer> <leader>ge :OmniSharpFindSyntaxErrors<CR>
 
-Bundle 'scrooloose/syntastic'
-let g:syntastic_python_checkers=['flake8', 'pylint']
-let g:syntastic_python_checker_args='--ignore=E501,E225'
+" Bundle 'scrooloose/syntastic'
+" let g:syntastic_python_checkers=['flake8', 'pylint']
+" let g:syntastic_python_checker_args='--ignore=E501,E225'
 
-" Bundle 'klen/python-mode'
-" let g:pymode_rope = 0
-" 
-" Bundle 'davidhalter/jedi-vim'
-" let g:jedi#use_tabs_not_buffers = 0
+Bundle 'dhruvasagar/vim-table-mode'
+let g:table_mode_corner = '+'
 
 Bundle 'tomtom/tcomment_vim'
-nmap <C-K> gcc
+nmap <C-K> gccj
 vmap <C-K> gc
 
 Bundle 'scrooloose/nerdtree'
@@ -116,8 +105,8 @@ let g:NERDTreeHighlightCursorline=1
 let g:NERDTreeWinPos="right"
 
 Bundle 'majutsushi/tagbar'
-let g:tagbar_left=1
 nmap <F5> :TagbarToggle<CR>
+let g:tagbar_left=1
 
 Bundle 'thinca/vim-visualstar'
 nmap * <Plug>(visualstar-*)N
@@ -129,9 +118,9 @@ nmap <script> <silent> <leader>q :call ToggleQuickfixList()<CR>
 Bundle 'vim-scripts/toggle_words.vim'
 nmap <leader>\ :ToggleWord<CR>
 
-Bundle 'sjl/gundo.vim'
-nmap <leader>u :GundoToggle<CR>
-"
+" Bundle 'sjl/gundo.vim'
+" nmap <leader>u :GundoToggle<CR>
+
 Bundle 'tyru/open-browser.vim'
 let g:netrw_nogx = 1
 nmap gx <Plug>(openbrowser-smart-search)
@@ -139,6 +128,7 @@ vmap gx <Plug>(openbrowser-smart-search)
 
 Bundle 'kien/ctrlp.vim'
 let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlPCurWD'
 " }}}
 " Global preferences {{{
 " ------------------------------------------------------------------------------
@@ -184,6 +174,7 @@ set suffixes+=.class,.exe,.o,.obj,.dat,.dll,.aux,.pdf,.gch
 set wildmenu
 set wildmode=longest:list,full
 set laststatus=2
+set ttimeoutlen=50
 " }}}
 " Theme  {{{
 " ------------------------------------------------------------------------------
@@ -198,10 +189,18 @@ if has("gui_running")
     highlight LocalVariable guifg=#ffffff
     highlight Function guifg=#F4F885
     if (s:isWin)
-        set guifont=Consolas:h13:cANSI
+        set guifont=Consolas:h11:cANSI
     else
         set guifont=DejaVu\ \Sans\ Mono
     endif
+    set guioptions-=m
+    set guioptions+=c
+    set guioptions-=l
+    set guioptions-=L
+    set guioptions-=r
+    set guioptions-=R
+    set guioptions-=b
+    set guioptions-=T
 else
     set t_Co=256
     if (s:isLinux)
@@ -216,23 +215,30 @@ hi ColorColumn guibg=#2d2d2d ctermbg=235
 " Adobe extend script 
 autocmd BufRead,BufNewFile *.jsx setlocal filetype=javascript
 autocmd BufRead,BufNewFile *.jsxinc setlocal filetype=javascript
+autocmd BufRead,BufNewFile *.mxi setlocal filetype=xml
 
 " CSharp
 autocmd BufRead,BufNewFile *.cshtml setlocal filetype=xml.javascript
 
 " ActionScript3
-autocmd BufRead,BufNewFile *.as set filetype=as3
+autocmd BufRead,BufNewFile *.as setlocal filetype=as3
 
-" Markdown
-autocmd BufRead,BufNewFile *.md set filetype=markdown
+" Mardown
+autocmd BufRead,BufNewFile *.md setlocal filetype=markdown
 
 " Java
 let java_highlight_all=1
 let java_highlight_debug=1
 autocmd filetype java setlocal suffixesadd+=.java
 
+" Unity Shaders
+autocmd BufRead,BufNewFile *.shader setlocal filetype=cg
+
 " HTML
 autocmd filetype html setl shiftwidth=2
+
+" Python
+autocmd filetype python setlocal foldmethod=indent
 
 " Ruby
 autocmd filetype ruby setl shiftwidth=2
@@ -249,4 +255,30 @@ func! StartSFS2X()
     execute 'Start ' . $SFS2X . '/restartSFS2X.bat' 
 endfunc
 nmap <silent> <leader>ws         :call StartSFS2X()<CR>
+" }}}
+
+" Tracking {{{
+" ------------------------------------------------------------------------------
+func! TrackerAddItem()
+    let b:ve=&ve
+    set ve=all
+    execute 'normal 0$  v80|r-$hhhhxxxxx iOPEN'
+    let &ve=b:ve
+    unlet! b:ve
+endfunc
+
+func! TrackerCloseItem()
+    execute 'normal 0 /OPEN$/ciwDONE'
+endfunc
+
+func! TrackerOpenItem()
+    execute 'normal 0 /DONE$/ciwOPEN'
+endfunc
+
+nmap <silent> <leader>ma        :call TrackerAddItem()<CR>
+nmap <silent> <leader>mc        :call TrackerCloseItem()<CR>
+nmap <silent> <leader>mo        :call TrackerOpenItem()<CR>
+vmap <silent> <leader>ma        :call TrackerAddItem()<CR>
+vmap <silent> <leader>mc        :call TrackerCloseItem()<CR>
+vmap <silent> <leader>mo        :call TrackerOpenItem()<CR>
 " }}}
