@@ -34,6 +34,10 @@ else
 endif
 nmap Q              <Nop>
 
+" " Select visual lines by default
+" nmap j gj
+" nmap k gk
+
 " Fastes insert mode leaving
 imap jk <ESC>
 
@@ -48,16 +52,28 @@ vmap <leader>y      "*yy
 
 " Start the current file as a command
 nmap <leader>e      :Start %s:h<CR>
+
 " Easier window navigation
 nmap <C-H>          <C-W>h
 nmap <C-J>          <C-W>j
 nmap <C-K>          <C-W>k
 nmap <C-L>          <C-W>l
+
 " Mouse scrolling
 map <ScrollWheelUp> <C-Y>
 map <S-ScrollWheelUp> <C-U>
 map <ScrollWheelDown> <C-E>
 map <S-ScrollWheelDown> <C-D>
+
+" Always launch command editing window
+" nmap : q:i
+" nmap / q:i
+" nmap ? q?i
+
+" Faster substitute prompt
+nmap <leader>; :%s:::g<Left><Left><Left>
+nmap <leader>' :%s:::gc<Left><Left><Left><Left>
+
 " }}}
 " Bundles {{{
 Bundle 'flazz/vim-colorschemes'
@@ -73,6 +89,17 @@ Bundle 'tpope/vim-surround'
 Bundle 'Townk/vim-autoclose'
 Bundle 'ervandew/supertab'
 Bundle 'vim-scripts/cg.vim'
+Bundle 'dart-lang/dart-vim-plugin'
+Bundle 'vim-scripts/VOoM'
+
+Bundle 'vim-pandoc/vim-pandoc-syntax'
+let g:pandoc_use_embeds_in_codeblocks_for_langs = [
+    \ "python"
+    \ ]
+
+Bundle 'vim-pandoc/vim-pantondoc'
+let g:pantondoc_use_pandoc_markdown = 1
+let g:pandoc_use_conceal = 0
 
 Bundle 'vim-scripts/mru.vim'
 nmap <leader>r      :MRU<CR>
@@ -89,15 +116,13 @@ au BufNewFile,BufRead *.shader set filetype=glsl.c
 " au filetype cs nmap <buffer> <leader>ge :OmniSharpFindSyntaxErrors<CR>
 
 " Bundle 'scrooloose/syntastic'
-" let g:syntastic_python_checkers=['flake8', 'pylint']
-" let g:syntastic_python_checker_args='--ignore=E501,E225'
 
 Bundle 'dhruvasagar/vim-table-mode'
 let g:table_mode_corner = '+'
 
 Bundle 'tomtom/tcomment_vim'
-nmap <C-K> gccj
-vmap <C-K> gc
+nmap <C-i> gccj
+vmap <C-i> gcc
 
 Bundle 'scrooloose/nerdtree'
 nmap <F6> :NERDTreeToggle<CR>
@@ -133,6 +158,7 @@ let g:ctrlp_cmd = 'CtrlPCurWD'
 " Global preferences {{{
 " ------------------------------------------------------------------------------
 syntax on
+set lazyredraw
 set sessionoptions-=options
 set sessionoptions-=folds
 set viminfo='50,<1000,s100,n~/.viminfo
@@ -166,6 +192,7 @@ set shiftwidth=4
 set softtabstop=4
 set textwidth=80
 set foldmethod=syntax
+set foldlevelstart=99
 set formatoptions-=t
 set foldcolumn=3
 autocmd FileType qf wincmd J " quickfix list at bottom
@@ -193,6 +220,10 @@ if has("gui_running")
     else
         set guifont=DejaVu\ \Sans\ Mono
     endif
+    set enc=utf-8
+    set fileencoding=utf-8
+    set fileencodings=ucs-bom,utf8,prc
+    set guifontwide=NSimsun:h12
     set guioptions-=m
     set guioptions+=c
     set guioptions-=l
@@ -223,9 +254,6 @@ autocmd BufRead,BufNewFile *.cshtml setlocal filetype=xml.javascript
 " ActionScript3
 autocmd BufRead,BufNewFile *.as setlocal filetype=as3
 
-" Mardown
-autocmd BufRead,BufNewFile *.md setlocal filetype=markdown
-
 " Java
 let java_highlight_all=1
 let java_highlight_debug=1
@@ -233,6 +261,9 @@ autocmd filetype java setlocal suffixesadd+=.java
 
 " Unity Shaders
 autocmd BufRead,BufNewFile *.shader setlocal filetype=cg
+
+" Dart
+autocmd BufRead,BufNewFile *.dart setlocal filetype=dart
 
 " HTML
 autocmd filetype html setl shiftwidth=2
@@ -256,7 +287,6 @@ func! StartSFS2X()
 endfunc
 nmap <silent> <leader>ws         :call StartSFS2X()<CR>
 " }}}
-
 " Tracking {{{
 " ------------------------------------------------------------------------------
 func! TrackerAddItem()
@@ -281,4 +311,23 @@ nmap <silent> <leader>mo        :call TrackerOpenItem()<CR>
 vmap <silent> <leader>ma        :call TrackerAddItem()<CR>
 vmap <silent> <leader>mc        :call TrackerCloseItem()<CR>
 vmap <silent> <leader>mo        :call TrackerOpenItem()<CR>
+" }}}
+" ... {{{
+func! ConvertAsToDart()
+  execute '%s/\<var\>//'
+  execute '%s/\<private\>//'
+  execute '%s/\<protected\>//'
+  execute '%s/\<public\>//'
+  execute '%s/\<override\>//'
+  execute '%s/\<uint\>/int/'
+  execute '%s/\<function\>//'
+  execute '%s/\<Number\>/num/'
+  execute '%s/\<Boolean\>/bool/'
+  execute '%s/\<Math\.max\>/max/'
+  execute '%s/\<Math\.min\>/min/'
+  execute 'normal >>'
+  execute 'normal <<'
+endfunc
+nmap <silent> <leader>c :call ConvertAsToDart()<CR>
+"
 " }}}
