@@ -91,6 +91,7 @@ Bundle 'ervandew/supertab'
 Bundle 'vim-scripts/cg.vim'
 Bundle 'dart-lang/dart-vim-plugin'
 Bundle 'vim-scripts/VOoM'
+Bundle 'vim-scripts/CRefVim'
 
 Bundle 'vim-pandoc/vim-pandoc-syntax'
 let g:pandoc_use_embeds_in_codeblocks_for_langs = [
@@ -99,7 +100,7 @@ let g:pandoc_use_embeds_in_codeblocks_for_langs = [
 
 Bundle 'vim-pandoc/vim-pantondoc'
 let g:pantondoc_use_pandoc_markdown = 1
-let g:pandoc_use_conceal = 0
+" let g:pandoc_use_conceal = 0
 
 Bundle 'vim-scripts/mru.vim'
 nmap <leader>r      :MRU<CR>
@@ -182,7 +183,7 @@ set norelativenumber
 set nowrap
 set ruler
 set linebreak
-set showbreak=>>
+let &showbreak='... '
 set cursorline
 set ignorecase
 set smartcase
@@ -207,14 +208,49 @@ set ttimeoutlen=50
 " ------------------------------------------------------------------------------
 set colorcolumn=+1
 if has("gui_running")
-    colorscheme molokai
-    highlight CursorLine guibg=#333333
-    autocmd InsertEnter * highlight CursorLine guibg=#113254 guifg=NONE
-    autocmd InsertLeave * highlight CursorLine guibg=#333333 guifg=NONE
+
+    " Specify all desired colorschemes
+    let s:colos = [
+                \  "molokai"
+                \ ,"candyman"
+                \ ]
+
+    " Gets a random number in a range
+    func! Rand(lower, upper)
+python << EOF
+import vim, random
+r = random.randint(int(vim.eval('a:lower')), int(vim.eval('a:upper')))
+vim.command('return ' + str(r))
+EOF
+    endfunc
+
+    " Load the color scheme
+    execute 'colorscheme ' . s:colos[Rand(0, len(s:colos) - 1)]
+
+    " Overwrites
+    if (g:colors_name == "molokai")
+        hi! link Conceal Operator
+        hi! link ColorColumn WarningMsg
+
+        hi! CursorLine guibg=#333333 guifg=NONE
+        " Blue insert mode cursor line
+        autocmd InsertEnter * highlight CursorLine guibg=#113254 guifg=NONE
+        autocmd InsertLeave * highlight CursorLine guibg=#333333 guifg=NONE
+
+    elseif (g:colors_name == "candyman")
+        hi! link ColorColumn SpecialKey
+
+        hi! CursorLine guibg=#222222 guifg=NONE
+        " Blue insert mode cursor line
+        autocmd InsertEnter * hi! CursorLine guibg=#002143 guifg=NONE
+        autocmd InsertLeave * hi! CursorLine guibg=#222222 guifg=NONE
+    end
+
     " TagHighlight classes
     highlight Class guifg=#5199C0
     highlight LocalVariable guifg=#ffffff
     highlight Function guifg=#F4F885
+
     if (s:isWin)
         set guifont=Consolas:h11:cANSI
     else
@@ -239,7 +275,6 @@ else
     endif
     hi CursorLine term=NONE cterm=NONE ctermbg=236
 endif
-hi ColorColumn guibg=#2d2d2d ctermbg=235
 " }}}
 " Filetypes {{{
 " ------------------------------------------------------------------------------
