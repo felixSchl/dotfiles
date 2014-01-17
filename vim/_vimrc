@@ -1,4 +1,4 @@
-" vim:foldmethod=marker
+" vim: set foldmethod=marker:
 " Init vundle {{{
 " -------------------------------------------------------------------------------
 let s:isWin=0
@@ -134,6 +134,7 @@ Bundle 'majutsushi/tagbar'
 nmap <F5> :TagbarToggle<CR>
 let g:tagbar_left=1
 
+Bundle "nelstrom/vim-visual-star-search"
 Bundle 'thinca/vim-visualstar'
 nmap * <Plug>(visualstar-*)N
 
@@ -211,9 +212,10 @@ set fileencodings=ucs-bom,utf8,prc
 " ------------------------------------------------------------------------------
 set colorcolumn=+1
 
+" Random Colors {{{2
 func! Rand(lower, upper)
-    " Gets random number in range (lower, upper)
-    python << EOF
+" Gets random number in range (lower, upper)
+python << EOF
 import vim, random
 r = random.randint(int(vim.eval('a:lower')), int(vim.eval('a:upper')))
 vim.command('return ' + str(r))
@@ -224,7 +226,7 @@ func! SetRandomColorScheme(colors)
     " Load the color scheme
     execute 'colorscheme ' . a:colors[Rand(0, len(a:colors) - 1)]
 
-    " Cursor line colors
+    " Cursor line default colors
     let cursor_line_normal_bg = "#333333"
     let cursor_line_insert_bg = "#002143"
 
@@ -232,27 +234,54 @@ func! SetRandomColorScheme(colors)
     if (g:colors_name == "molokai")
         hi! link Conceal Operator
         hi! link ColorColumn WarningMsg
-
     elseif (g:colors_name == "candyman")
         let cursor_line_normal_bg = "#222222"
         hi! link ColorColumn SpecialKey
-
+    elseif (g:colors_name == "jellybeans")
+        let cursor_line_normal_bg = "#222222"
+        hi! link ColorColumn SpecialKey
     elseif (g:colors_name == "xoria256")
         hi! link ColorColumn VertSplit
-
+    elseif (g:colors_name == "herald")
+        hi! link ColorColumn StatusLine
+    elseif (g:colors_name == "lilypink")
+        hi! link ColorColumn StatusLineNC
+    elseif (g:colors_name == "wombat256mod")
+        hi! link ColorColumn SpecialKey
+    elseif (g:colors_name == "inkpot")
+        hi! link ColorColumn LineNr
+    elseif (g:colors_name == "pf_earth")
+        hi! link ColorColumn LineNr
+    elseif (g:colors_name == "kolor")
+        hi! link ColorColumn LineNr
+    elseif (g:colors_name == "lodestone")
+        hi! link ColorColumn LineNr
+    elseif (g:colors_name == "darkburn")
+        hi! link ColorColumn ErrorMsg
     elseif (g:colors_name == "graywh")
     endif
 
+    " Set the cursor line color
     execute "hi! CursorLine guibg=".cursor_line_normal_bg." guifg=NONE"
     execute "au InsertEnter * hi! CursorLine guibg=".cursor_line_insert_bg." guifg=NONE"
     execute "au InsertLeave * hi! CursorLine guibg=".cursor_line_normal_bg." guifg=NONE"
 endfunc
+" }}}2
 
 if has("gui_running")
 
     let colors = []
     " call add(colors, "molokai")
     call add(colors, "candyman")
+    call add(colors, "darkburn")
+    call add(colors, "jellybeans")
+    call add(colors, "lilypink")
+    call add(colors, "wombat256mod")
+    " call add(colors, "inkpot")
+    call add(colors, "pf_earth")
+    call add(colors, "kolor")
+    call add(colors, "lodestone")
+    call add(colors, "herald")
     call SetRandomColorScheme(colors)
 
     " TagHighlight classes
@@ -321,7 +350,6 @@ autocmd filetype ruby setl shiftwidth=2
 autocmd BufRead,BufNewFile *.slim set filetype=slim
 
 " }}}
-" ------------------------------------------------------------------------------ 
 " Custard Square {{{
 " ------------------------------------------------------------------------------
 " Start the smartfox server
