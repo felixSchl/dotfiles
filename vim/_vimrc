@@ -224,35 +224,36 @@ func! SetRandomColorScheme(colors)
     " Load the color scheme
     execute 'colorscheme ' . a:colors[Rand(0, len(a:colors) - 1)]
 
+    " Cursor line colors
+    let cursor_line_normal_bg = "#333333"
+    let cursor_line_insert_bg = "#002143"
+
     " Overwrites
     if (g:colors_name == "molokai")
         hi! link Conceal Operator
         hi! link ColorColumn WarningMsg
 
-        hi! CursorLine guibg=#333333 guifg=NONE
-        " Blue insert mode cursor line
-        autocmd InsertEnter * highlight CursorLine guibg=#113254 guifg=NONE
-        autocmd InsertLeave * highlight CursorLine guibg=#333333 guifg=NONE
-
     elseif (g:colors_name == "candyman")
+        let cursor_line_normal_bg = "#222222"
         hi! link ColorColumn SpecialKey
-
-        hi! CursorLine guibg=#222222 guifg=NONE
-        " Blue insert mode cursor line
-        autocmd InsertEnter * hi! CursorLine guibg=#002143 guifg=NONE
-        autocmd InsertLeave * hi! CursorLine guibg=#222222 guifg=NONE
 
     elseif (g:colors_name == "xoria256")
         hi! link ColorColumn VertSplit
+
+    elseif (g:colors_name == "graywh")
     endif
+
+    execute "hi! CursorLine guibg=".cursor_line_normal_bg." guifg=NONE"
+    execute "au InsertEnter * hi! CursorLine guibg=".cursor_line_insert_bg." guifg=NONE"
+    execute "au InsertLeave * hi! CursorLine guibg=".cursor_line_normal_bg." guifg=NONE"
 endfunc
 
 if has("gui_running")
 
-    call SetRandomColorScheme([
-                \  "molokai"
-                \ ,"candyman"
-                \ ])
+    let colors = []
+    " call add(colors, "molokai")
+    call add(colors, "candyman")
+    call SetRandomColorScheme(colors)
 
     " TagHighlight classes
     highlight Class guifg=#5199C0
