@@ -203,29 +203,26 @@ set wildmenu
 set wildmode=longest:list,full
 set laststatus=2
 set ttimeoutlen=50
+set enc=utf-8
+set fileencoding=utf-8
+set fileencodings=ucs-bom,utf8,prc
 " }}}
 " Theme  {{{
 " ------------------------------------------------------------------------------
 set colorcolumn=+1
-if has("gui_running")
 
-    " Specify all desired colorschemes
-    let s:colos = [
-                \  "molokai"
-                \ ,"candyman"
-                \ ]
-
-    " Gets a random number in a range
-    func! Rand(lower, upper)
-python << EOF
+func! Rand(lower, upper)
+    " Gets random number in range (lower, upper)
+    python << EOF
 import vim, random
 r = random.randint(int(vim.eval('a:lower')), int(vim.eval('a:upper')))
 vim.command('return ' + str(r))
 EOF
-    endfunc
+endfunc
 
+func! SetRandomColorScheme(colors)
     " Load the color scheme
-    execute 'colorscheme ' . s:colos[Rand(0, len(s:colos) - 1)]
+    execute 'colorscheme ' . a:colors[Rand(0, len(a:colors) - 1)]
 
     " Overwrites
     if (g:colors_name == "molokai")
@@ -244,7 +241,18 @@ EOF
         " Blue insert mode cursor line
         autocmd InsertEnter * hi! CursorLine guibg=#002143 guifg=NONE
         autocmd InsertLeave * hi! CursorLine guibg=#222222 guifg=NONE
-    end
+
+    elseif (g:colors_name == "xoria256")
+        hi! link ColorColumn VertSplit
+    endif
+endfunc
+
+if has("gui_running")
+
+    call SetRandomColorScheme([
+                \  "molokai"
+                \ ,"candyman"
+                \ ])
 
     " TagHighlight classes
     highlight Class guifg=#5199C0
@@ -256,9 +264,6 @@ EOF
     else
         set guifont=DejaVu\ \Sans\ Mono
     endif
-    set enc=utf-8
-    set fileencoding=utf-8
-    set fileencodings=ucs-bom,utf8,prc
     set guifontwide=NSimsun:h12
     set guioptions-=m
     set guioptions+=c
@@ -271,7 +276,9 @@ EOF
 else
     set t_Co=256
     if (s:isLinux)
-        colorscheme xoria256
+        call SetRandomColorScheme([
+                    \  "xoria256"
+                    \ ])
     endif
     hi CursorLine term=NONE cterm=NONE ctermbg=236
 endif
