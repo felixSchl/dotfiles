@@ -230,9 +230,10 @@ func! SetRandomColorScheme(colors)
     let cursor_line_normal_bg = "#333333"
     let cursor_line_insert_bg = "#002143"
 
+    hi! link Conceal Operator
+
     " Overwrites
     if (g:colors_name == "molokai")
-        hi! link Conceal Operator
         hi! link ColorColumn WarningMsg
     elseif (g:colors_name == "candyman")
         let cursor_line_normal_bg = "#222222"
