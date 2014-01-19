@@ -1,4 +1,10 @@
-" vim: set foldmethod=marker:
+" vim: fdm=marker: foldlevel=0:
+" Globals {{{
+" -------------------------------------------------------------------------------
+if !exists('g:chosen_color')
+    let g:chosen_color = ""
+endif
+" }}}
 " Init vundle {{{
 " -------------------------------------------------------------------------------
 let s:isWin=0
@@ -16,13 +22,13 @@ endif
 " }}}
 " Mandatory settings {{{
 " ------------------------------------------------------------------------------
-set guioptions+=M
 set nocompatible
 filetype indent plugin on
 " }}}
 " Mappings {{{
 " ------------------------------------------------------------------------------
 let mapleader = ","
+let maplocalleader = "\\"
 if (s:isWin)
     nmap <F2>           :e ~/_vimrc<CR>
     nmap <F3>           :so ~/_vimrc<CR>
@@ -223,8 +229,16 @@ EOF
 endfunc
 
 func! SetRandomColorScheme(colors)
+    let color = ""
+    if (g:chosen_color != "")
+        let color = g:chosen_color
+    else
+        let color = a:colors[Rand(0, len(a:colors) - 1)]
+    endif
+
     " Load the color scheme
-    execute 'colorscheme ' . a:colors[Rand(0, len(a:colors) - 1)]
+    execute 'colorscheme ' . color
+    let g:chosen_color = g:colors_name
 
     " Cursor line default colors
     let cursor_line_normal_bg = "#333333"
@@ -244,7 +258,11 @@ func! SetRandomColorScheme(colors)
     elseif (g:colors_name == "xoria256")
         hi! link ColorColumn VertSplit
     elseif (g:colors_name == "herald")
-        hi! link ColorColumn StatusLine
+        if has("gui_running")
+            hi! link ColorColumn StatusLine
+        else
+            hi! link ColorColumn StatusLineNC
+        endif
     elseif (g:colors_name == "lilypink")
         hi! link ColorColumn StatusLineNC
     elseif (g:colors_name == "wombat256mod")
@@ -256,7 +274,11 @@ func! SetRandomColorScheme(colors)
     elseif (g:colors_name == "kolor")
         hi! link ColorColumn LineNr
     elseif (g:colors_name == "lodestone")
-        hi! link ColorColumn LineNr
+        if has("gui_running")
+            hi! link ColorColumn LineNr
+        else
+            hi! link ColorColumn Pmenu
+        endif
     elseif (g:colors_name == "darkburn")
         hi! link ColorColumn ErrorMsg
     elseif (g:colors_name == "graywh")
@@ -266,6 +288,7 @@ func! SetRandomColorScheme(colors)
     execute "hi! CursorLine guibg=".cursor_line_normal_bg." guifg=NONE"
     execute "au InsertEnter * hi! CursorLine guibg=".cursor_line_insert_bg." guifg=NONE"
     execute "au InsertLeave * hi! CursorLine guibg=".cursor_line_normal_bg." guifg=NONE"
+
 endfunc
 " }}}2
 
@@ -307,9 +330,14 @@ if has("gui_running")
 else
     set t_Co=256
     if (s:isLinux)
-        call SetRandomColorScheme([
-                    \  "xoria256"
-                    \ ])
+        let colors = []
+        call add(colors, "xoria256")
+        call add(colors, "candyman")
+        call add(colors, "jellybeans")
+        call add(colors, "kolor")
+        call add(colors, "lodestone")
+        call add(colors, "herald")
+        call SetRandomColorScheme(colors)
     endif
     hi CursorLine term=NONE cterm=NONE ctermbg=236
 endif
@@ -349,6 +377,9 @@ autocmd filetype ruby setl shiftwidth=2
 
 " Rails asset pipeline
 autocmd BufRead,BufNewFile *.slim set filetype=slim
+
+" Haskell
+autocmd filetype haskell nmap <script> <buffer> <localLeader>r :!runhaskell %<CR>
 
 " }}}
 " Custard Square {{{
