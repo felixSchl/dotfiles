@@ -33,6 +33,7 @@ if (s:isWin)
     nmap <F2>           :e ~/_vimrc<CR>
     nmap <F3>           :so ~/_vimrc<CR>
     nmap <leader>E      :Start explorer %:h<CR>
+    nmap <leader>C      :Start cmd %:h<CR>
 else
     nmap <F2>           :e ~/.vimrc<CR>
     nmap <F3>           :so ~/.vimrc<CR>
@@ -43,6 +44,12 @@ nmap Q              <Nop>
 " " Select visual lines by default
 " nmap j gj
 " nmap k gk
+
+" Swap v and CTRL-v (prefer block mode)
+nnoremap    v   <C-V>
+nnoremap <C-V>     v
+vnoremap    v   <C-V>
+vnoremap <C-V>     v
 
 " Fastes insert mode leaving
 imap jk <ESC>
@@ -98,6 +105,24 @@ Bundle 'vim-scripts/cg.vim'
 Bundle 'dart-lang/dart-vim-plugin'
 Bundle 'vim-scripts/VOoM'
 Bundle 'vim-scripts/CRefVim'
+Bundle 'vim-scripts/Haskell-Conceal'
+Bundle 'ivyl/vim-bling'
+
+Bundle 'jondkinney/dragvisuals.vim'
+vmap  <expr>  <S-LEFT>   DVB_Drag('left')
+vmap  <expr>  <S-RIGHT>  DVB_Drag('right')
+vmap  <expr>  <S-DOWN>   DVB_Drag('down')
+vmap  <expr>  <S-UP>     DVB_Drag('up')
+vmap  <expr>  D          DVB_Duplicate()  
+
+Bundle 'scrooloose/syntastic'
+let g:syntastic_check_on_wq=0
+let g:syntastic_mode_map = { 'mode': 'passive'
+                           \,'active_filetypes': []
+                           \,'passive_filetypes': []
+                           \}
+nmap <silent> <leader>s :SyntasticCheck<CR>
+let g:syntastic_haskell_checkers=['hlint']
 
 Bundle 'vim-pandoc/vim-pandoc-syntax'
 let g:pandoc_use_embeds_in_codeblocks_for_langs = [
@@ -121,8 +146,6 @@ au BufNewFile,BufRead *.shader set filetype=glsl.c
 " au filetype cs nmap <buffer> <leader>gu :OmniSharpFindUsages<CR>
 " au filetype cs nmap <buffer> <leader>gr :OmniSharpGetCodeActions<CR>
 " au filetype cs nmap <buffer> <leader>ge :OmniSharpFindSyntaxErrors<CR>
-
-" Bundle 'scrooloose/syntastic'
 
 Bundle 'dhruvasagar/vim-table-mode'
 let g:table_mode_corner = '+'
@@ -202,7 +225,7 @@ set textwidth=80
 set foldmethod=syntax
 set foldlevelstart=99
 set formatoptions-=t
-set foldcolumn=3
+" set foldcolumn=3
 autocmd FileType qf wincmd J " quickfix list at bottom
 set wildignore=*.o,*.obj,*.bak,*.exe,*.pyc,*.swp
 set suffixes+=.class,.exe,.o,.obj,.dat,.dll,.aux,.pdf,.gch
@@ -213,6 +236,8 @@ set ttimeoutlen=50
 set enc=utf-8
 set fileencoding=utf-8
 set fileencodings=ucs-bom,utf8,prc
+exec "set listchars=tab:\uBB\uBB,trail:\uB7,nbsp:~"
+set list
 " }}}
 " Theme  {{{
 " ------------------------------------------------------------------------------
@@ -382,6 +407,20 @@ autocmd BufRead,BufNewFile *.slim set filetype=slim
 autocmd filetype haskell nmap <script> <buffer> <localLeader>r :!runhaskell %<CR>
 
 " }}}
+" Goodies {{{
+" ------------------------------------------------------------------------------
+" Open file with pre-existing swp file in read-only automatically
+augroup NoSimultaneousEdits
+    autocmd!
+    autocmd SwapExists * let v:swapchoice = 'o'
+    autocmd SwapExists * echomsg ErrorMsg
+    autocmd SwapExists * echo 'Duplicate edit session (readonly)'
+    autocmd SwapExists * echohl None
+    autocmd SwapExists * sleep 2
+augroup END
+" }}}
+"
+" Random stuff:
 " Custard Square {{{
 " ------------------------------------------------------------------------------
 " Start the smartfox server
@@ -415,22 +454,22 @@ vmap <silent> <leader>ma        :call TrackerAddItem()<CR>
 vmap <silent> <leader>mc        :call TrackerCloseItem()<CR>
 vmap <silent> <leader>mo        :call TrackerOpenItem()<CR>
 " }}}
-" ... {{{
-func! ConvertAsToDart()
-  execute '%s/\<var\>//'
-  execute '%s/\<private\>//'
-  execute '%s/\<protected\>//'
-  execute '%s/\<public\>//'
-  execute '%s/\<override\>//'
-  execute '%s/\<uint\>/int/'
-  execute '%s/\<function\>//'
-  execute '%s/\<Number\>/num/'
-  execute '%s/\<Boolean\>/bool/'
-  execute '%s/\<Math\.max\>/max/'
-  execute '%s/\<Math\.min\>/min/'
-  execute 'normal >>'
-  execute 'normal <<'
-endfunc
-nmap <silent> <leader>c :call ConvertAsToDart()<CR>
+" {{{ Convert AS3 to dart
+" func! ConvertAsToDart()
+"   execute '%s/\<var\>//'
+"   execute '%s/\<private\>//'
+"   execute '%s/\<protected\>//'
+"   execute '%s/\<public\>//'
+"   execute '%s/\<override\>//'
+"   execute '%s/\<uint\>/int/'
+"   execute '%s/\<function\>//'
+"   execute '%s/\<Number\>/num/'
+"   execute '%s/\<Boolean\>/bool/'
+"   execute '%s/\<Math\.max\>/max/'
+"   execute '%s/\<Math\.min\>/min/'
+"   execute 'normal >>'
+"   execute 'normal <<'
+" endfunc
+" nmap <silent> <leader>c :call ConvertAsToDart()<CR>
 "
 " }}}
