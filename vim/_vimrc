@@ -52,7 +52,7 @@ vnoremap    v   <C-V>
 vnoremap <C-V>     v
 
 " Fastes insert mode leaving
-imap jk <ESC>
+imap jk <C-C>
 
 " Quickly remove search highlight
 nmap <F4> :nohl<CR>
@@ -100,13 +100,27 @@ Bundle 'garbas/vim-snipmate'
 Bundle 'honza/vim-snippets'
 Bundle 'tpope/vim-surround'
 Bundle 'Townk/vim-autoclose'
-Bundle 'ervandew/supertab'
 Bundle 'vim-scripts/cg.vim'
 Bundle 'dart-lang/dart-vim-plugin'
 Bundle 'vim-scripts/VOoM'
 Bundle 'vim-scripts/CRefVim'
 Bundle 'vim-scripts/Haskell-Conceal'
 Bundle 'ivyl/vim-bling'
+Bundle 'Shougo/vimproc'
+
+Bundle 'Shougo/neocomplete'
+let g:neocomplete#enable_at_startup = 1
+let g:neocomplete#enable_smart_case = 1
+inoremap <expr><C-g>    neocomplete#undo_completion()
+inoremap <expr><C-l>    neocomplete#complete_common_string()
+inoremap <expr><TAB>    pumvisible() ? "\<C-n>" : "\<TAB>"
+inoremap <expr><C-h>    neocomplete#smart_close_popup()."\<C-h>"
+inoremap <expr><BS>     neocomplete#smart_close_popup()."\<C-h>"
+inoremap <expr><C-y>    neocomplete#close_popup()
+inoremap <expr><C-e>    neocomplete#cancel_popup()
+
+Bundle 'eagletmt/neco-ghc'
+Bundle 'eagletmt/ghcmod-vim'
 
 Bundle 'jondkinney/dragvisuals.vim'
 vmap  <expr>  <S-LEFT>   DVB_Drag('left')
@@ -121,7 +135,8 @@ let g:syntastic_mode_map = { 'mode': 'passive'
                            \,'active_filetypes': []
                            \,'passive_filetypes': []
                            \}
-nmap <silent> <leader>s :SyntasticCheck<CR>
+nmap <silent> <leader>ss :SyntasticCheck<CR>
+nmap <silent> <leader>sr :SyntasticReset<CR>
 let g:syntastic_haskell_checkers=['hlint']
 
 Bundle 'vim-pandoc/vim-pandoc-syntax'
@@ -158,6 +173,9 @@ Bundle 'scrooloose/nerdtree'
 nmap <F6> :NERDTreeToggle<CR>
 let g:NERDTreeHighlightCursorline=1
 let g:NERDTreeWinPos="right"
+let g:NERDTreeIgnore = [
+    \ '\.pyc$'
+    \ ]
 
 Bundle 'majutsushi/tagbar'
 nmap <F5> :TagbarToggle<CR>
@@ -404,7 +422,9 @@ autocmd filetype ruby setl shiftwidth=2
 autocmd BufRead,BufNewFile *.slim set filetype=slim
 
 " Haskell
-autocmd filetype haskell nmap <script> <buffer> <localLeader>r :!runhaskell %<CR>
+au filetype haskell nmap <script> <buffer> <localLeader>r :!runhaskell %<CR>
+au filetype haskell nnoremap <script> <buffer> <LocalLeader>t :GhcModType<CR>
+au filetype haskell setl omnifunc=necoghc#omnifunc
 
 " }}}
 " Goodies {{{
@@ -413,7 +433,7 @@ autocmd filetype haskell nmap <script> <buffer> <localLeader>r :!runhaskell %<CR
 augroup NoSimultaneousEdits
     autocmd!
     autocmd SwapExists * let v:swapchoice = 'o'
-    autocmd SwapExists * echomsg ErrorMsg
+    " autocmd SwapExists * echomsg ErrorMsg
     autocmd SwapExists * echo 'Duplicate edit session (readonly)'
     autocmd SwapExists * echohl None
     autocmd SwapExists * sleep 2
