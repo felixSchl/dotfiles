@@ -4,6 +4,7 @@
 if !exists('g:chosen_color')
     let g:chosen_color = ""
 endif
+
 " }}}
 " Init vundle {{{
 " -------------------------------------------------------------------------------
@@ -24,6 +25,10 @@ endif
 " ------------------------------------------------------------------------------
 set nocompatible
 filetype indent plugin on
+if (s:isWin)
+    set shell=cmd
+    set shellcmdflag=/c
+endif
 " }}}
 " Mappings {{{
 " ------------------------------------------------------------------------------
@@ -33,7 +38,8 @@ if (s:isWin)
     nmap <F2>           :e ~/_vimrc<CR>
     nmap <F3>           :so ~/_vimrc<CR>
     nmap <leader>E      :Start explorer %:h<CR>
-    nmap <leader>C      :Start cmd %:h<CR>
+    "nmap <leader>C      :Start cmd %:h<CR>
+    nmap <leader>C      :Start cmd /K cd /d "%:h"<CR>
 else
     nmap <F2>           :e ~/.vimrc<CR>
     nmap <F3>           :so ~/.vimrc<CR>
@@ -93,6 +99,7 @@ Bundle 'flazz/vim-colorschemes'
 Bundle 'tpope/vim-dispatch'
 Bundle 'endel/actionscript.vim'
 Bundle 'tpope/vim-fugitive'
+" Bundle 'airblade/vim-gitgutter'
 Bundle 'tsaleh/vim-matchit'
 Bundle 'MarcWeber/vim-addon-mw-utils'
 Bundle 'tomtom/tlib_vim'
@@ -108,16 +115,37 @@ Bundle 'vim-scripts/Haskell-Conceal'
 Bundle 'ivyl/vim-bling'
 Bundle 'Shougo/vimproc'
 
-Bundle 'Shougo/neocomplete'
-let g:neocomplete#enable_at_startup = 1
-let g:neocomplete#enable_smart_case = 1
-inoremap <expr><C-g>    neocomplete#undo_completion()
-inoremap <expr><C-l>    neocomplete#complete_common_string()
-inoremap <expr><TAB>    pumvisible() ? "\<C-n>" : "\<TAB>"
-inoremap <expr><C-h>    neocomplete#smart_close_popup()."\<C-h>"
-inoremap <expr><BS>     neocomplete#smart_close_popup()."\<C-h>"
-inoremap <expr><C-y>    neocomplete#close_popup()
-inoremap <expr><C-e>    neocomplete#cancel_popup()
+if (s:isLinux)
+    " Unfortunately too slow on windows
+    Bundle 'bling/vim-airline'
+endif
+
+if has("lua")
+    Bundle 'Shougo/neocomplete'
+    let g:neocomplete#enable_at_startup = 1
+    let g:neocomplete#enable_smart_case = 1
+    inoremap <expr><C-g>    neocomplete#undo_completion()
+    inoremap <expr><C-l>    neocomplete#complete_common_string()
+    inoremap <expr><TAB>    pumvisible() ? "\<C-n>" : "\<TAB>"
+    inoremap <expr><C-h>    neocomplete#smart_close_popup()."\<C-h>"
+    inoremap <expr><BS>     neocomplete#smart_close_popup()."\<C-h>"
+    inoremap <expr><C-y>    neocomplete#close_popup()
+    inoremap <expr><C-e>    neocomplete#cancel_popup()
+else 
+"     (unfortunately way too slow:)
+"     Bundle 'Shougo/neocomplcache.vim'
+"     let g:neocomplcache#enable_at_startup = 1
+"     let g:neocomplcache#enable_smart_case = 1
+"     inoremap <expr><C-g>    neocomplcache#undo_completion()
+"     inoremap <expr><C-l>    neocomplcache#complcache_common_string()
+"     inoremap <expr><TAB>    pumvisible() ? "\<C-n>" : "\<TAB>"
+"     inoremap <expr><C-h>    neocomplcache#smart_close_popup()."\<C-h>"
+"     inoremap <expr><BS>     neocomplcache#smart_close_popup()."\<C-h>"
+"     inoremap <expr><C-y>    neocomplcache#close_popup()
+"     inoremap <expr><C-e>    neocomplcache#cancel_popup()
+"     call neocomplcache#initialize() " because '#enable_at_startup' gets ignored
+    Bundle 'ervandew/supertab'
+endif
 
 Bundle 'eagletmt/neco-ghc'
 Bundle 'eagletmt/ghcmod-vim'
@@ -142,6 +170,7 @@ let g:syntastic_haskell_checkers=['hlint']
 Bundle 'vim-pandoc/vim-pandoc-syntax'
 let g:pandoc_use_embeds_in_codeblocks_for_langs = [
     \ "python"
+    \,"haskell"
     \ ]
 
 Bundle 'vim-pandoc/vim-pantondoc'
@@ -167,7 +196,7 @@ let g:table_mode_corner = '+'
 
 Bundle 'tomtom/tcomment_vim'
 nmap <C-i> gccj
-vmap <C-i> gcc
+vmap <C-i> gc
 
 Bundle 'scrooloose/nerdtree'
 nmap <F6> :NERDTreeToggle<CR>
@@ -203,6 +232,9 @@ vmap gx <Plug>(openbrowser-smart-search)
 Bundle 'kien/ctrlp.vim'
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlPCurWD'
+let g:ctrlp_custom_ignore = {
+    \ 'file': '\v\.(meta)$'
+    \ }
 " }}}
 " Global preferences {{{
 " ------------------------------------------------------------------------------
@@ -246,6 +278,9 @@ set formatoptions-=t
 " set foldcolumn=3
 autocmd FileType qf wincmd J " quickfix list at bottom
 set wildignore=*.o,*.obj,*.bak,*.exe,*.pyc,*.swp
+set wildignore+=*.png,*.tga,*.psd
+set wildignore+=*.class,*.jar
+set wildignore+=*.meta,*.prefab
 set suffixes+=.class,.exe,.o,.obj,.dat,.dll,.aux,.pdf,.gch
 set wildmenu
 set wildmode=longest:list,full
