@@ -127,6 +127,7 @@ Bundle 'vim-scripts/CRefVim'
 Bundle 'vim-scripts/Haskell-Conceal'
 Bundle 'ivyl/vim-bling'
 Bundle 'Shougo/vimproc'
+Bundle 'OrangeT/vim-csharp'
 
 Bundle 'chrismccord/bclose.vim'
 nnoremap <C-W>c :Bclose<CR>
