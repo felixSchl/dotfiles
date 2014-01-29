@@ -78,6 +78,20 @@ nmap <C-J>          <C-W>j
 nmap <C-K>          <C-W>k
 nmap <C-L>          <C-W>l
 
+" Easier tab navigation
+nnoremap <C-S-tab> :tabprevious<CR>
+nnoremap <C-tab>   :tabnext<CR>
+nnoremap <C-t>     :tabnew<CR>
+inoremap <C-S-tab> <Esc>:tabprevious<CR>i
+inoremap <C-tab>   <Esc>:tabnext<CR>i
+inoremap <C-t>     <Esc>:tabnew<CR>
+nnoremap <C-Insert> :tabnew<CR>
+nnoremap <C-Delete> :tabclose<CR>
+nnoremap <A-F1> 1gt
+nnoremap <A-F2> 2gt
+nnoremap <A-F3> 3gt
+nnoremap <A-F4> 4gt
+
 " Mouse scrolling
 map <ScrollWheelUp> <C-Y>
 map <S-ScrollWheelUp> <C-U>
@@ -99,7 +113,6 @@ Bundle 'flazz/vim-colorschemes'
 Bundle 'tpope/vim-dispatch'
 Bundle 'endel/actionscript.vim'
 Bundle 'tpope/vim-fugitive'
-" Bundle 'airblade/vim-gitgutter'
 Bundle 'tsaleh/vim-matchit'
 Bundle 'MarcWeber/vim-addon-mw-utils'
 Bundle 'tomtom/tlib_vim'
@@ -115,10 +128,17 @@ Bundle 'vim-scripts/Haskell-Conceal'
 Bundle 'ivyl/vim-bling'
 Bundle 'Shougo/vimproc'
 
-if (s:isLinux)
-    " Unfortunately too slow on windows
-    Bundle 'bling/vim-airline'
+Bundle 'chrismccord/bclose.vim'
+nnoremap <C-W>c :Bclose<CR>
+
+if !s:isWin
+    " Too slow on windows...
+    Bundle 'airblade/vim-gitgutter'
 endif
+
+Bundle 'bling/vim-airline'
+" Disable Tagbar for airline, too slow!
+let g:airline#extensions#tagbar#enabled=0
 
 if has("lua")
     Bundle 'Shougo/neocomplete'
@@ -132,18 +152,17 @@ if has("lua")
     inoremap <expr><C-y>    neocomplete#close_popup()
     inoremap <expr><C-e>    neocomplete#cancel_popup()
 else 
-"     (unfortunately way too slow:)
-"     Bundle 'Shougo/neocomplcache.vim'
-"     let g:neocomplcache#enable_at_startup = 1
-"     let g:neocomplcache#enable_smart_case = 1
-"     inoremap <expr><C-g>    neocomplcache#undo_completion()
-"     inoremap <expr><C-l>    neocomplcache#complcache_common_string()
-"     inoremap <expr><TAB>    pumvisible() ? "\<C-n>" : "\<TAB>"
-"     inoremap <expr><C-h>    neocomplcache#smart_close_popup()."\<C-h>"
-"     inoremap <expr><BS>     neocomplcache#smart_close_popup()."\<C-h>"
-"     inoremap <expr><C-y>    neocomplcache#close_popup()
-"     inoremap <expr><C-e>    neocomplcache#cancel_popup()
-"     call neocomplcache#initialize() " because '#enable_at_startup' gets ignored
+    " Bundle 'Shougo/neocomplcache.vim'
+    " let g:neocomplcache#enable_at_startup = 1
+    " let g:neocomplcache#enable_smart_case = 1
+    " inoremap <expr><C-g>    neocomplcache#undo_completion()
+    " inoremap <expr><C-l>    neocomplcache#complcache_common_string()
+    " inoremap <expr><TAB>    pumvisible() ? "\<C-n>" : "\<TAB>"
+    " inoremap <expr><C-h>    neocomplcache#smart_close_popup()."\<C-h>"
+    " inoremap <expr><BS>     neocomplcache#smart_close_popup()."\<C-h>"
+    " inoremap <expr><C-y>    neocomplcache#close_popup()
+    " inoremap <expr><C-e>    neocomplcache#cancel_popup()
+    " call neocomplcache#initialize()
     Bundle 'ervandew/supertab'
 endif
 
@@ -177,11 +196,11 @@ Bundle 'vim-pandoc/vim-pantondoc'
 let g:pantondoc_use_pandoc_markdown = 1
 " let g:pandoc_use_conceal = 0
 
-Bundle 'vim-scripts/mru.vim'
-nmap <leader>r      :MRU<CR>
-
 Bundle 'vim-scripts/glsl.vim'
 au BufNewFile,BufRead *.shader set filetype=glsl.c
+
+" Bundle 'vim-scripts/mru.vim'
+" nmap <leader>r      :MRU<CR>
 
 " Bundle 'nosami/Omnisharp'
 " au filetype cs nmap <buffer> <leader>gs :OmniSharpStartServer<CR>
@@ -205,6 +224,7 @@ let g:NERDTreeWinPos="right"
 let g:NERDTreeIgnore = [
     \ '\.pyc$'
     \ ]
+nnoremap <LocalLeader>f :NERDTreeFind<CR>
 
 Bundle 'majutsushi/tagbar'
 nmap <F5> :TagbarToggle<CR>
@@ -230,11 +250,15 @@ nmap gx <Plug>(openbrowser-smart-search)
 vmap gx <Plug>(openbrowser-smart-search)
 
 Bundle 'kien/ctrlp.vim'
+let g:ctrlp_max_depth = 20
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlPCurWD'
 let g:ctrlp_custom_ignore = {
     \ 'file': '\v\.(meta)$'
     \ }
+nnoremap <silent> <C-B> :CtrlPBuffer<CR>
+nnoremap <leader>r      :CtrlPMRU<CR>
+
 " }}}
 " Global preferences {{{
 " ------------------------------------------------------------------------------
@@ -473,6 +497,9 @@ augroup NoSimultaneousEdits
     autocmd SwapExists * echohl None
     autocmd SwapExists * sleep 2
 augroup END
+
+" Open a help in a vertsplit. Use with `:Vh`
+command! -nargs=* -complete=help Vh vertical belowright help <args>
 " }}}
 "
 " Random stuff:
