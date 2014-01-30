@@ -131,6 +131,10 @@ Bundle 'eagletmt/neco-ghc'
 Bundle 'eagletmt/ghcmod-vim'
 Bundle 'vim-scripts/Haskell-Conceal'
 
+Bundle 'dbakker/vim-projectroot'
+nnoremap <leader>dp :ProjectRootCD<cr>
+nnoremap <leader>df :ProjectRootExe NERDTreeFind<CR>
+
 Bundle 'chrismccord/bclose.vim'
 nnoremap <C-W>c :Bclose<CR>
 
@@ -226,7 +230,7 @@ let g:NERDTreeShowLineNumbers=1
 let g:NERDTreeIgnore = [
     \ '\.pyc$'
     \ ]
-nnoremap <LocalLeader>f :NERDTreeFind<CR>
+" nnoremap <LocalLeader>f :NERDTreeFind<CR>
 
 Bundle 'majutsushi/tagbar'
 nmap <F5> :TagbarToggle<CR>
@@ -253,7 +257,8 @@ vmap gx <Plug>(openbrowser-smart-search)
 
 Bundle 'kien/ctrlp.vim'
 let g:ctrlp_max_depth = 20
-let g:ctrlp_map = '<c-p>'
+let g:ctrlp_map = '<C-P>'
+let g:ctrlp_clear_cache_on_exit = 0
 let g:ctrlp_cmd = 'CtrlPCurWD'
 let g:ctrlp_custom_ignore = {
     \ 'file': '\v\.(meta)$'
@@ -265,6 +270,7 @@ nnoremap <leader>r      :CtrlPMRU<CR>
 " Global preferences {{{
 " ------------------------------------------------------------------------------
 syntax on
+set noswapfile
 set lazyredraw
 set sessionoptions-=options
 set sessionoptions-=folds
