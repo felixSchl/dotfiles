@@ -124,10 +124,12 @@ Bundle 'vim-scripts/cg.vim'
 Bundle 'dart-lang/dart-vim-plugin'
 Bundle 'vim-scripts/VOoM'
 Bundle 'vim-scripts/CRefVim'
-Bundle 'vim-scripts/Haskell-Conceal'
 Bundle 'ivyl/vim-bling'
 Bundle 'Shougo/vimproc'
 Bundle 'OrangeT/vim-csharp'
+Bundle 'eagletmt/neco-ghc'
+Bundle 'eagletmt/ghcmod-vim'
+Bundle 'vim-scripts/Haskell-Conceal'
 
 Bundle 'chrismccord/bclose.vim'
 nnoremap <C-W>c :Bclose<CR>
@@ -145,6 +147,9 @@ if has("lua")
     Bundle 'Shougo/neocomplete'
     let g:neocomplete#enable_at_startup = 1
     let g:neocomplete#enable_smart_case = 1
+    let g:neocomplete#text_mode_filetypes = {
+                                            \ "pandoc": 1
+                                            \ }
     inoremap <expr><C-g>    neocomplete#undo_completion()
     inoremap <expr><C-l>    neocomplete#complete_common_string()
     inoremap <expr><TAB>    pumvisible() ? "\<C-n>" : "\<TAB>"
@@ -152,30 +157,16 @@ if has("lua")
     inoremap <expr><BS>     neocomplete#smart_close_popup()."\<C-h>"
     inoremap <expr><C-y>    neocomplete#close_popup()
     inoremap <expr><C-e>    neocomplete#cancel_popup()
-else 
-    " Bundle 'Shougo/neocomplcache.vim'
-    " let g:neocomplcache#enable_at_startup = 1
-    " let g:neocomplcache#enable_smart_case = 1
-    " inoremap <expr><C-g>    neocomplcache#undo_completion()
-    " inoremap <expr><C-l>    neocomplcache#complcache_common_string()
-    " inoremap <expr><TAB>    pumvisible() ? "\<C-n>" : "\<TAB>"
-    " inoremap <expr><C-h>    neocomplcache#smart_close_popup()."\<C-h>"
-    " inoremap <expr><BS>     neocomplcache#smart_close_popup()."\<C-h>"
-    " inoremap <expr><C-y>    neocomplcache#close_popup()
-    " inoremap <expr><C-e>    neocomplcache#cancel_popup()
-    " call neocomplcache#initialize()
+else
     Bundle 'ervandew/supertab'
 endif
-
-Bundle 'eagletmt/neco-ghc'
-Bundle 'eagletmt/ghcmod-vim'
 
 Bundle 'jondkinney/dragvisuals.vim'
 vmap  <expr>  <S-LEFT>   DVB_Drag('left')
 vmap  <expr>  <S-RIGHT>  DVB_Drag('right')
 vmap  <expr>  <S-DOWN>   DVB_Drag('down')
 vmap  <expr>  <S-UP>     DVB_Drag('up')
-vmap  <expr>  D          DVB_Duplicate()  
+vmap  <expr>  D          DVB_Duplicate()
 
 Bundle 'scrooloose/syntastic'
 let g:syntastic_check_on_wq=0
@@ -219,9 +210,19 @@ nmap <C-i> gccj
 vmap <C-i> gc
 
 Bundle 'scrooloose/nerdtree'
-nmap <F6> :NERDTreeToggle<CR>
+nmap <F6> :call g:vimrc_toggle_nerd_tree()<CR>
+let g:vimrc_initial_nerd_tree=1
+function! g:vimrc_toggle_nerd_tree()
+    if (g:vimrc_initial_nerd_tree==1)
+        execute ":NERDTreeCWD"
+        let g:vimrc_initial_nerd_tree=0
+    else
+        execute ":NERDTreeToggle"
+    endif
+endfunc
 let g:NERDTreeHighlightCursorline=1
 let g:NERDTreeWinPos="right"
+let g:NERDTreeShowLineNumbers=1
 let g:NERDTreeIgnore = [
     \ '\.pyc$'
     \ ]
