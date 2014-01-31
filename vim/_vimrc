@@ -141,15 +141,20 @@ Bundle 'tpope/vim-repeat'
 Bundle 'godlygeek/tabular'
 " Maps hotkeys for tabularize, repeatable by repeat.vim
 function! s:make_align_mappings(base, ...)
-    for i in a:000
-        let c = " " . a:base . i . " :Tabularize /" . i . "<CR>"
-              \.":call repeat#set(\":Tabularize /". i ."<Bslash><lt>CR>\")<CR>"
-        execute "nnoremap" . c
-        execute "vmap" . c
+    for regex in a:000
+        let char = regex
+        if (len(regex) > 2)
+            let char = regex[0]
+        endif
+        let cmd = " " . a:base . char . " :Tabularize /" . regex . "<CR>"
+                \.":call repeat#set(\":Tabularize /". regex ."<Bslash><lt>"
+                \."CR>\")<CR>"
+        execute "nnoremap" . cmd
+        execute "vmap" . cmd
     endfor
 endfunc
 call s:make_align_mappings("<leader>a"
-                          \,'=', '\|', '+', '-', ':', '[', ']'
+                          \,'=', '\|', '+', '-', ':\zs', '[', ']'
                           \)
 
 Bundle 'chrismccord/bclose.vim'
