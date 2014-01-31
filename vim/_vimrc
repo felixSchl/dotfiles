@@ -5,6 +5,12 @@ if !exists('g:chosen_color')
     let g:chosen_color = ""
 endif
 
+let s:ignore_dirs='\v[\/]((\.(git|hg|svn))|(build|obj|temp|Library))$'
+let s:ignore_files='\v\.('
+                 \.'meta|exe|so|dll|fbx|png|tga|jpg|bmp|csproj|sln|'
+                 \.'unityproj|userprefs|suo|asset|prefab|db|dwlt|mdb|class|jar|'
+                 \.'mat|apk|obb|cache|controller|user|ttf|guiskin|unity'
+                 \.')$'
 " }}}
 " Init vundle {{{
 " -------------------------------------------------------------------------------
@@ -130,10 +136,21 @@ Bundle 'OrangeT/vim-csharp'
 Bundle 'eagletmt/neco-ghc'
 Bundle 'eagletmt/ghcmod-vim'
 Bundle 'vim-scripts/Haskell-Conceal'
+Bundle 'tpope/vim-repeat'
 
-Bundle 'dbakker/vim-projectroot'
-nnoremap <leader>dp :ProjectRootCD<cr>
-nnoremap <leader>df :ProjectRootExe NERDTreeFind<CR>
+Bundle 'godlygeek/tabular'
+" Maps hotkeys for tabularize, repeatable by repeat.vim
+function! s:make_align_mappings(base, ...)
+    for i in a:000
+        let c = " " . a:base . i . " :Tabularize /" . i . "<CR>"
+              \.":call repeat#set(\":Tabularize /". i ."<Bslash><lt>CR>\")<CR>"
+        execute "nnoremap" . c
+        execute "vmap" . c
+    endfor
+endfunc
+call s:make_align_mappings("<leader>a"
+                          \,'=', '\|', '+', '-', ':', '[', ']'
+                          \)
 
 Bundle 'chrismccord/bclose.vim'
 nnoremap <C-W>c :Bclose<CR>
@@ -195,9 +212,6 @@ let g:pantondoc_use_pandoc_markdown = 1
 Bundle 'vim-scripts/glsl.vim'
 au BufNewFile,BufRead *.shader set filetype=glsl.c
 
-" Bundle 'vim-scripts/mru.vim'
-" nmap <leader>r      :MRU<CR>
-
 " Bundle 'nosami/Omnisharp'
 " au filetype cs nmap <buffer> <leader>gs :OmniSharpStartServer<CR>
 " au filetype cs nmap <buffer> <leader>gt :OmniSharpHighlightTypes<CR>
@@ -227,10 +241,16 @@ endfunc
 let g:NERDTreeHighlightCursorline=1
 let g:NERDTreeWinPos="right"
 let g:NERDTreeShowLineNumbers=1
+let g:NERDTreeMinimalUI=1
 let g:NERDTreeIgnore = [
-    \ '\.pyc$'
+    \ s:ignore_files . '[[file]]'
+    \,s:ignore_dirs . '[[dir]]'
     \ ]
-" nnoremap <LocalLeader>f :NERDTreeFind<CR>
+autocmd FileType nerdtree call s:nerdtree_settings()
+function! s:nerdtree_settings()
+    setl relativenumber
+endfunc
+nnoremap <leader>ff :NERDTreeFind<CR>
 
 Bundle 'majutsushi/tagbar'
 nmap <F5> :TagbarToggle<CR>
@@ -247,9 +267,6 @@ nmap <script> <silent> <leader>q :call ToggleQuickfixList()<CR>
 Bundle 'vim-scripts/toggle_words.vim'
 nmap <leader>\ :ToggleWord<CR>
 
-" Bundle 'sjl/gundo.vim'
-" nmap <leader>u :GundoToggle<CR>
-
 Bundle 'tyru/open-browser.vim'
 let g:netrw_nogx = 1
 nmap gx <Plug>(openbrowser-smart-search)
@@ -261,10 +278,22 @@ let g:ctrlp_map = '<C-P>'
 let g:ctrlp_clear_cache_on_exit = 0
 let g:ctrlp_cmd = 'CtrlPCurWD'
 let g:ctrlp_custom_ignore = {
-    \ 'file': '\v\.(meta)$'
+    \ 'dir':  s:ignore_dirs,
+    \ 'file': s:ignore_files
     \ }
+let g:ctrlp_extensions = ['tag', 'buffertag', 'quickfix', 'dir', 'rtscript',
+                        \ 'undo', 'line', 'changes', 'mixed', 'bookmarkdir']
 nnoremap <silent> <C-B> :CtrlPBuffer<CR>
 nnoremap <leader>r      :CtrlPMRU<CR>
+nnoremap <leader>b      :CtrlPBookmarkDir<CR>
+nnoremap <leader>fd     :execute ":CtrlPDir ".getcwd() <CR>
+nnoremap <leader>fs     :CtrlPRTS<CR>
+nnoremap <leader>fu     :CtrlPUndo<CR>
+nnoremap <leader>fl     :CtrlPLine<CR>
+
+Bundle 'dbakker/vim-projectroot'
+nnoremap <leader>cd :ProjectRootCD<cr>
+
 
 " }}}
 " Global preferences {{{
@@ -508,6 +537,11 @@ augroup END
 
 " Open a help in a vertsplit. Use with `:Vh`
 command! -nargs=* -complete=help Vh vertical belowright help <args>
+
+" Working directory per tab
+au TabEnter * if exists("t:wd") | exe "cd" . '"' t:wd . '"' | endif 
+au TabLeave * let t:wd=getcwd()
+
 " }}}
 "
 " Random stuff:
