@@ -253,6 +253,7 @@ let g:NERDTreeIgnore = [
     \ ]
 autocmd FileType nerdtree call s:nerdtree_settings()
 function! s:nerdtree_settings()
+    let &nu=0
     setl relativenumber
 endfunc
 nnoremap <leader>ff :NERDTreeFind<CR>
@@ -291,7 +292,7 @@ let g:ctrlp_extensions = ['tag', 'buffertag', 'quickfix', 'dir', 'rtscript',
 nnoremap <silent> <C-B> :CtrlPBuffer<CR>
 nnoremap <leader>r      :CtrlPMRU<CR>
 nnoremap <leader>b      :CtrlPBookmarkDir<CR>
-nnoremap <leader>fd     :execute ":CtrlPDir ".getcwd() <CR>
+nnoremap <leader>fd     :execute ":CtrlPDir ".fnameescape(getcwd()) <CR>
 nnoremap <leader>fs     :CtrlPRTS<CR>
 nnoremap <leader>fu     :CtrlPUndo<CR>
 nnoremap <leader>fl     :CtrlPLine<CR>
