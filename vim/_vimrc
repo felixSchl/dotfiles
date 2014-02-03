@@ -78,6 +78,10 @@ vmap <leader>y      "*yy
 " Start the current file as a command
 nmap <leader>e      :Start %s:h<CR>
 
+" ':Wa' is not editor command annoyance
+command! -bang Wa wa<bang>
+command! -bang Wq wq<bang>
+
 " Easier window navigation
 nmap <C-H>          <C-W>h
 nmap <C-J>          <C-W>j
@@ -451,6 +455,7 @@ if has("gui_running")
     call add(colors, "kolor")
     call add(colors, "lodestone")
     call add(colors, "herald")
+    call add(colors, "solarized")
     call SetRandomColorScheme(colors)
 
     " TagHighlight classes
@@ -465,6 +470,7 @@ if has("gui_running")
     endif
     set guifontwide=NSimsun:h12
     set guioptions-=m
+    set guioptions-=e
     set guioptions+=c
     set guioptions-=l
     set guioptions-=L
