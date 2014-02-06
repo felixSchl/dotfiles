@@ -1,8 +1,12 @@
-" vim: fdm=marker: foldlevel=0:
+" vim: fdm=marker:
 " Globals {{{
 " -------------------------------------------------------------------------------
 if !exists('g:chosen_color')
     let g:chosen_color = ""
+endif
+if !exists('g:initial_load')
+    setl foldlevel=0
+    let g:initial_load = 1
 endif
 
 let s:ignore_dirs='\v[\/]((\.(git|hg|svn))|(build|obj|temp|Library))$'
@@ -44,7 +48,6 @@ if (s:isWin)
     nmap <F2>           :e ~/_vimrc<CR>
     nmap <F3>           :so ~/_vimrc<CR>
     nmap <leader>E      :Start explorer %:h<CR>
-    "nmap <leader>C      :Start cmd %:h<CR>
     nmap <leader>C      :Start cmd /K cd /d "%:h"<CR>
 else
     nmap <F2>           :e ~/.vimrc<CR>
@@ -144,6 +147,10 @@ Bundle 'tpope/vim-repeat'
 Bundle 'vim-scripts/ZoomWin'
 Bundle 'tpope/vim-unimpaired'
 
+Bundle 'Yggdroot/indentLine'
+nmap <leader>ir :IndentLinesReset<CR>
+nmap <leader>ig :IndentLinesToggle<CR>
+
 Bundle 'godlygeek/tabular'
 " Maps hotkeys for tabularize, repeatable by repeat.vim
 function! s:make_align_mappings(first_key, ...)
@@ -171,9 +178,6 @@ call s:make_align_mappings(
     \,['\]', "\/\]/l1r1"]
     \,['m' , "\/^[^<]*<[^>]*>\\zs/l0r1"]
     \)
-
-" te   == s     =  d "
-" test == s  =  d "
 
 Bundle 'chrismccord/bclose.vim'
 nnoremap <C-W>c :Bclose<CR>
@@ -236,6 +240,8 @@ Bundle 'vim-scripts/glsl.vim'
 au BufNewFile,BufRead *.shader set filetype=glsl.c
 
 " Bundle 'nosami/Omnisharp'
+" let g:Omnisharp_start_server = 0
+" let g:Omnisharp_stop_server = 0
 " au filetype cs nmap <buffer> <leader>gs :OmniSharpStartServer<CR>
 " au filetype cs nmap <buffer> <leader>gt :OmniSharpHighlightTypes<CR>
 " au filetype cs nmap <buffer> <leader>gd :OmniSharpGotoDefinition<CR>
@@ -272,7 +278,7 @@ let g:NERDTreeIgnore = [
 autocmd FileType nerdtree call s:nerdtree_settings()
 function! s:nerdtree_settings()
     let &nu=0
-    setl relativenumber
+    let &relativenumber=0
 endfunc
 nnoremap <leader>ff :NERDTreeFind<CR>
 
@@ -374,8 +380,8 @@ set ttimeoutlen=50
 set enc=utf-8
 set fileencoding=utf-8
 set fileencodings=ucs-bom,utf8,prc
-exec "set listchars=tab:\uBB\uBB,trail:\uB7,nbsp:~"
-set list
+exec "set listchars=tab:\\|→"
+exec "set list lcs+=trail:\uB7,nbsp:~"
 " }}}
 " Theme  {{{
 " ------------------------------------------------------------------------------
