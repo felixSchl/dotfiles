@@ -4,9 +4,11 @@
 if !exists('g:chosen_color')
     let g:chosen_color = ""
 endif
+let s:is_initial=1
 if !exists('g:initial_load')
-    setl foldlevel=0
-    let g:initial_load = 1
+    let g:initial_load=1
+else
+    let s:is_initial=0
 endif
 
 let s:ignore_dirs='\v[\/]((\.(git|hg|svn))|(build|obj|temp|Library))$'
@@ -54,7 +56,25 @@ else
     nmap <F3>           :so ~/.vimrc<CR>
     nmap <leader>E      :Start nautilus %:h<CR>
 endif
-nmap Q              <Nop>
+nmap Q <Nop>
+
+" Toggle cursor column
+map <F11> :set cursorcolumn!<CR>
+
+" Easier virtual editing
+" block -> onemore -> off
+func! Change_virtual_edit_mode()
+    if (&ve=="block")
+        let &ve="onemore"
+    elseif (&ve=="onemore")
+        let &ve=""
+    elseif (&ve=="")
+        let &ve="block"
+    endif
+    echo "Virtual edit mode is now: \"".&ve."\""
+endfunc
+set virtualedit="onemore"
+nmap <F10> :call Change_virtual_edit_mode()<CR>
 
 " " Select visual lines by default
 " nmap j gj
@@ -73,13 +93,13 @@ imap jk <C-C>
 nmap <F4> :nohl<CR>
 
 " Easier copying and pasting
-nmap <leader>p      "*p
-nmap <leader>P      "*P
-imap <C-_>          <C-R>
-vmap <leader>y      "*yy
+nmap <leader>p "*p
+nmap <leader>P "*P
+imap <C-_>     <C-R>
+vmap <leader>y "*yy
 
 " Start the current file as a command
-nmap <leader>e      :Start %s:h<CR>
+nmap <leader>e :Start %s:h<CR>
 
 " ':Wa' is not editor command annoyance
 command! -bang Wa wa<bang>
@@ -106,9 +126,9 @@ nnoremap <A-F3> 3gt
 nnoremap <A-F4> 4gt
 
 " Mouse scrolling
-map <ScrollWheelUp> <C-Y>
-map <S-ScrollWheelUp> <C-U>
-map <ScrollWheelDown> <C-E>
+map <ScrollWheelUp>     <C-Y>
+map <S-ScrollWheelUp>   <C-U>
+map <ScrollWheelDown>   <C-E>
 map <S-ScrollWheelDown> <C-D>
 
 " Always launch command editing window
@@ -117,6 +137,10 @@ map <S-ScrollWheelDown> <C-D>
 " nmap ? q?i
 
 " Faster substitute prompt
+" Substitute with last search, confirm on/off
+nmap <leader>r/ :%s:<C-R>/::gc<Left><Left><Left>
+nmap <leader>R/ :%s:<C-R>/::g<Left><Left>
+" Substitute from blank, confirm on/off
 nmap <leader>; :%s:::g<Left><Left><Left>
 nmap <leader>' :%s:::gc<Left><Left><Left><Left>
 
@@ -149,7 +173,9 @@ Bundle 'tpope/vim-unimpaired'
 
 Bundle 'Yggdroot/indentLine'
 nmap <leader>ir :IndentLinesReset<CR>
-nmap <leader>ig :IndentLinesToggle<CR>
+nmap <leader>it :IndentLinesToggle<CR>
+nmap <F12>      :IndentLinesToggle<CR>
+let g:indentLine_noConcealCursor=1
 
 Bundle 'godlygeek/tabular'
 " Maps hotkeys for tabularize, repeatable by repeat.vim
@@ -314,8 +340,8 @@ let g:ctrlp_custom_ignore = {
 let g:ctrlp_extensions = ['tag', 'buffertag', 'quickfix', 'dir', 'rtscript',
                         \ 'undo', 'line', 'changes', 'mixed', 'bookmarkdir']
 nnoremap <silent> <C-B> :CtrlPBuffer<CR>
-nnoremap <leader>r      :CtrlPMRU<CR>
-nnoremap <leader>b      :CtrlPBookmarkDir<CR>
+nnoremap <leader>fr     :CtrlPMRU<CR>
+nnoremap <leader>fb     :CtrlPBookmarkDir<CR>
 nnoremap <leader>fd     :execute ":CtrlPDir ".fnameescape(getcwd()) <CR>
 nnoremap <leader>fs     :CtrlPRTS<CR>
 nnoremap <leader>fu     :CtrlPUndo<CR>
@@ -324,11 +350,12 @@ nnoremap <leader>fl     :CtrlPLine<CR>
 Bundle 'dbakker/vim-projectroot'
 nnoremap <leader>cd :ProjectRootCD<cr>
 
-
 " }}}
 " Global preferences {{{
 " ------------------------------------------------------------------------------
-syntax on
+if (s:is_initial)
+    syntax on
+endif
 set noswapfile
 set lazyredraw
 set sessionoptions-=options
@@ -448,9 +475,6 @@ func! SetRandomColorScheme(colors)
         else
             hi! link ColorColumn Pmenu
         endif
-    elseif (g:colors_name == "darkburn")
-        hi! link ColorColumn ErrorMsg
-        hi! link Comment NonText
     elseif (g:colors_name == "graywh")
     endif
 
@@ -465,13 +489,10 @@ endfunc
 if has("gui_running")
 
     let colors = []
-    " call add(colors, "molokai")
     call add(colors, "candyman")
-    call add(colors, "darkburn")
     call add(colors, "jellybeans")
     call add(colors, "lilypink")
     call add(colors, "wombat256mod")
-    " call add(colors, "inkpot")
     call add(colors, "pf_earth")
     call add(colors, "kolor")
     call add(colors, "lodestone")
@@ -630,3 +651,4 @@ vmap <silent> <leader>mo        :call TrackerOpenItem()<CR>
 " nmap <silent> <leader>c :call ConvertAsToDart()<CR>
 "
 " }}}
+
