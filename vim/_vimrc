@@ -171,6 +171,9 @@ Bundle 'tpope/vim-repeat'
 Bundle 'vim-scripts/ZoomWin'
 Bundle 'tpope/vim-unimpaired'
 
+Bundle 'AndrewRadev/switch.vim'
+nnoremap - :Switch<CR>
+
 Bundle 'Yggdroot/indentLine'
 nmap <leader>ir :IndentLinesReset<CR>
 nmap <leader>it :IndentLinesToggle<CR>
@@ -651,4 +654,3 @@ vmap <silent> <leader>mo        :call TrackerOpenItem()<CR>
 " nmap <silent> <leader>c :call ConvertAsToDart()<CR>
 "
 " }}}
-
