@@ -136,6 +136,18 @@ map <S-ScrollWheelDown> <C-D>
 " nmap / q:i
 " nmap ? q?i
 
+" Faster vimgrep prompt
+" func! Get_vimgrep_prompt()
+"     let ext = expand("%:e")
+"     if (ext != "")
+"         let ext = "." . ext
+"     endif
+"     " return ext
+"     execute ":exec ://"
+" endfunc
+" nmap <leader>f: :call Get_vimgrep_prompt()<CR>
+":exe ":vim /<C-R>// **/*" . Get_vim_ext() <CR>
+
 " Faster substitute prompt
 " Substitute with last search, confirm on/off
 nmap <leader>r/ :%s:<C-R>/::gc<Left><Left><Left>
@@ -170,6 +182,13 @@ Bundle 'vim-scripts/Haskell-Conceal'
 Bundle 'tpope/vim-repeat'
 Bundle 'vim-scripts/ZoomWin'
 Bundle 'tpope/vim-unimpaired'
+
+Bundle 'felixSchl/ctrlp-unity3d-docs'
+au filetype cs nmap <buffer> <localLeader>fu :CtrlPUnity3DDocs<CR>
+
+Bundle 'tomtom/tcomment_vim'
+nmap <C-i> gccj
+vmap <C-i> gc
 
 Bundle 'AndrewRadev/switch.vim'
 nnoremap - :Switch<CR>
@@ -220,13 +239,22 @@ Bundle 'bling/vim-airline'
 " Disable Tagbar for airline, too slow!
 let g:airline#extensions#tagbar#enabled=0
 
+let s:neocomplete=0
 if has("lua")
     Bundle 'Shougo/neocomplete'
+    let s:neocomplete = 1
+    let g:neocomplete#use_vimproc = 1
     let g:neocomplete#enable_at_startup = 1
     let g:neocomplete#enable_smart_case = 1
     let g:neocomplete#text_mode_filetypes = {
                                             \ "pandoc": 1
                                             \ }
+    if !exists('g:neocomplete#sources#omni#input_patterns')
+        let g:neocomplete#sources#omni#input_patterns = {}
+    endif
+    if !exists('g:neocomplete#sources')
+        let g:neocomplete#sources = {}
+    endif
     inoremap <expr><C-g>    neocomplete#undo_completion()
     inoremap <expr><C-l>    neocomplete#complete_common_string()
     inoremap <expr><TAB>    pumvisible() ? "\<C-n>" : "\<TAB>"
@@ -268,9 +296,13 @@ let g:pantondoc_use_pandoc_markdown = 1
 Bundle 'vim-scripts/glsl.vim'
 au BufNewFile,BufRead *.shader set filetype=glsl.c
 
-" Bundle 'nosami/Omnisharp'
-" let g:Omnisharp_start_server = 0
-" let g:Omnisharp_stop_server = 0
+Bundle 'nosami/Omnisharp'
+if (s:neocomplete)
+    let g:neocomplete#sources#omni#input_patterns.cs = '.*[^;]'
+    let g:neocomplete#sources.cs = ['omni', 'buffer']
+endif
+let g:Omnisharp_start_server = 0
+let g:Omnisharp_stop_server = 0
 " au filetype cs nmap <buffer> <leader>gs :OmniSharpStartServer<CR>
 " au filetype cs nmap <buffer> <leader>gt :OmniSharpHighlightTypes<CR>
 " au filetype cs nmap <buffer> <leader>gd :OmniSharpGotoDefinition<CR>
@@ -280,10 +312,6 @@ au BufNewFile,BufRead *.shader set filetype=glsl.c
 
 Bundle 'dhruvasagar/vim-table-mode'
 let g:table_mode_corner = '+'
-
-Bundle 'tomtom/tcomment_vim'
-nmap <C-i> gccj
-vmap <C-i> gc
 
 Bundle 'scrooloose/nerdtree'
 nmap <F6> :call g:vimrc_toggle_nerd_tree()<CR>
@@ -341,7 +369,8 @@ let g:ctrlp_custom_ignore = {
     \ 'file': s:ignore_files
     \ }
 let g:ctrlp_extensions = ['tag', 'buffertag', 'quickfix', 'dir', 'rtscript',
-                        \ 'undo', 'line', 'changes', 'mixed', 'bookmarkdir']
+                        \ 'undo', 'line', 'changes', 'mixed', 'bookmarkdir'
+                        \ ]
 nnoremap <silent> <C-B> :CtrlPBuffer<CR>
 nnoremap <leader>fr     :CtrlPMRU<CR>
 nnoremap <leader>fb     :CtrlPBookmarkDir<CR>
@@ -356,6 +385,7 @@ nnoremap <leader>cd :ProjectRootCD<cr>
 " }}}
 " Global preferences {{{
 " ------------------------------------------------------------------------------
+set mouse=
 if (s:is_initial)
     syntax on
 endif
@@ -443,7 +473,8 @@ func! SetRandomColorScheme(colors)
     let cursor_line_normal_bg = "#333333"
     let cursor_line_insert_bg = "#002143"
 
-    hi! link Conceal Operator
+    hi! link Conceal SpecialKey
+    " hi! link Conceal Operator
 
     " Overwrites
     if (g:colors_name == "molokai")
@@ -602,13 +633,16 @@ au TabLeave * let t:wd=getcwd()
 " }}}
 "
 " Random stuff:
-" Custard Square {{{
-" ------------------------------------------------------------------------------
-" Start the smartfox server
-func! StartSFS2X()
-    execute 'Start ' . $SFS2X . '/restartSFS2X.bat' 
-endfunc
-nmap <silent> <leader>ws         :call StartSFS2X()<CR>
+" " Unity3D {{{
+" func! LookUpUnityDocs()
+"     let word = expand("<cword>")
+"     let url = "https://docs.unity3d.com/Documentation/ScriptReference/"
+"     let url .= word
+"     let url .= ".html"
+"     echo url
+"     execute ":OpenBrowser " . url
+" endfunc
+" au filetype cs nmap <script> <buffer> <localLeader>fu :call LookUpUnityDocs()<CR>
 " }}}
 " Tracking {{{
 " ------------------------------------------------------------------------------
@@ -634,23 +668,4 @@ nmap <silent> <leader>mo        :call TrackerOpenItem()<CR>
 vmap <silent> <leader>ma        :call TrackerAddItem()<CR>
 vmap <silent> <leader>mc        :call TrackerCloseItem()<CR>
 vmap <silent> <leader>mo        :call TrackerOpenItem()<CR>
-" }}}
-" {{{ Convert AS3 to dart
-" func! ConvertAsToDart()
-"   execute '%s/\<var\>//'
-"   execute '%s/\<private\>//'
-"   execute '%s/\<protected\>//'
-"   execute '%s/\<public\>//'
-"   execute '%s/\<override\>//'
-"   execute '%s/\<uint\>/int/'
-"   execute '%s/\<function\>//'
-"   execute '%s/\<Number\>/num/'
-"   execute '%s/\<Boolean\>/bool/'
-"   execute '%s/\<Math\.max\>/max/'
-"   execute '%s/\<Math\.min\>/min/'
-"   execute 'normal >>'
-"   execute 'normal <<'
-" endfunc
-" nmap <silent> <leader>c :call ConvertAsToDart()<CR>
-"
 " }}}
