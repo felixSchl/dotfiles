@@ -27,7 +27,6 @@ if has('win32') || has('win64')
   call vundle#rc('$HOME/vimfiles/bundle/')
   let s:isWin=1
 else
-  " Usual quickstart instructions
   set rtp+=~/.vim/bundle/vundle/
   call vundle#rc()
   let s:isLinux=1
@@ -60,21 +59,6 @@ nmap Q <Nop>
 
 " Toggle cursor column
 map <F11> :set cursorcolumn!<CR>
-
-" Easier virtual editing
-" block -> onemore -> off
-func! Change_virtual_edit_mode()
-    if (&ve=="block")
-        let &ve="onemore"
-    elseif (&ve=="onemore")
-        let &ve=""
-    elseif (&ve=="")
-        let &ve="block"
-    endif
-    echo "Virtual edit mode is now: \"".&ve."\""
-endfunc
-set virtualedit="onemore"
-nmap <F10> :call Change_virtual_edit_mode()<CR>
 
 " " Select visual lines by default
 " nmap j gj
@@ -136,18 +120,6 @@ map <S-ScrollWheelDown> <C-D>
 " nmap / q:i
 " nmap ? q?i
 
-" Faster vimgrep prompt
-" func! Get_vimgrep_prompt()
-"     let ext = expand("%:e")
-"     if (ext != "")
-"         let ext = "." . ext
-"     endif
-"     " return ext
-"     execute ":exec ://"
-" endfunc
-" nmap <leader>f: :call Get_vimgrep_prompt()<CR>
-":exe ":vim /<C-R>// **/*" . Get_vim_ext() <CR>
-
 " Faster substitute prompt
 " Substitute with last search, confirm on/off
 nmap <leader>r/ :%s:<C-R>/::gc<Left><Left><Left>
@@ -178,15 +150,17 @@ Bundle 'Shougo/vimproc'
 Bundle 'OrangeT/vim-csharp'
 Bundle 'eagletmt/neco-ghc'
 Bundle 'eagletmt/ghcmod-vim'
-Bundle 'vim-scripts/Haskell-Conceal'
+" Bundle 'vim-scripts/Haskell-Conceal'
 Bundle 'tpope/vim-repeat'
 Bundle 'vim-scripts/ZoomWin'
 Bundle 'tpope/vim-unimpaired'
+Bundle 'bitc/vim-hdevtools'
 
 Bundle 'felixSchl/ctrlp-unity3d-docs'
 au filetype cs nmap <buffer> <localLeader>fu :CtrlPUnity3DDocs<CR>
 
 Bundle 'tomtom/tcomment_vim'
+nmap <leader>o <C-O>
 nmap <C-i> gccj
 vmap <C-i> gc
 
@@ -286,6 +260,7 @@ let g:syntastic_haskell_checkers=['hlint']
 Bundle 'vim-pandoc/vim-pandoc-syntax'
 let g:pandoc_use_embeds_in_codeblocks_for_langs = [
     \ "python"
+    \,"cs"
     \,"haskell"
     \ ]
 
@@ -608,6 +583,7 @@ autocmd BufRead,BufNewFile *.slim set filetype=slim
 " Haskell
 au filetype haskell nmap <script> <buffer> <localLeader>r :!runhaskell %<CR>
 au filetype haskell nnoremap <script> <buffer> <LocalLeader>t :GhcModType<CR>
+au filetype haskell nnoremap <buffer> <F7> :exe "w \| !runhaskell %"<CR>
 au filetype haskell setl omnifunc=necoghc#omnifunc
 
 " }}}
