@@ -31,6 +31,7 @@ else
   call vundle#rc()
   let s:isLinux=1
 endif
+Bundle 'gmarik/vundle'
 " }}}
 " Mandatory settings {{{
 " ------------------------------------------------------------------------------
@@ -147,14 +148,14 @@ Bundle 'vim-scripts/VOoM'
 Bundle 'vim-scripts/CRefVim'
 Bundle 'ivyl/vim-bling'
 Bundle 'Shougo/vimproc'
-Bundle 'OrangeT/vim-csharp'
+Bundle 'felixSchl/vim-csharp'
 Bundle 'eagletmt/neco-ghc'
 Bundle 'eagletmt/ghcmod-vim'
 " Bundle 'vim-scripts/Haskell-Conceal'
 Bundle 'tpope/vim-repeat'
-Bundle 'vim-scripts/ZoomWin'
 Bundle 'tpope/vim-unimpaired'
-Bundle 'bitc/vim-hdevtools'
+Bundle 'vim-scripts/ZoomWin'
+" Bundle 'bitc/vim-hdevtools'
 
 Bundle 'felixSchl/ctrlp-unity3d-docs'
 au filetype cs nmap <buffer> <localLeader>fu :CtrlPUnity3DDocs<CR>
@@ -271,7 +272,7 @@ let g:pantondoc_use_pandoc_markdown = 1
 Bundle 'vim-scripts/glsl.vim'
 au BufNewFile,BufRead *.shader set filetype=glsl.c
 
-Bundle 'nosami/Omnisharp'
+" Bundle 'nosami/Omnisharp'
 if (s:neocomplete)
     let g:neocomplete#sources#omni#input_patterns.cs = '.*[^;]'
     let g:neocomplete#sources.cs = ['omni', 'buffer']
@@ -506,7 +507,6 @@ if has("gui_running")
     call add(colors, "kolor")
     call add(colors, "lodestone")
     call add(colors, "herald")
-    call add(colors, "solarized")
     call SetRandomColorScheme(colors)
 
     " TagHighlight classes
@@ -603,22 +603,9 @@ augroup END
 command! -nargs=* -complete=help Vh vertical belowright help <args>
 
 " Working directory per tab
-au TabEnter * if exists("t:wd") | exe "cd" . '"' t:wd . '"' | endif 
+au TabEnter * if exists("t:wd") | exe "cd " . fnameescape(t:wd) | endif
 au TabLeave * let t:wd=getcwd()
 
-" }}}
-"
-" Random stuff:
-" " Unity3D {{{
-" func! LookUpUnityDocs()
-"     let word = expand("<cword>")
-"     let url = "https://docs.unity3d.com/Documentation/ScriptReference/"
-"     let url .= word
-"     let url .= ".html"
-"     echo url
-"     execute ":OpenBrowser " . url
-" endfunc
-" au filetype cs nmap <script> <buffer> <localLeader>fu :call LookUpUnityDocs()<CR>
 " }}}
 " Tracking {{{
 " ------------------------------------------------------------------------------
