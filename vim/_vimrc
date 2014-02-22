@@ -75,7 +75,11 @@ vnoremap <C-V>     v
 imap jk <C-C>
 
 " Quickly remove search highlight
-nmap <F4> :nohl<CR>
+func! ClearSearch()
+    call setreg('/', "you will never find me!")
+    nohl
+endfunc
+nmap <F4> :call ClearSearch()<CR>
 
 " Easier copying and pasting
 nmap <leader>p "*p
@@ -156,6 +160,7 @@ Bundle 'tpope/vim-repeat'
 Bundle 'tpope/vim-unimpaired'
 Bundle 'vim-scripts/ZoomWin'
 " Bundle 'bitc/vim-hdevtools'
+Bundle 'ervandew/supertab'
 
 Bundle 'felixSchl/ctrlp-unity3d-docs'
 au filetype cs nmap <buffer> <localLeader>fu :CtrlPUnity3DDocs<CR>
@@ -237,8 +242,6 @@ if has("lua")
     inoremap <expr><BS>     neocomplete#smart_close_popup()."\<C-h>"
     inoremap <expr><C-y>    neocomplete#close_popup()
     inoremap <expr><C-e>    neocomplete#cancel_popup()
-else
-    Bundle 'ervandew/supertab'
 endif
 
 Bundle 'jondkinney/dragvisuals.vim'
@@ -272,10 +275,10 @@ let g:pantondoc_use_pandoc_markdown = 1
 Bundle 'vim-scripts/glsl.vim'
 au BufNewFile,BufRead *.shader set filetype=glsl.c
 
-" Bundle 'nosami/Omnisharp'
+Bundle 'nosami/Omnisharp'
 if (s:neocomplete)
     let g:neocomplete#sources#omni#input_patterns.cs = '.*[^;]'
-    let g:neocomplete#sources.cs = ['omni', 'buffer']
+    let g:neocomplete#sources.cs = ['buffer']
 endif
 let g:Omnisharp_start_server = 0
 let g:Omnisharp_stop_server = 0
