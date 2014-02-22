@@ -160,7 +160,6 @@ Bundle 'tpope/vim-repeat'
 Bundle 'tpope/vim-unimpaired'
 Bundle 'vim-scripts/ZoomWin'
 " Bundle 'bitc/vim-hdevtools'
-Bundle 'ervandew/supertab'
 
 Bundle 'felixSchl/ctrlp-unity3d-docs'
 au filetype cs nmap <buffer> <localLeader>fu :CtrlPUnity3DDocs<CR>
@@ -244,6 +243,13 @@ if has("lua")
     inoremap <expr><C-e>    neocomplete#cancel_popup()
 endif
 
+Bundle 'ervandew/supertab'
+let g:SuperTabDefaultCompletionType = 'context'
+let g:SuperTabContextDefaultCompletionType = "<c-x><c-o>"
+let g:SuperTabDefaultCompletionTypeDiscovery = ["&omnifunc:<c-x><c-o>","&completefunc:<c-x><c-n>"]
+let g:SuperTabClosePreviewOnPopupClose = 1
+
+
 Bundle 'jondkinney/dragvisuals.vim'
 vmap  <expr>  <S-LEFT>   DVB_Drag('left')
 vmap  <expr>  <S-RIGHT>  DVB_Drag('right')
@@ -278,16 +284,23 @@ au BufNewFile,BufRead *.shader set filetype=glsl.c
 Bundle 'nosami/Omnisharp'
 if (s:neocomplete)
     let g:neocomplete#sources#omni#input_patterns.cs = '.*[^;]'
-    let g:neocomplete#sources.cs = ['buffer']
+    let g:neocomplete#sources.cs = ['buffer'] " , 'omni']
 endif
+
 let g:Omnisharp_start_server = 0
 let g:Omnisharp_stop_server = 0
-" au filetype cs nmap <buffer> <leader>gs :OmniSharpStartServer<CR>
-" au filetype cs nmap <buffer> <leader>gt :OmniSharpHighlightTypes<CR>
-" au filetype cs nmap <buffer> <leader>gd :OmniSharpGotoDefinition<CR>
-" au filetype cs nmap <buffer> <leader>gu :OmniSharpFindUsages<CR>
-" au filetype cs nmap <buffer> <leader>gr :OmniSharpGetCodeActions<CR>
-" au filetype cs nmap <buffer> <leader>ge :OmniSharpFindSyntaxErrors<CR>
+func! s:OmniSharpTypeLookup()
+    let x = OmniSharp#ServerIsRunning()
+    if (x != 0)
+        call OmniSharp#TypeLookup()
+    endif
+endfunc
+" autocmd CursorHold *.cs call s:OmniSharpTypeLookup()
+nnoremap <space> :OmniSharpGetCodeActions<cr>
+au filetype cs nmap <buffer> <C-]> :OmniSharpGotoDefinition<CR>
+au filetype cs nmap <buffer> <localleader>u :OmniSharpFindUsages<CR>
+au filetype cs nmap <buffer> <localleader>t :OmniSharp#TypeLookup()<CR>
+au filetype cs nmap <buffer> <leader>ge :OmniSharpFindSyntaxErrors<CR>
 
 Bundle 'dhruvasagar/vim-table-mode'
 let g:table_mode_corner = '+'
@@ -368,7 +381,11 @@ set mouse=
 if (s:is_initial)
     syntax on
 endif
-set noswapfile
+" set noswapfile
+set updatetime=500
+set completeopt=longest,menuone,preview
+set cmdheight=1
+set splitbelow
 set lazyredraw
 set sessionoptions-=options
 set sessionoptions-=folds
