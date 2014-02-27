@@ -1,0 +1,9 @@
+[user]
+	email = felixschlitter@gmail.com
+	name = Felix
+[push]
+	default = simple
+[merge]
+	tool = gvimdiff
+[diff]
+	tool = gvimdiff
