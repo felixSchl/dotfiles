@@ -1,5 +1,36 @@
-SSH_ENV=$HOME/.ssh/environment
-export PATH=/c/Python33:$PATH
+# ~/.bashrc: executed by bash(1) for non-login shells.
+# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
+# for examples
+
+# If not running interactively, don't do anything
+[ -z "$PS1" ] && return
+
+# don't put duplicate lines or lines starting with space in the history.
+# See bash(1) for more options
+HISTCONTROL=ignoreboth
+
+# append to the history file, don't overwrite it
+shopt -s histappend
+
+# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+HISTSIZE=1000
+HISTFILESIZE=2000
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
+# If set, the pattern "**" used in a pathname expansion context will
+# match all files and zero or more directories and subdirectories.
+#shopt -s globstar
+
+# make less more friendly for non-text input files, see lesspipe(1)
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+# set variable identifying the chroot you work in (used in the prompt below)
+if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
+    debian_chroot=$(cat /etc/debian_chroot)
+fi
 
 function start_agent {
      echo "Initialising new SSH agent..."
@@ -22,8 +53,9 @@ else
      start_agent;
 fi
 
-# ------------------------------------------------------------ #
+# ---------------------------------------------------------------------------- #
 # ALIASES
+# ---------------------------------------------------------------------------- #
 
 # Set OS-specific aliases.
 case `uname` in
@@ -36,21 +68,47 @@ case `uname` in
         ;;
 esac
 
-# Set general aliases.
-alias e='emacs -nw'
-alias la='ls -a'
-alias ll='ls -g'
-alias t='tree'
-alias k='tree -L 2'
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto'
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
 
-alias ez='emacs ~/.zshrc'
-alias ee='emacs ~/.emacs.d/init.el'
+alias gvi='google docs edit $1'
+alias glist='google docs list'
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
 
-# Find largest files.
-alias biggest='find -type f -printf '\''%s %p\n'\'' | sort -nr | head -n 40 | gawk "{ print \$1/1000000 \" \" \$2 \" \" \$3 \" \" \$4 \" \" \$5 \" \" \$6 \" \" \$7 \" \" \$8 \" \" \$9 }"'
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
-# ------------------------------------------------------------ #
+# Alias definitions.
+# You may want to put all your additions into a separate file like
+# ~/.bash_aliases, instead of adding them here directly.
+# See /usr/share/doc/bash-doc/examples in the bash-doc package.
+
+if [ -f ~/.bash_aliases ]; then
+    . ~/.bash_aliases
+fi
+
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
+    . /etc/bash_completion
+fi
+
+alias gvi='google docs edit $1'
+alias glist='google docs list'
+
+# ---------------------------------------------------------------------------- #
 # GIT ALIASES
+# ---------------------------------------------------------------------------- #
 
 function git_current_branch() {
   git symbolic-ref HEAD 2> /dev/null | sed -e 's/refs\/heads\///'
@@ -85,8 +143,9 @@ alias gc='git clean'
 alias gclone='git clone'
 alias gl='git log --graph --all --format=format:"%C(bold blue)%h%C(reset) %C(green)- %s %C(reset)%C(bold green)— %an%C(reset) %C(cyan)(%ar)%C(reset) %C(blue)%d%C(reset)" --abbrev-commit --date=relative'
 
-# ------------------------------------------------------------ #
+# ---------------------------------------------------------------------------- #
 # SHELL COLOURS
+# ---------------------------------------------------------------------------- #
 
 # Solarize
 function dark {
@@ -102,8 +161,9 @@ case `uname` in
     *)      export CLICOLOR=1;;
 esac
 
-# ------------------------------------------------------------ #
+# ---------------------------------------------------------------------------- #
 # CUSTOMISE PROMPT
+# ---------------------------------------------------------------------------- #
 
 # Red if last command failed
 function __last_cmd_code_ps1() {
@@ -125,3 +185,25 @@ PS1=$(echo "$ps1""$nc""
 >>> ");
 }
 prompt
+
+# ---------------------------------------------------------------------------- #
+# TOOLS IN PATH ETC.
+# ---------------------------------------------------------------------------- #
+
+PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+
+### Added by the Heroku Toolbelt
+export PATH="/usr/local/heroku/bin:$PATH"
+[[ -s '/home/felix/.rvm/scripts/rvm' ]] && source '/home/felix/.rvm/scripts/rvm'
+
+# BEGIN Ruboto setup
+source ~/.rubotorc
+# END Ruboto setup
+
+### Dart
+DART_SDK=/home/felix/apps/dart-sdk
+PATH=$PATH:$DART_SDK/bin
+
+## Cabal
+PATH=$PATH:$HOME/.cabal/bin
+
