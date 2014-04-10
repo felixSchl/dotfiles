@@ -15,7 +15,7 @@ let s:ignore_dirs='\v[\/]((\.(git|hg|svn))|(build|obj|temp))$'
 let s:ignore_files='\v\.('
                  \.'meta|exe|so|dll|fbx|png|tga|jpg|bmp|csproj|sln|'
                  \.'unityproj|userprefs|suo|asset|prefab|db|dwlt|mdb|class|jar|'
-                 \.'mat|apk|obb|cache|controller|user|ttf|guiskin|unity'
+                 \.'mat|apk|obb|cache|controller|user|ttf|guiskin|unity|pyc'
                  \.')$'
 " }}}
 " Init vundle {{{
@@ -71,7 +71,7 @@ nnoremap <C-V>     v
 vnoremap    v   <C-V>
 vnoremap <C-V>     v
 
-" Fastes insert mode leaving
+" Fastest insert mode leaving
 imap jk <C-C>
 
 " Quickly remove search highlight
@@ -127,8 +127,7 @@ map <S-ScrollWheelDown> <C-D>
 
 " Faster substitute prompt
 " Substitute with last search, confirm on/off
-nmap <leader>r/ :%s:<C-R>/::gc<Left><Left><Left>
-nmap <leader>R/ :%s:<C-R>/::g<Left><Left>
+nmap <leader>/ :%s:<C-R>/::g<Left><Left>
 " Substitute from blank, confirm on/off
 nmap <leader>; :%s:::g<Left><Left><Left>
 nmap <leader>' :%s:::gc<Left><Left><Left><Left>
@@ -153,13 +152,22 @@ Bundle 'vim-scripts/CRefVim'
 Bundle 'ivyl/vim-bling'
 Bundle 'Shougo/vimproc'
 Bundle 'felixSchl/vim-csharp'
-Bundle 'eagletmt/neco-ghc'
-Bundle 'eagletmt/ghcmod-vim'
-" Bundle 'vim-scripts/Haskell-Conceal'
 Bundle 'tpope/vim-repeat'
-Bundle 'tpope/vim-unimpaired'
 Bundle 'vim-scripts/ZoomWin'
+Bundle 'tpope/vim-haml'
+Bundle 'vim-scripts/LargeFile'
+" Bundle 'klen/python-mode'
+" Bundle 'eagletmt/neco-ghc'
+" Bundle 'eagletmt/ghcmod-vim'
 " Bundle 'bitc/vim-hdevtools'
+" Bundle 'vim-scripts/Haskell-Conceal'
+Bundle 'suan/vim-instant-markdown'
+
+Bundle "Twinside/vim-hoogle"
+au filetype haskell map <buffer> <leader>i :HoogleInfo<CR>
+au filetype haskell map <buffer> <F1>      :Hoogle
+au filetype haskell map <buffer> <C-F1>    :HoogleClose<CR>
+au filetype haskell map <buffer> <S-F1>    :HoogleLine<CR>
 
 Bundle 'felixSchl/ctrlp-unity3d-docs'
 au filetype cs nmap <buffer> <localLeader>fu :CtrlPUnity3DDocs<CR>
@@ -276,7 +284,7 @@ let g:pandoc_use_embeds_in_codeblocks_for_langs = [
 
 Bundle 'vim-pandoc/vim-pantondoc'
 let g:pantondoc_use_pandoc_markdown = 1
-" let g:pandoc_use_conceal = 0
+let g:pandoc_use_conceal = 0
 
 Bundle 'vim-scripts/glsl.vim'
 au BufNewFile,BufRead *.shader set filetype=glsl.c
@@ -284,7 +292,7 @@ au BufNewFile,BufRead *.shader set filetype=glsl.c
 Bundle 'nosami/Omnisharp'
 if (s:neocomplete)
     let g:neocomplete#sources#omni#input_patterns.cs = '.*[^;]'
-    let g:neocomplete#sources.cs = ['buffer'] " , 'omni']
+    let g:neocomplete#sources.cs = ['buffer', 'omni']
 endif
 
 let g:Omnisharp_start_server = 0
@@ -300,6 +308,7 @@ nnoremap <space> :OmniSharpGetCodeActions<cr>
 au filetype cs nmap <buffer> <C-]> :OmniSharpGotoDefinition<CR>
 au filetype cs nmap <buffer> <localleader>u :OmniSharpFindUsages<CR>
 au filetype cs nmap <buffer> <localleader>t :OmniSharp#TypeLookup()<CR>
+au filetype cs nmap <buffer> <leader>ft :OmniSharpFindType<CR>
 au filetype cs nmap <buffer> <leader>ge :OmniSharpFindSyntaxErrors<CR>
 
 Bundle 'dhruvasagar/vim-table-mode'
@@ -523,7 +532,6 @@ if has("gui_running")
     call add(colors, "jellybeans")
     call add(colors, "lilypink")
     call add(colors, "wombat256mod")
-    call add(colors, "pf_earth")
     call add(colors, "kolor")
     call add(colors, "lodestone")
     call add(colors, "herald")
@@ -535,7 +543,7 @@ if has("gui_running")
     highlight Function guifg=#F4F885
 
     if (s:isWin)
-        set guifont=Consolas:h11:cANSI
+        set guifont=Consolas:h12:cANSI
     else
         set guifont=DejaVu\ \Sans\ Mono
     endif
@@ -593,6 +601,7 @@ autocmd filetype html setl shiftwidth=2
 
 " Python
 autocmd filetype python setlocal foldmethod=indent
+autocmd filetype python nnoremap <buffer> <F7> :exe "w \| !python %"<CR>
 
 " Ruby
 autocmd filetype ruby setl shiftwidth=2
@@ -609,16 +618,6 @@ au filetype haskell setl omnifunc=necoghc#omnifunc
 " }}}
 " Goodies {{{
 " ------------------------------------------------------------------------------
-" Open file with pre-existing swp file in read-only automatically
-augroup NoSimultaneousEdits
-    autocmd!
-    autocmd SwapExists * let v:swapchoice = 'o'
-    " autocmd SwapExists * echomsg ErrorMsg
-    autocmd SwapExists * echo 'Duplicate edit session (readonly)'
-    autocmd SwapExists * echohl None
-    autocmd SwapExists * sleep 2
-augroup END
-
 " Open a help in a vertsplit. Use with `:Vh`
 command! -nargs=* -complete=help Vh vertical belowright help <args>
 
