@@ -155,18 +155,26 @@ Bundle 'vim-scripts/CRefVim'
 Bundle 'ivyl/vim-bling'
 Bundle 'Shougo/vimproc'
 Bundle 'OrangeT/vim-csharp'
-Bundle 'eagletmt/neco-ghc'
-Bundle 'eagletmt/ghcmod-vim'
-" Bundle 'vim-scripts/Haskell-Conceal'
 Bundle 'tpope/vim-repeat'
 Bundle 'vim-scripts/ZoomWin'
 Bundle 'tpope/vim-haml'
-" Bundle 'klen/python-mode'
-" Bundle 'eagletmt/neco-ghc'
-" Bundle 'eagletmt/ghcmod-vim'
-" Bundle 'bitc/vim-hdevtools'
-" Bundle 'vim-scripts/Haskell-Conceal'
-Bundle 'suan/vim-instant-markdown'
+Bundle 'eagletmt/ghcmod-vim'
+Bundle 'eagletmt/neco-ghc'
+Bundle 'derekwyatt/vim-scala'
+
+Bundle 'bitc/vim-hdevtools'
+function! FindCabalSandboxRoot()
+    return finddir('.cabal-sandbox', './;')
+endfunction
+
+function! FindCabalSandboxRootPackageConf()
+    return glob(FindCabalSandboxRoot().'/*-packages.conf.d')
+endfunction
+
+let g:hdevtools_options = '-g-ilib -g-isrc -g-i. -g-idist/build/autogen -g-Wall -g-package-conf='.FindCabalSandboxRootPackageConf()
+
+Bundle 'mathhn/emmet-vim'
+let g:user_emmet_leader_key='<C-Z>'
 
 Bundle 'vim-scripts/LargeFile'
 let g:LargeFile=50
@@ -541,7 +549,7 @@ if has("gui_running")
     if (s:isWin)
         set guifont=Consolas:h12:cANSI
     else
-        set guifont=DejaVu\ \Sans\ Mono
+        set guifont=Monaco
     endif
     set guifontwide=NSimsun:h12
     set guioptions-=m
@@ -607,7 +615,7 @@ autocmd BufRead,BufNewFile *.slim set filetype=slim
 
 " Haskell
 au filetype haskell nmap <script> <buffer> <localLeader>r :!runhaskell %<CR>
-au filetype haskell nnoremap <script> <buffer> <LocalLeader>t :GhcModType<CR>
+au filetype haskell nnoremap <script> <buffer> <LocalLeader>t :HdevtoolsType<CR>
 au filetype haskell nnoremap <buffer> <F7> :exe "w \| !runhaskell %"<CR>
 au filetype haskell setl omnifunc=necoghc#omnifunc
 
