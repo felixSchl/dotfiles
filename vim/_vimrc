@@ -59,7 +59,7 @@ endif
 nmap Q <Nop>
 
 " Toggle cursor column
-map <F11> :set cursorcolumn!<CR>
+map <F10> :set cursorcolumn!<CR>
 
 " " Select visual lines by default
 " nmap j gj
@@ -145,23 +145,22 @@ Bundle 'garbas/vim-snipmate'
 Bundle 'honza/vim-snippets'
 Bundle 'tpope/vim-surround'
 Bundle 'Townk/vim-autoclose'
-Bundle 'vim-scripts/cg.vim'
-Bundle 'dart-lang/dart-vim-plugin'
-Bundle 'vim-scripts/VOoM'
-Bundle 'vim-scripts/CRefVim'
 Bundle 'ivyl/vim-bling'
 Bundle 'Shougo/vimproc'
-Bundle 'felixSchl/vim-csharp'
 Bundle 'tpope/vim-repeat'
 Bundle 'vim-scripts/ZoomWin'
 Bundle 'tpope/vim-haml'
 Bundle 'vim-scripts/LargeFile'
-" Bundle 'klen/python-mode'
-" Bundle 'eagletmt/neco-ghc'
-" Bundle 'eagletmt/ghcmod-vim'
-" Bundle 'bitc/vim-hdevtools'
-" Bundle 'vim-scripts/Haskell-Conceal'
-Bundle 'suan/vim-instant-markdown'
+Bundle 'felixSchl/python-vim-instant-markdown'
+Bundle 'leafgarland/typescript-vim'
+Bundle 'kongo2002/fsharp-vim'
+Bundle 'gkz/vim-ls'
+
+if s:isWin
+    Bundle 'vim-scripts/gvimfullscreen_win32'
+    map <F11> <Esc>:call libcallnr("gvimfullscreen.dll", "ToggleFullScreen", 0)<CR> 
+endif
+
 
 Bundle "Twinside/vim-hoogle"
 au filetype haskell map <buffer> <leader>i :HoogleInfo<CR>
@@ -251,13 +250,6 @@ if has("lua")
     inoremap <expr><C-e>    neocomplete#cancel_popup()
 endif
 
-Bundle 'ervandew/supertab'
-let g:SuperTabDefaultCompletionType = 'context'
-let g:SuperTabContextDefaultCompletionType = "<c-x><c-o>"
-let g:SuperTabDefaultCompletionTypeDiscovery = ["&omnifunc:<c-x><c-o>","&completefunc:<c-x><c-n>"]
-let g:SuperTabClosePreviewOnPopupClose = 1
-
-
 Bundle 'jondkinney/dragvisuals.vim'
 vmap  <expr>  <S-LEFT>   DVB_Drag('left')
 vmap  <expr>  <S-RIGHT>  DVB_Drag('right')
@@ -271,9 +263,16 @@ let g:syntastic_mode_map = { 'mode': 'passive'
                            \,'active_filetypes': []
                            \,'passive_filetypes': []
                            \}
+let g:syntastic_check_on_open=1
+let g:syntastic_enable_signs=1
+
+let g:syntastic_cs_checkers = ['issues', 'syntax']
+let g:syntastic_haskell_checkers = ['hlint', 'ghc_mod']
+
 nmap <silent> <leader>ss :SyntasticCheck<CR>
 nmap <silent> <leader>sr :SyntasticReset<CR>
-let g:syntastic_haskell_checkers=['hlint']
+
+autocmd BufEnter,BufWrite *.cs SyntasticCheck
 
 Bundle 'vim-pandoc/vim-pandoc-syntax'
 let g:pandoc_use_embeds_in_codeblocks_for_langs = [
@@ -290,26 +289,25 @@ Bundle 'vim-scripts/glsl.vim'
 au BufNewFile,BufRead *.shader set filetype=glsl.c
 
 Bundle 'nosami/Omnisharp'
+autocmd FileType cs setlocal omnifunc=OmniSharp#Complete
+
 if (s:neocomplete)
     let g:neocomplete#sources#omni#input_patterns.cs = '.*[^;]'
-    let g:neocomplete#sources.cs = ['buffer', 'omni']
+    let g:neocomplete#sources.cs = ['buffer'] " , 'omni']
 endif
 
 let g:Omnisharp_start_server = 0
-let g:Omnisharp_stop_server = 0
-func! s:OmniSharpTypeLookup()
-    let x = OmniSharp#ServerIsRunning()
-    if (x != 0)
-        call OmniSharp#TypeLookup()
-    endif
-endfunc
-" autocmd CursorHold *.cs call s:OmniSharpTypeLookup()
-nnoremap <space> :OmniSharpGetCodeActions<cr>
-au filetype cs nmap <buffer> <C-]> :OmniSharpGotoDefinition<CR>
-au filetype cs nmap <buffer> <localleader>u :OmniSharpFindUsages<CR>
-au filetype cs nmap <buffer> <localleader>t :OmniSharp#TypeLookup()<CR>
+let g:Omnisharp_stop_server  = 0
+
+" autocmd CursorHold *.cs call OmniSharp#TypeLookupWithoutDocumentation()
+autocmd BufWritePost *.cs call OmniSharp#AddToProject()
+
+au filetype cs nmap <buffer> <space>    :OmniSharpGetCodeActions<cr>
+au filetype cs nmap <buffer> <C-]>      :OmniSharpGotoDefinition<CR>
+au filetype cs nmap <buffer> <leader>fu :OmniSharpFindUsages<CR>
+au filetype cs nmap <buffer> <leader>fd :OmniSharpDocumentation<CR>
 au filetype cs nmap <buffer> <leader>ft :OmniSharpFindType<CR>
-au filetype cs nmap <buffer> <leader>ge :OmniSharpFindSyntaxErrors<CR>
+au filetype cs nmap <buffer> <leader>fe :OmniSharpFindSyntaxErrors<CR>
 
 Bundle 'dhruvasagar/vim-table-mode'
 let g:table_mode_corner = '+'
@@ -340,10 +338,6 @@ function! s:nerdtree_settings()
 endfunc
 nnoremap <leader>ff :NERDTreeFind<CR>
 
-Bundle 'majutsushi/tagbar'
-nmap <F5> :TagbarToggle<CR>
-let g:tagbar_left=1
-
 Bundle "nelstrom/vim-visual-star-search"
 Bundle 'thinca/vim-visualstar'
 nmap * <Plug>(visualstar-*)N
@@ -351,9 +345,6 @@ nmap * <Plug>(visualstar-*)N
 Bundle 'milkypostman/vim-togglelist'
 nmap <script> <silent> <leader>l :call ToggleLocationList()<CR>
 nmap <script> <silent> <leader>q :call ToggleQuickfixList()<CR>
-
-Bundle 'vim-scripts/toggle_words.vim'
-nmap <leader>\ :ToggleWord<CR>
 
 Bundle 'tyru/open-browser.vim'
 let g:netrw_nogx = 1
@@ -391,11 +382,11 @@ if (s:is_initial)
     syntax on
 endif
 " set noswapfile
+set linespace=2
 set updatetime=500
-set completeopt=longest,menuone,preview
+set completeopt=menu,preview
 set cmdheight=1
 set splitbelow
-set lazyredraw
 set sessionoptions-=options
 set sessionoptions-=folds
 set viminfo='50,<1000,s100,n~/.viminfo
@@ -408,7 +399,6 @@ set nrformats-=octal
 set shiftround
 set ttimeout
 set ttimeoutlen=50
-set exrc
 set hidden
 set nospell
 set showcmd
@@ -431,7 +421,6 @@ set textwidth=80
 set foldmethod=syntax
 set foldlevelstart=99
 set formatoptions-=t
-" set foldcolumn=3
 autocmd FileType qf wincmd J " quickfix list at bottom
 set wildignore=*.o,*.obj,*.bak,*.exe,*.pyc,*.swp
 set wildignore+=*.png,*.tga,*.psd
@@ -552,11 +541,11 @@ if has("gui_running")
     set guioptions-=e
     set guioptions+=c
     set guioptions-=l
-    set guioptions-=L
-    set guioptions-=r
     set guioptions-=R
     set guioptions-=b
     set guioptions-=T
+    set guioptions-=r
+    set guioptions-=L
 else
     set t_Co=256
     if (s:isLinux)
@@ -596,15 +585,25 @@ autocmd BufRead,BufNewFile *.shader setlocal filetype=cg
 " Dart
 autocmd BufRead,BufNewFile *.dart setlocal filetype=dart
 
+" ls
+autocmd BufRead,BufNewFile *.ls setlocal filetype=ls
+
+" Typescript
+autocmd BufRead,BufNewFile *.ts setlocal filetype=typescript
+
 " HTML
 autocmd filetype html setl shiftwidth=2
 
 " Python
 autocmd filetype python setlocal foldmethod=indent
-autocmd filetype python nnoremap <buffer> <F7> :exe "w \| !python %"<CR>
+autocmd filetype python nnoremap <buffer> <F7> :exe "w \| !python2 %"<CR>
+
+" Fsharp
+autocmd BufNewFile,BufRead *.fs,*.fsi,*.fsx set filetype=fsharp
 
 " Ruby
 autocmd filetype ruby setl shiftwidth=2
+autocmd filetype ruby nnoremap <buffer> <F7> :exe "w \| !ruby %"<CR>
 
 " Rails asset pipeline
 autocmd BufRead,BufNewFile *.slim set filetype=slim
@@ -644,10 +643,10 @@ func! TrackerOpenItem()
     execute 'normal 0 /DONE$/ciwOPEN'
 endfunc
 
-nmap <silent> <leader>ma        :call TrackerAddItem()<CR>
-nmap <silent> <leader>mc        :call TrackerCloseItem()<CR>
-nmap <silent> <leader>mo        :call TrackerOpenItem()<CR>
-vmap <silent> <leader>ma        :call TrackerAddItem()<CR>
-vmap <silent> <leader>mc        :call TrackerCloseItem()<CR>
-vmap <silent> <leader>mo        :call TrackerOpenItem()<CR>
+nmap <silent> <leader>ma :call TrackerAddItem()<CR>
+nmap <silent> <leader>mc :call TrackerCloseItem()<CR>
+nmap <silent> <leader>mo :call TrackerOpenItem()<CR>
+vmap <silent> <leader>ma :call TrackerAddItem()<CR>
+vmap <silent> <leader>mc :call TrackerCloseItem()<CR>
+vmap <silent> <leader>mo :call TrackerOpenItem()<CR>
 " }}}
