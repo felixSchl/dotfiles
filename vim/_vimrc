@@ -458,6 +458,9 @@ set fileencoding=utf-8
 set fileencodings=ucs-bom,utf8,prc
 exec "set listchars=tab:\\|→"
 exec "set list lcs+=trail:\uB7,nbsp:~"
+command! -nargs=1 Silent
+\ | execute ':silent !'.<q-args>
+\ | execute ':redraw!'
 " }}}
 " Theme  {{{
 " ------------------------------------------------------------------------------
