@@ -32,27 +32,6 @@ if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
     debian_chroot=$(cat /etc/debian_chroot)
 fi
 
-function start_agent {
-     echo "Initialising new SSH agent..."
-     /usr/bin/ssh-agent | sed 's/^echo/#echo/' > ${SSH_ENV}
-     echo succeeded
-     chmod 600 ${SSH_ENV}
-     . ${SSH_ENV} > /dev/null
-     /usr/bin/ssh-add;
-}
-
-# Source SSH settings, if applicable
-
-if [ -f "${SSH_ENV}" ]; then
-     . ${SSH_ENV} > /dev/null
-     #ps ${SSH_AGENT_PID} doesn't work under cywgin
-     ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
-         start_agent;
-     }
-else
-     start_agent;
-fi
-
 # ---------------------------------------------------------------------------- #
 # ALIASES
 # ---------------------------------------------------------------------------- #
@@ -191,19 +170,3 @@ prompt
 # ---------------------------------------------------------------------------- #
 
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
-
-### Added by the Heroku Toolbelt
-export PATH="/usr/local/heroku/bin:$PATH"
-[[ -s '/home/felix/.rvm/scripts/rvm' ]] && source '/home/felix/.rvm/scripts/rvm'
-
-# BEGIN Ruboto setup
-source ~/.rubotorc
-# END Ruboto setup
-
-### Dart
-DART_SDK=/home/felix/apps/dart-sdk
-PATH=$PATH:$DART_SDK/bin
-
-## Cabal
-PATH=$PATH:$HOME/.cabal/bin
-
