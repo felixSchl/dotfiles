@@ -18,20 +18,15 @@ let s:ignore_files='\v\.('
                  \.'mat|apk|obb|cache|controller|user|ttf|guiskin|unity|pyc'
                  \.')$'
 " }}}
-" Init vundle {{{
+" Init globals {{{
 " -------------------------------------------------------------------------------
 let s:isWin=0
 let s:isLinux=0
 if has('win32') || has('win64')
-  set rtp+=~/vimfiles/bundle/vundle/
-  call vundle#rc('$HOME/vimfiles/bundle/')
   let s:isWin=1
 else
-  set rtp+=~/.vim/bundle/vundle/
-  call vundle#rc()
   let s:isLinux=1
 endif
-Bundle 'gmarik/vundle'
 " }}}
 " Mandatory settings {{{
 " ------------------------------------------------------------------------------
@@ -59,7 +54,7 @@ endif
 nmap Q <Nop>
 
 " Toggle cursor column
-map <F10> :set cursorcolumn!<CR>
+map <F11> :set cursorcolumn!<CR>
 
 " " Select visual lines by default
 " nmap j gj
@@ -135,78 +130,53 @@ nmap <leader>/ :%s:<C-R>/::g<Left><Left>
 nmap <leader>; :%s:::g<Left><Left><Left>
 nmap <leader>' :%s:::gc<Left><Left><Left><Left>
 
+" View last command output (hack)
+nmap <leader>s :!cat<CR>
+
 " }}}
-" Bundles {{{
-Bundle 'flazz/vim-colorschemes'
-Bundle 'tpope/vim-dispatch'
-Bundle 'endel/actionscript.vim'
-Bundle 'tpope/vim-fugitive'
-Bundle 'tsaleh/vim-matchit'
-Bundle 'MarcWeber/vim-addon-mw-utils'
-Bundle 'tomtom/tlib_vim'
-Bundle 'garbas/vim-snipmate'
-Bundle 'honza/vim-snippets'
-Bundle 'tpope/vim-surround'
-Bundle 'Townk/vim-autoclose'
-Bundle 'ivyl/vim-bling'
-Bundle 'Shougo/vimproc'
-Bundle 'tpope/vim-repeat'
-Bundle 'vim-scripts/ZoomWin'
-Bundle 'tpope/vim-haml'
-Bundle 'eagletmt/ghcmod-vim'
-Bundle 'eagletmt/neco-ghc'
-Bundle 'derekwyatt/vim-scala'
-Bundle 'felixSchl/python-vim-instant-markdown'
-Bundle 'leafgarland/typescript-vim'
-Bundle 'kongo2002/fsharp-vim'
-Bundle 'gkz/vim-ls'
 
-Bundle 'bitc/vim-hdevtools'
-function! FindCabalSandboxRoot()
-    return finddir('.cabal-sandbox', './;')
-endfunction
+" Plugins {{{
+" ------------------------------------------------------------------------------
+call plug#begin("~/.vim/plugged")
+Plug 'flazz/vim-colorschemes'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-repeat'
+Plug 'Townk/vim-autoclose'
+Plug 'mileszs/ack.vim'
+Plug 'ivyl/vim-bling'
+Plug 'OrangeT/vim-csharp'
+Plug 'tpope/vim-haml'
+Plug 'derekwyatt/vim-scala'
+Plug 'jimenezrick/vimerl'
+Plug 'othree/xml.vim'
+Plug 'gkz/vim-ls'
+Plug 'leafgarland/typescript-vim'
 
-function! FindCabalSandboxRootPackageConf()
-    return glob(FindCabalSandboxRoot().'/*-packages.conf.d')
-endfunction
-
-let g:hdevtools_options = '-g-ilib -g-isrc -g-i. -g-idist/build/autogen -g-Wall -g-package-conf='.FindCabalSandboxRootPackageConf()
-
-Bundle 'mathhn/emmet-vim'
-let g:user_emmet_leader_key='<C-Z>'
-
-Bundle 'vim-scripts/LargeFile'
+Plug 'vim-scripts/LargeFile'
 let g:LargeFile=50
 
-if s:isWin
-    Bundle 'vim-scripts/gvimfullscreen_win32'
-    map <F11> <Esc>:call libcallnr("gvimfullscreen.dll", "ToggleFullScreen", 0)<CR> 
-endif
-
-Bundle "Twinside/vim-hoogle"
+Plug 'Twinside/vim-hoogle'
 au filetype haskell map <buffer> <leader>i :HoogleInfo<CR>
 au filetype haskell map <buffer> <F1>      :Hoogle
 au filetype haskell map <buffer> <C-F1>    :HoogleClose<CR>
 au filetype haskell map <buffer> <S-F1>    :HoogleLine<CR>
 
-Bundle 'felixSchl/ctrlp-unity3d-docs'
-au filetype cs nmap <buffer> <localLeader>fu :CtrlPUnity3DDocs<CR>
-
-Bundle 'tomtom/tcomment_vim'
+Plug 'tomtom/tcomment_vim'
 nmap <leader>o <C-O>
 nmap <C-i> gccj
 vmap <C-i> gc
 
-Bundle 'AndrewRadev/switch.vim'
+Plug 'AndrewRadev/switch.vim'
 nnoremap - :Switch<CR>
 
-Bundle 'Yggdroot/indentLine'
+Plug 'Yggdroot/indentLine'
 nmap <leader>ir :IndentLinesReset<CR>
 nmap <leader>it :IndentLinesToggle<CR>
 nmap <F12>      :IndentLinesToggle<CR>
 let g:indentLine_noConcealCursor=1
 
-Bundle 'godlygeek/tabular'
+Plug 'godlygeek/tabular'
 " Maps hotkeys for tabularize, repeatable by repeat.vim
 function! s:make_align_mappings(first_key, ...)
     for tabmaps in a:000
@@ -224,7 +194,7 @@ call s:make_align_mappings(
     \ "<leader>a"
     \,[':' , "\/:\\zs/l0r1"]
     \,[',' , "\/,\\zs/l0r1"]
-    \,['=' , "\/[^=]=[^=]/l1r1"]
+    \,['=' , "\/[^=^<^!]=[^=^>]/l0r0"]
     \,['\~', "\/==/l1r1"]
     \,['+' , "\/+/l1r1"]
     \,['-' , "\/-/l1r1"]
@@ -234,21 +204,21 @@ call s:make_align_mappings(
     \,['m' , "\/^[^<]*<[^>]*>\\zs/l0r1"]
     \)
 
-Bundle 'chrismccord/bclose.vim'
+Plug 'chrismccord/bclose.vim'
 nnoremap <C-W>c :Bclose<CR>
 
 if !s:isWin
     " Too slow on windows...
-    Bundle 'airblade/vim-gitgutter'
+    Plug 'airblade/vim-gitgutter'
 endif
 
-Bundle 'bling/vim-airline'
+Plug 'bling/vim-airline'
 " Disable Tagbar for airline, too slow!
 let g:airline#extensions#tagbar#enabled=0
 
 let s:neocomplete=0
 if has("lua")
-    Bundle 'Shougo/neocomplete'
+    Plug 'Shougo/neocomplete'
     let s:neocomplete = 1
     let g:neocomplete#use_vimproc = 1
     let g:neocomplete#enable_at_startup = 1
@@ -270,71 +240,46 @@ if has("lua")
     inoremap <expr><C-y>    neocomplete#close_popup()
     inoremap <expr><C-e>    neocomplete#cancel_popup()
 else
-    Bundle 'ervandew/supertab'
+    Plug 'ervandew/supertab'
 endif
 
-Bundle 'jondkinney/dragvisuals.vim'
+Plug 'jondkinney/dragvisuals.vim'
 vmap  <expr>  <S-LEFT>   DVB_Drag('left')
 vmap  <expr>  <S-RIGHT>  DVB_Drag('right')
 vmap  <expr>  <S-DOWN>   DVB_Drag('down')
 vmap  <expr>  <S-UP>     DVB_Drag('up')
 vmap  <expr>  D          DVB_Duplicate()
 
-Bundle 'scrooloose/syntastic'
+Plug 'scrooloose/syntastic'
 let g:syntastic_check_on_wq=0
 let g:syntastic_mode_map = { 'mode': 'passive'
                            \,'active_filetypes': []
                            \,'passive_filetypes': []
                            \}
-let g:syntastic_check_on_open=1
-let g:syntastic_enable_signs=1
-
-let g:syntastic_cs_checkers = ['issues', 'syntax']
-let g:syntastic_haskell_checkers = ['hlint', 'ghc_mod']
-
 nmap <silent> <leader>ss :SyntasticCheck<CR>
 nmap <silent> <leader>sr :SyntasticReset<CR>
 
-autocmd BufEnter,BufWrite *.cs SyntasticCheck
+let g:syntastic_haskell_checkers = ['hlint']
+let g:syntastic_cs_checkers      = ['syntax', 'semantic', 'issues']
 
-Bundle 'vim-pandoc/vim-pandoc-syntax'
+Plug 'vim-pandoc/vim-pandoc-syntax'
 let g:pandoc_use_embeds_in_codeblocks_for_langs = [
     \ "python"
     \,"cs"
     \,"haskell"
     \ ]
 
-Bundle 'vim-pandoc/vim-pantondoc'
+Plug 'vim-pandoc/vim-pantondoc'
 let g:pantondoc_use_pandoc_markdown = 1
 let g:pandoc_use_conceal = 0
 
-Bundle 'vim-scripts/glsl.vim'
+Plug 'vim-scripts/glsl.vim'
 au BufNewFile,BufRead *.shader set filetype=glsl.c
 
-Bundle 'nosami/Omnisharp'
-autocmd FileType cs setlocal omnifunc=OmniSharp#Complete
-
-if (s:neocomplete)
-    let g:neocomplete#sources#omni#input_patterns.cs = '.*[^;]'
-    let g:neocomplete#sources.cs = ['buffer'] " , 'omni']
-endif
-
-let g:Omnisharp_stop_server  = 0
-
-" autocmd CursorHold *.cs call OmniSharp#TypeLookupWithoutDocumentation()
-autocmd BufWritePost *.cs call OmniSharp#AddToProject()
-
-au filetype cs nmap <buffer> <space>    :OmniSharpGetCodeActions<cr>
-au filetype cs nmap <buffer> <C-]>      :OmniSharpGotoDefinition<CR>
-au filetype cs nmap <buffer> <leader>fu :OmniSharpFindUsages<CR>
-au filetype cs nmap <buffer> <leader>fd :OmniSharpDocumentation<CR>
-au filetype cs nmap <buffer> <leader>ft :OmniSharpFindType<CR>
-au filetype cs nmap <buffer> <leader>fe :OmniSharpFindSyntaxErrors<CR>
-
-Bundle 'dhruvasagar/vim-table-mode'
+Plug 'dhruvasagar/vim-table-mode'
 let g:table_mode_corner = '+'
 
-Bundle 'scrooloose/nerdtree'
+Plug 'scrooloose/nerdtree'
 nmap <F6> :call g:vimrc_toggle_nerd_tree()<CR>
 let g:vimrc_initial_nerd_tree=1
 function! g:vimrc_toggle_nerd_tree()
@@ -360,20 +305,20 @@ function! s:nerdtree_settings()
 endfunc
 nnoremap <leader>ff :NERDTreeFind<CR>
 
-Bundle "nelstrom/vim-visual-star-search"
-Bundle 'thinca/vim-visualstar'
+Plug 'nelstrom/vim-visual-star-search'
+Plug 'thinca/vim-visualstar'
 nmap * <Plug>(visualstar-*)N
 
-Bundle 'milkypostman/vim-togglelist'
+Plug 'milkypostman/vim-togglelist'
 nmap <script> <silent> <leader>l :call ToggleLocationList()<CR>
 nmap <script> <silent> <leader>q :call ToggleQuickfixList()<CR>
 
-Bundle 'tyru/open-browser.vim'
+Plug 'tyru/open-browser.vim'
 let g:netrw_nogx = 1
 nmap gx <Plug>(openbrowser-smart-search)
 vmap gx <Plug>(openbrowser-smart-search)
 
-Bundle 'kien/ctrlp.vim'
+Plug 'kien/ctrlp.vim'
 let g:ctrlp_max_depth = 20
 let g:ctrlp_map = '<C-P>'
 let g:ctrlp_clear_cache_on_exit = 0
@@ -393,22 +338,25 @@ nnoremap <leader>fs     :CtrlPRTS<CR>
 nnoremap <leader>fu     :CtrlPUndo<CR>
 nnoremap <leader>fl     :CtrlPLine<CR>
 
-Bundle 'dbakker/vim-projectroot'
+Plug 'dbakker/vim-projectroot'
 nnoremap <leader>cd :ProjectRootCD<cr>
 
+call plug#end()
 " }}}
 " Global preferences {{{
 " ------------------------------------------------------------------------------
+set foldlevelstart=20
 set mouse=
 if (s:is_initial)
     syntax on
 endif
 " set noswapfile
-set linespace=2
+set noshowmatch
 set updatetime=500
-set completeopt=menu,preview
-set cmdheight=1
+set completeopt=longest,menuone,preview
+set cmdheight=2
 set splitbelow
+set lazyredraw
 set sessionoptions-=options
 set sessionoptions-=folds
 set viminfo='50,<1000,s100,n~/.viminfo
@@ -421,6 +369,7 @@ set nrformats-=octal
 set shiftround
 set ttimeout
 set ttimeoutlen=50
+set exrc
 set hidden
 set nospell
 set showcmd
@@ -443,6 +392,7 @@ set textwidth=80
 set foldmethod=syntax
 set foldlevelstart=99
 set formatoptions-=t
+" set foldcolumn=3
 autocmd FileType qf wincmd J " quickfix list at bottom
 set wildignore=*.o,*.obj,*.bak,*.exe,*.pyc,*.swp
 set wildignore+=*.png,*.tga,*.psd
@@ -458,9 +408,6 @@ set fileencoding=utf-8
 set fileencodings=ucs-bom,utf8,prc
 exec "set listchars=tab:\\|→"
 exec "set list lcs+=trail:\uB7,nbsp:~"
-command! -nargs=1 Silent
-\ | execute ':silent !'.<q-args>
-\ | execute ':redraw!'
 " }}}
 " Theme  {{{
 " ------------------------------------------------------------------------------
@@ -542,7 +489,6 @@ endfunc
 if has("gui_running")
 
     let colors = []
-    call add(colors, "candyman")
     call add(colors, "jellybeans")
     call add(colors, "lilypink")
     call add(colors, "wombat256mod")
@@ -566,17 +512,16 @@ if has("gui_running")
     set guioptions-=e
     set guioptions+=c
     set guioptions-=l
+    set guioptions-=L
+    set guioptions-=r
     set guioptions-=R
     set guioptions-=b
     set guioptions-=T
-    set guioptions-=r
-    set guioptions-=L
 else
     set t_Co=256
     if (s:isLinux)
         let colors = []
         call add(colors, "xoria256")
-        call add(colors, "candyman")
         call add(colors, "jellybeans")
         call add(colors, "kolor")
         call add(colors, "lodestone")
@@ -596,6 +541,9 @@ autocmd BufRead,BufNewFile *.mxi setlocal filetype=xml
 " CSharp
 autocmd BufRead,BufNewFile *.cshtml setlocal filetype=xml.javascript
 
+" Livescript
+autocmd BufRead,BufNewFile *.ls setlocal filetype=ls
+
 " ActionScript3
 autocmd BufRead,BufNewFile *.as setlocal filetype=as3
 
@@ -610,25 +558,18 @@ autocmd BufRead,BufNewFile *.shader setlocal filetype=cg
 " Dart
 autocmd BufRead,BufNewFile *.dart setlocal filetype=dart
 
-" ls
-autocmd BufRead,BufNewFile *.ls setlocal filetype=ls
-
-" Typescript
-autocmd BufRead,BufNewFile *.ts setlocal filetype=typescript
-
 " HTML
 autocmd filetype html setl shiftwidth=2
 
+" Typescript
+au BufRead,BufNewFile *.ts setl filetype=typescript
+
 " Python
 autocmd filetype python setlocal foldmethod=indent
-autocmd filetype python nnoremap <buffer> <F7> :exe "w \| !python2 %"<CR>
-
-" Fsharp
-autocmd BufNewFile,BufRead *.fs,*.fsi,*.fsx set filetype=fsharp
+autocmd filetype python nnoremap <buffer> <F7> :exe "w \| !python %"<CR>
 
 " Ruby
 autocmd filetype ruby setl shiftwidth=2
-autocmd filetype ruby nnoremap <buffer> <F7> :exe "w \| !ruby %"<CR>
 
 " Rails asset pipeline
 autocmd BufRead,BufNewFile *.slim set filetype=slim
@@ -644,6 +585,16 @@ au filetype haskell setl omnifunc=necoghc#omnifunc
 " ------------------------------------------------------------------------------
 " Open a help in a vertsplit. Use with `:Vh`
 command! -nargs=* -complete=help Vh vertical belowright help <args>
+
+" Bind the last run command to a hotkey
+" e.g.: :BindLast <F7>
+func! BindCommand(key)
+    let b:cmd  = histget('cmd', -2)
+    let b:comp = ":w! \\| ".b:cmd
+    exec ":nmap ".a:key." :exe \"".b:comp."\"<CR>"
+endfunc
+command! -nargs=+ BindLast :call BindCommand(<q-args>)
+
 
 " Working directory per tab
 au TabEnter * if exists("t:wd") | exe "cd " . fnameescape(t:wd) | endif
@@ -668,11 +619,11 @@ func! TrackerOpenItem()
     execute 'normal 0 /DONE$/ciwOPEN'
 endfunc
 
-nmap <silent> <leader>ma :call TrackerAddItem()<CR>
-nmap <silent> <leader>mc :call TrackerCloseItem()<CR>
-nmap <silent> <leader>mo :call TrackerOpenItem()<CR>
-vmap <silent> <leader>ma :call TrackerAddItem()<CR>
-vmap <silent> <leader>mc :call TrackerCloseItem()<CR>
-vmap <silent> <leader>mo :call TrackerOpenItem()<CR>
+nmap <silent> <leader>ma        :call TrackerAddItem()<CR>
+nmap <silent> <leader>mc        :call TrackerCloseItem()<CR>
+nmap <silent> <leader>mo        :call TrackerOpenItem()<CR>
+vmap <silent> <leader>ma        :call TrackerAddItem()<CR>
+vmap <silent> <leader>mc        :call TrackerCloseItem()<CR>
+vmap <silent> <leader>mo        :call TrackerOpenItem()<CR>
 " }}}
 
