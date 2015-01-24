@@ -469,12 +469,6 @@ func! SetRandomColorScheme(colors)
         hi! link ColorColumn LineNr
     elseif (g:colors_name == "kolor")
         hi! link ColorColumn LineNr
-    elseif (g:colors_name == "lodestone")
-        if has("gui_running")
-            hi! link ColorColumn LineNr
-        else
-            hi! link ColorColumn Pmenu
-        endif
     elseif (g:colors_name == "graywh")
     endif
 
@@ -493,7 +487,6 @@ if has("gui_running")
     call add(colors, "lilypink")
     call add(colors, "wombat256mod")
     call add(colors, "kolor")
-    call add(colors, "lodestone")
     call add(colors, "herald")
     call SetRandomColorScheme(colors)
 
@@ -524,7 +517,6 @@ else
         call add(colors, "xoria256")
         call add(colors, "jellybeans")
         call add(colors, "kolor")
-        call add(colors, "lodestone")
         call add(colors, "herald")
         call SetRandomColorScheme(colors)
     endif
