@@ -280,9 +280,9 @@ Plug 'dhruvasagar/vim-table-mode'
 let g:table_mode_corner = '+'
 
 Plug 'scrooloose/nerdtree'
-nmap <F6> :call g:vimrc_toggle_nerd_tree()<CR>
+nmap <F6> :call g:Vimrc_toggle_nerd_tree()<CR>
 let g:vimrc_initial_nerd_tree=1
-function! g:vimrc_toggle_nerd_tree()
+function! g:Vimrc_toggle_nerd_tree()
     if (g:vimrc_initial_nerd_tree==1)
         execute ":NERDTreeCWD"
         let g:vimrc_initial_nerd_tree=0
