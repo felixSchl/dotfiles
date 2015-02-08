@@ -139,6 +139,7 @@ nmap <leader>s :!cat<CR>
 " ------------------------------------------------------------------------------
 call plug#begin("~/.vim/plugged")
 Plug 'flazz/vim-colorschemes'
+Plug 'ChrisKempson/Tomorrow-Theme', { 'rtp': 'vim' }
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
@@ -439,7 +440,9 @@ EOF
 endfunc
 
 func! SetRandomColorScheme(colors)
+
     let color = ""
+
     if (g:chosen_color != "")
         let color = g:chosen_color
     else
@@ -455,7 +458,6 @@ func! SetRandomColorScheme(colors)
     let cursor_line_insert_bg = "#002143"
 
     hi! link Conceal SpecialKey
-    " hi! link Conceal Operator
 
     " Overwrites
     if (g:colors_name == "molokai")
@@ -497,13 +499,13 @@ endfunc
 
 if has("gui_running")
 
-    let colors = []
-    call add(colors, "jellybeans")
-    call add(colors, "lilypink")
-    call add(colors, "wombat256mod")
-    call add(colors, "kolor")
-    call add(colors, "herald")
-    call SetRandomColorScheme(colors)
+    call SetRandomColorScheme([
+        \  'jellybeans'
+        \, 'lilypink'
+        \, 'wombat256mod'
+        \, 'kolor'
+        \, 'herald'
+    \])
 
     " TagHighlight classes
     highlight Class guifg=#5199C0
@@ -528,12 +530,15 @@ if has("gui_running")
 else
     set t_Co=256
     if (s:isLinux)
-        let colors = []
-        call add(colors, "xoria256")
-        call add(colors, "jellybeans")
-        call add(colors, "kolor")
-        call add(colors, "herald")
-        call SetRandomColorScheme(colors)
+        call SetRandomColorScheme([
+            \  'xoria256'
+            \, 'jellybeans'
+            \, 'kolor'
+            \, 'herald'
+            \, 'Tomorrow-Night'
+            \, 'Tomorrow-Night-Eighties'
+            \, 'Tomorrow-Night-Bright'
+        \])
     endif
     hi CursorLine term=NONE cterm=NONE ctermbg=236
 endif
