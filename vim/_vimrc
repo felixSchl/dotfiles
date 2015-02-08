@@ -285,10 +285,6 @@ let g:pandoc_use_embeds_in_codeblocks_for_langs = [
     \,"haskell"
     \ ]
 
-Plug 'vim-pandoc/vim-pantondoc'
-let g:pantondoc_use_pandoc_markdown = 1
-let g:pandoc_use_conceal = 0
-
 Plug 'vim-scripts/glsl.vim'
 au BufNewFile,BufRead *.shader set filetype=glsl.c
 
