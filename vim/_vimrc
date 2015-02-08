@@ -13,7 +13,7 @@ endif
 
 let s:ignore_dirs='\v[\/]((\.(git|hg|svn))|(build|obj|temp))$'
 let s:ignore_files='\v\.('
-                 \.'meta|exe|so|dll|fbx|png|tga|jpg|bmp|csproj|sln|'
+                 \.'meta|exe|so|dll|fbx|png|tga|jpg|bmp|'
                  \.'unityproj|userprefs|suo|asset|prefab|db|dwlt|mdb|class|jar|'
                  \.'mat|apk|obb|cache|controller|user|ttf|guiskin|unity|pyc'
                  \.')$'
