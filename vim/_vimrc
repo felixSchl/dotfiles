@@ -152,6 +152,8 @@ Plug 'jimenezrick/vimerl'
 Plug 'othree/xml.vim'
 Plug 'gkz/vim-ls'
 Plug 'leafgarland/typescript-vim'
+Plug 'Shougo/vimproc.vim'
+Plug 'tpope/vim-dispatch'
 
 Plug 'vim-scripts/LargeFile'
 let g:LargeFile=50
