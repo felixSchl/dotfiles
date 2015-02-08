@@ -602,6 +602,7 @@ func! BindCommand(key)
 endfunc
 command! -nargs=+ BindLast :call BindCommand(<q-args>)
 
+au FileType javascript nmap <F7> :exe ":w! \| !node %"<CR>
 
 " Working directory per tab
 au TabEnter * if exists("t:wd") | exe "cd " . fnameescape(t:wd) | endif
