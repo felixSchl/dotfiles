@@ -156,11 +156,12 @@ Plug 'leafgarland/typescript-vim'
 Plug 'Shougo/vimproc.vim'
 Plug 'tpope/vim-dispatch'
 Plug 'tmux-plugins/vim-tmux'
-
-Plug 'OmniSharp/omnisharp-vim'
-
-augroup omnisharp_commands
-    autocmd!
+Plug 'digitaltoad/vim-jade'
+Plug 'guns/vim-sexp'
+Plug 'tpope/vim-sexp-mappings-for-regular-people'
+Plug 'guns/vim-clojure-static'
+Plug 'tpope/vim-fireplace'
+Plug 'felixSchl/python-vim-instant-markdown'
 
 Plug 'OmniSharp/omnisharp-vim'
 let g:OmniSharp_timeout = 1
@@ -612,6 +613,11 @@ autocmd filetype ruby setl shiftwidth=2
 " Rails asset pipeline
 autocmd BufRead,BufNewFile *.slim set filetype=slim
 
+" Markdown
+autocmd BufRead,BufNewFile *.md set filetype=markdown
+autocmd BufRead,BufNewFile *.mdown set filetype=markdown
+autocmd BufRead,BufNewFile *.markdown set filetype=markdown
+
 " Haskell
 au filetype haskell nmap <script> <buffer> <localLeader>r :!runhaskell %<CR>
 au filetype haskell nnoremap <script> <buffer> <LocalLeader>t :HdevtoolsType<CR>
@@ -638,6 +644,7 @@ endfunc
 command! -nargs=+ BindLast :call BindCommand(<q-args>)
 
 au FileType javascript nmap <F7> :exe ":w! \| !node %"<CR>
+au FileType clojure nmap <F7> :exe ":%Eval"<CR>
 
 " Working directory per tab
 au TabEnter * if exists("t:wd") | exe "cd " . fnameescape(t:wd) | endif
