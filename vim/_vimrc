@@ -395,6 +395,7 @@ if (s:is_initial)
     syntax on
 endif
 " set noswapfile
+set history=100000
 set noshowmatch
 set updatetime=500
 set completeopt=longest,menuone,preview
