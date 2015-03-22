@@ -162,6 +162,7 @@ Plug 'tpope/vim-sexp-mappings-for-regular-people'
 Plug 'guns/vim-clojure-static'
 Plug 'tpope/vim-fireplace'
 Plug 'felixSchl/python-vim-instant-markdown'
+Plug 'raichoo/purescript-vim'
 
 Plug 'OmniSharp/omnisharp-vim'
 let g:OmniSharp_timeout = 1
