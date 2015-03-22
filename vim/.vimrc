@@ -395,7 +395,6 @@ if (s:is_initial)
     syntax on
 endif
 " set noswapfile
-set undofile
 set history=100000
 set noshowmatch
 set updatetime=500
