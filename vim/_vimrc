@@ -163,6 +163,11 @@ Plug 'junegunn/vim-github-dashboard'
 
 Plug 'OmniSharp/omnisharp-vim'
 
+" Use roslyn on linux and osx
+if !s:isWin
+    let g:OmniSharp_server_type = 'roslyn'
+endif
+
 augroup omnisharp_commands
     autocmd!
 
@@ -312,7 +317,7 @@ vmap  <expr>  D          DVB_Duplicate()
 Plug 'scrooloose/syntastic'
 let g:syntastic_check_on_wq=0
 let g:syntastic_mode_map = { 'mode': 'passive'
-                           \,'active_filetypes': []
+                           \,'active_filetypes': ['javascript', 'cs']
                            \,'passive_filetypes': []
                            \}
 nnoremap <silent> <leader>ss :SyntasticCheck<CR>
@@ -320,6 +325,12 @@ nnoremap <silent> <leader>sr :SyntasticReset<CR>
 
 let g:syntastic_haskell_checkers = ['hlint']
 let g:syntastic_cs_checkers      = ['syntax', 'semantic', 'issues']
+
+if (s:isWin)
+    let g:syntastic_cs_checkers = ['syntax', 'semantic', 'issues']
+else
+    let g:syntastic_cs_checkers = ['code_checker']
+endif
 
 Plug 'vim-pandoc/vim-pandoc-syntax'
 let g:pandoc_use_embeds_in_codeblocks_for_langs = [
