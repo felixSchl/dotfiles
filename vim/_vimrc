@@ -654,29 +654,3 @@ au TabEnter * if exists("t:wd") | exe "cd " . fnameescape(t:wd) | endif
 au TabLeave * let t:wd=getcwd()
 
 " }}}
-" Tracking {{{
-" ------------------------------------------------------------------------------
-func! TrackerAddItem()
-    let b:ve=&ve
-    set ve=all
-    execute 'normal 0$  v80|r-$hhhhxxxxx iOPEN'
-    let &ve=b:ve
-    unlet! b:ve
-endfunc
-
-func! TrackerCloseItem()
-    execute 'normal 0 /OPEN$/ciwDONE'
-endfunc
-
-func! TrackerOpenItem()
-    execute 'normal 0 /DONE$/ciwOPEN'
-endfunc
-
-nmap <silent> <leader>ma        :call TrackerAddItem()<CR>
-nmap <silent> <leader>mc        :call TrackerCloseItem()<CR>
-nmap <silent> <leader>mo        :call TrackerOpenItem()<CR>
-vmap <silent> <leader>ma        :call TrackerAddItem()<CR>
-vmap <silent> <leader>mc        :call TrackerCloseItem()<CR>
-vmap <silent> <leader>mo        :call TrackerOpenItem()<CR>
-" }}}
-
