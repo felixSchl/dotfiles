@@ -152,10 +152,19 @@ Plug 'felixschl/gh-preview', { 'rtp': 'vim' }
 Plug 'junegunn/vim-peekaboo'
 Plug 'junegunn/vim-github-dashboard'
 Plug 'plasticboy/vim-markdown'
+Plug 'jamescarr/snipmate-nodejs'
+Plug 'guileen/vim-node-dict'
+Plug 'myhere/vim-nodejs-complete'
+Plug 'jelera/vim-javascript-syntax'
 
 Plug 'junegunn/vim-easy-align'
 vmap <Enter> <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
+Plug 'junegunn/rainbow_parentheses.vim'
+augroup rainbow
+  autocmd!
+  autocmd FileType * RainbowParentheses
+augroup END
 
 Plug 'OmniSharp/omnisharp-vim'
 let g:OmniSharp_timeout = 1
@@ -385,6 +394,8 @@ if (s:is_initial)
     syntax on
 endif
 " set noswapfile
+set history=100000
+set noshowmatch
 set undofile
 set noshowmatch
 set updatetime=500
@@ -599,11 +610,19 @@ au BufRead,BufNewFile *.ts setl filetype=typescript
 autocmd filetype python setlocal foldmethod=indent
 autocmd filetype python nnoremap <buffer> <F7> :exe "w \| !python %"<CR>
 
+" Purescript
+autocmd filetype purescript setl shiftwidth=2
+
 " Ruby
 autocmd filetype ruby setl shiftwidth=2
 
 " Rails asset pipeline
 autocmd BufRead,BufNewFile *.slim set filetype=slim
+
+" Markdown
+autocmd BufRead,BufNewFile *.md set filetype=markdown
+autocmd BufRead,BufNewFile *.mdown set filetype=markdown
+autocmd BufRead,BufNewFile *.markdown set filetype=markdown
 
 " Haskell
 au filetype haskell nnoremap <script> <buffer> <localLeader>r :!runhaskell %<CR>
