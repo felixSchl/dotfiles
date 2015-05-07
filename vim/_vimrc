@@ -398,6 +398,7 @@ call plug#end()
 " Global preferences {{{
 " ------------------------------------------------------------------------------
 set foldlevelstart=20
+set conceallevel=0
 set mouse=
 if (s:is_initial)
     syntax on
