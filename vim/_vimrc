@@ -632,9 +632,6 @@ au filetype haskell setl omnifunc=necoghc#omnifunc
 " Goodies {{{
 " ------------------------------------------------------------------------------
 
-" Quit immediately
-nmap <C-X><C-X> :qal!<CR>
-
 " Open a help in a vertsplit. Use with `:Vh`
 command! -nargs=* -complete=help Vh vertical belowright help <args>
 
