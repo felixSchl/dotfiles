@@ -13,7 +13,7 @@ endif
 
 let s:ignore_dirs='\v[\/]((\.(git|hg|svn))|(build|obj|temp))$'
 let s:ignore_files='\v\.('
-                 \.'meta|exe|so|dll|fbx|png|tga|jpg|bmp|'
+                 \.'meta|exe|so|dll|fbx|png|tga|jpg|bmp|csproj|sln|'
                  \.'unityproj|userprefs|suo|asset|prefab|db|dwlt|mdb|class|jar|'
                  \.'mat|apk|obb|cache|controller|user|ttf|guiskin|unity|pyc|o|a|so|dylib'
                  \.')$'
@@ -42,23 +42,19 @@ endif
 let mapleader = ","
 let maplocalleader = "\\"
 if (s:isWin)
-    nmap <F2>           :e ~/_vimrc<CR>
-    nmap <F3>           :so ~/_vimrc<CR>
-    nmap <leader>E      :Start explorer %:h<CR>
-    nmap <leader>C      :Start cmd /K cd /d "%:h"<CR>
+    nnoremap <F2>           :e ~/_vimrc<CR>
+    nnoremap <F3>           :so ~/_vimrc<CR>
+    nnoremap <leader>E      :Start explorer %:h<CR>
+    nnoremap <leader>C      :Start cmd /K cd /d "%:h"<CR>
 else
-    nmap <F2>           :e ~/.vimrc<CR>
-    nmap <F3>           :so ~/.vimrc<CR>
-    nmap <leader>E      :Start nautilus %:h<CR>
+    nnoremap <F2>           :e ~/.vimrc<CR>
+    nnoremap <F3>           :so ~/.vimrc<CR>
+    nnoremap <leader>E      :Start nautilus %:h<CR>
 endif
-nmap Q <Nop>
+nnoremap Q <Nop>
 
 " Toggle cursor column
 map <F11> :set cursorcolumn!<CR>
-
-" " Select visual lines by default
-" nmap j gj
-" nmap k gk
 
 " Swap v and CTRL-v (prefer block mode)
 nnoremap    v   <C-V>
@@ -77,26 +73,26 @@ func! ClearSearch()
     call setreg('/', "you will never find me!")
     nohl
 endfunc
-nmap <F4> :call ClearSearch()<CR>
+nnoremap <F4> :call ClearSearch()<CR>
 
 " Easier copying and pasting
-nmap <leader>p "*p
-nmap <leader>P "*P
-imap <C-_>     <C-R>
-vmap <leader>y "*yy
+nnoremap <leader>p "*p
+nnoremap <leader>P "*P
+inoremap <C-_>     <C-R>
+vnoremap <leader>y "*yy
 
 " Start the current file as a command
-nmap <leader>e :Start %s:h<CR>
+nnoremap <leader>e :Start %s:h<CR>
 
 " ':Wa' is not editor command annoyance
 command! -bang Wa wa<bang>
 command! -bang Wq wq<bang>
 
 " Easier window navigation
-nmap <C-H> <C-W>h
-nmap <C-J> <C-W>j
-nmap <C-K> <C-W>k
-nmap <C-L> <C-W>l
+nnoremap <C-H> <C-W>h
+nnoremap <C-J> <C-W>j
+nnoremap <C-K> <C-W>k
+nnoremap <C-L> <C-W>l
 
 " Easier tab navigation
 nnoremap <C-S-tab> :tabprevious<CR>
@@ -118,20 +114,15 @@ map <S-ScrollWheelUp>   <C-U>
 map <ScrollWheelDown>   <C-E>
 map <S-ScrollWheelDown> <C-D>
 
-" Always launch command editing window
-" nmap : q:i
-" nmap / q:i
-" nmap ? q?i
-
 " Faster substitute prompt
 " Substitute with last search, confirm on/off
-nmap <leader>/ :%s:<C-R>/::g<Left><Left>
+nnoremap <leader>/ :%s:<C-R>/::g<Left><Left>
 " Substitute from blank, confirm on/off
-nmap <leader>; :%s:::g<Left><Left><Left>
-nmap <leader>' :%s:::gc<Left><Left><Left><Left>
+nnoremap <leader>; :%s:::g<Left><Left><Left>
+nnoremap <leader>' :%s:::gc<Left><Left><Left><Left>
 
 " View last command output (hack)
-nmap <leader>s :!cat<CR>
+nnoremap <leader>s :!cat<CR>
 
 " }}}
 
@@ -156,22 +147,38 @@ Plug 'leafgarland/typescript-vim'
 Plug 'Shougo/vimproc.vim'
 Plug 'tpope/vim-dispatch'
 Plug 'tmux-plugins/vim-tmux'
-Plug 'digitaltoad/vim-jade'
-Plug 'guns/vim-sexp'
-Plug 'tpope/vim-sexp-mappings-for-regular-people'
-Plug 'guns/vim-clojure-static'
-Plug 'tpope/vim-fireplace'
-Plug 'felixSchl/python-vim-instant-markdown'
 Plug 'raichoo/purescript-vim'
+Plug 'felixschl/gh-preview', { 'rtp': 'vim' }
+Plug 'junegunn/vim-peekaboo'
+Plug 'junegunn/vim-github-dashboard'
 
 Plug 'OmniSharp/omnisharp-vim'
 let g:OmniSharp_timeout = 1
+" Use roslyn on linux and osx
+if !s:isWin
+    let g:OmniSharp_server_type = 'roslyn'
+endif
+
 augroup omnisharp_commands
     autocmd!
+
     autocmd FileType cs setlocal omnifunc=OmniSharp#Complete
     autocmd FileType cs nnoremap <leader>b :wa!<cr>:OmniSharpBuildAsync<cr>
     autocmd BufWritePost *.cs call OmniSharp#AddToProject()
     autocmd CursorHold *.cs call OmniSharp#TypeLookupWithoutDocumentation()
+    autocmd FileType cs nnoremap gd :OmniSharpGotoDefinition<cr>
+    autocmd FileType cs nnoremap <leader>fi :OmniSharpFindImplementations<cr>
+    autocmd FileType cs nnoremap <leader>ft :OmniSharpFindType<cr>
+    autocmd FileType cs nnoremap <leader>fs :OmniSharpFindSymbol<cr>
+    autocmd FileType cs nnoremap <leader>fu :OmniSharpFindUsages<cr>
+    autocmd FileType cs nnoremap <leader>fm :OmniSharpFindMembers<cr>
+    autocmd FileType cs nnoremap <leader>x  :OmniSharpFixIssue<cr>
+    autocmd FileType cs nnoremap <leader>fx :OmniSharpFixUsings<cr>
+    autocmd FileType cs nnoremap <leader>tt :OmniSharpTypeLookup<cr>
+    autocmd FileType cs nnoremap <leader>dc :OmniSharpDocumentation<cr>
+    autocmd FileType cs nnoremap <C-K> :OmniSharpNavigateUp<cr>
+    autocmd FileType cs nnoremap <C-J> :OmniSharpNavigateDown<cr>
+
 augroup END
 
 nnoremap <leader><space> :OmniSharpGetCodeActions<cr>
@@ -196,17 +203,17 @@ au filetype haskell map <buffer> <C-F1>    :HoogleClose<CR>
 au filetype haskell map <buffer> <S-F1>    :HoogleLine<CR>
 
 Plug 'tomtom/tcomment_vim'
-nmap <leader>o <C-O>
-nmap <C-i> gccj
+nnoremap <leader>o <C-O>
+nnoremap <C-i> gccj
 vmap <C-i> gc
 
 Plug 'AndrewRadev/switch.vim'
 nnoremap - :Switch<CR>
 
 Plug 'Yggdroot/indentLine'
-nmap <leader>ir :IndentLinesReset<CR>
-nmap <leader>it :IndentLinesToggle<CR>
-nmap <F12>      :IndentLinesToggle<CR>
+nnoremap <leader>ir :IndentLinesReset<CR>
+nnoremap <leader>it :IndentLinesToggle<CR>
+nnoremap <F12>      :IndentLinesToggle<CR>
 let g:indentLine_noConcealCursor=1
 
 Plug 'godlygeek/tabular'
@@ -300,15 +307,22 @@ vmap  <expr>  D          DVB_Duplicate()
 
 Plug 'scrooloose/syntastic'
 let g:syntastic_check_on_wq=0
+let g:syntastic_aggregate_errors = 1
 let g:syntastic_mode_map = { 'mode': 'passive'
-                           \,'active_filetypes': []
+                           \,'active_filetypes': ['javascript', 'cs']
                            \,'passive_filetypes': []
                            \}
-nmap <silent> <leader>ss :SyntasticCheck<CR>
-nmap <silent> <leader>sr :SyntasticReset<CR>
+nnoremap <silent> <leader>ss :SyntasticCheck<CR>
+nnoremap <silent> <leader>sr :SyntasticReset<CR>
 
 let g:syntastic_haskell_checkers = ['hlint']
 let g:syntastic_cs_checkers      = ['syntax', 'semantic', 'issues']
+
+if (s:isWin)
+    let g:syntastic_cs_checkers = ['syntax', 'semantic', 'issues']
+else
+    let g:syntastic_cs_checkers = ['code_checker']
+endif
 
 Plug 'vim-pandoc/vim-pandoc-syntax'
 let g:pandoc_use_embeds_in_codeblocks_for_langs = [
@@ -324,7 +338,7 @@ Plug 'dhruvasagar/vim-table-mode'
 let g:table_mode_corner = '+'
 
 Plug 'scrooloose/nerdtree'
-nmap <F6> :call g:Vimrc_toggle_nerd_tree()<CR>
+nnoremap <F6> :call g:Vimrc_toggle_nerd_tree()<CR>
 let g:vimrc_initial_nerd_tree=1
 function! g:Vimrc_toggle_nerd_tree()
     if (g:vimrc_initial_nerd_tree==1)
@@ -351,15 +365,15 @@ nnoremap <leader>ff :NERDTreeFind<CR>
 
 Plug 'nelstrom/vim-visual-star-search'
 Plug 'thinca/vim-visualstar'
-nmap * <Plug>(visualstar-*)N
+nnoremap * <Plug>(visualstar-*)N
 
 Plug 'milkypostman/vim-togglelist'
-nmap <script> <silent> <leader>l :call ToggleLocationList()<CR>
-nmap <script> <silent> <leader>q :call ToggleQuickfixList()<CR>
+nnoremap <script> <silent> <leader>l :call ToggleLocationList()<CR>
+nnoremap <script> <silent> <leader>q :call ToggleQuickfixList()<CR>
 
 Plug 'tyru/open-browser.vim'
 let g:netrw_nogx = 1
-nmap gx <Plug>(openbrowser-smart-search)
+nnoremap gx <Plug>(openbrowser-smart-search)
 vmap gx <Plug>(openbrowser-smart-search)
 
 Plug 'kien/ctrlp.vim'
@@ -390,12 +404,13 @@ call plug#end()
 " Global preferences {{{
 " ------------------------------------------------------------------------------
 set foldlevelstart=20
+set conceallevel=0
 set mouse=
 if (s:is_initial)
     syntax on
 endif
 " set noswapfile
-set history=100000
+set undofile
 set noshowmatch
 set updatetime=500
 set completeopt=longest,menuone,preview
@@ -615,13 +630,8 @@ autocmd filetype ruby setl shiftwidth=2
 " Rails asset pipeline
 autocmd BufRead,BufNewFile *.slim set filetype=slim
 
-" Markdown
-autocmd BufRead,BufNewFile *.md set filetype=markdown
-autocmd BufRead,BufNewFile *.mdown set filetype=markdown
-autocmd BufRead,BufNewFile *.markdown set filetype=markdown
-
 " Haskell
-au filetype haskell nmap <script> <buffer> <localLeader>r :!runhaskell %<CR>
+au filetype haskell nnoremap <script> <buffer> <localLeader>r :!runhaskell %<CR>
 au filetype haskell nnoremap <script> <buffer> <LocalLeader>t :HdevtoolsType<CR>
 au filetype haskell nnoremap <buffer> <F7> :exe "w \| !runhaskell %"<CR>
 au filetype haskell setl omnifunc=necoghc#omnifunc
@@ -629,9 +639,6 @@ au filetype haskell setl omnifunc=necoghc#omnifunc
 " }}}
 " Goodies {{{
 " ------------------------------------------------------------------------------
-
-" Quit immediately
-nmap <C-X><C-X> :qal!<CR>
 
 " Open a help in a vertsplit. Use with `:Vh`
 command! -nargs=* -complete=help Vh vertical belowright help <args>
@@ -641,41 +648,14 @@ command! -nargs=* -complete=help Vh vertical belowright help <args>
 func! BindCommand(key)
     let b:cmd  = histget('cmd', -2)
     let b:comp = ":w! \\| ".b:cmd
-    exec ":nmap ".a:key." :exe \"".b:comp."\"<CR>"
+    exec ":nnoremap ".a:key." :exe \"".b:comp."\"<CR>"
 endfunc
 command! -nargs=+ BindLast :call BindCommand(<q-args>)
 
-au FileType javascript nmap <F7> :exe ":w! \| !node %"<CR>
-au FileType clojure nmap <F7> :exe ":%Eval"<CR>
+
 
 " Working directory per tab
 au TabEnter * if exists("t:wd") | exe "cd " . fnameescape(t:wd) | endif
 au TabLeave * let t:wd=getcwd()
 
 " }}}
-" Tracking {{{
-" ------------------------------------------------------------------------------
-func! TrackerAddItem()
-    let b:ve=&ve
-    set ve=all
-    execute 'normal 0$  v80|r-$hhhhxxxxx iOPEN'
-    let &ve=b:ve
-    unlet! b:ve
-endfunc
-
-func! TrackerCloseItem()
-    execute 'normal 0 /OPEN$/ciwDONE'
-endfunc
-
-func! TrackerOpenItem()
-    execute 'normal 0 /DONE$/ciwOPEN'
-endfunc
-
-nmap <silent> <leader>ma        :call TrackerAddItem()<CR>
-nmap <silent> <leader>mc        :call TrackerCloseItem()<CR>
-nmap <silent> <leader>mo        :call TrackerOpenItem()<CR>
-vmap <silent> <leader>ma        :call TrackerAddItem()<CR>
-vmap <silent> <leader>mc        :call TrackerCloseItem()<CR>
-vmap <silent> <leader>mo        :call TrackerOpenItem()<CR>
-" }}}
-
