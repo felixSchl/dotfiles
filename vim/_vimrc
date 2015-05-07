@@ -158,6 +158,8 @@ Plug 'tpope/vim-dispatch'
 Plug 'tmux-plugins/vim-tmux'
 Plug 'raichoo/purescript-vim'
 Plug 'felixschl/gh-preview', { 'rtp': 'vim' }
+Plug 'junegunn/vim-peekaboo'
+Plug 'junegunn/vim-github-dashboard'
 
 Plug 'OmniSharp/omnisharp-vim'
 
