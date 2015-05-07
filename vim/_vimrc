@@ -156,6 +156,7 @@ Plug 'leafgarland/typescript-vim'
 Plug 'Shougo/vimproc.vim'
 Plug 'tpope/vim-dispatch'
 Plug 'tmux-plugins/vim-tmux'
+Plug 'raichoo/purescript-vim'
 
 Plug 'OmniSharp/omnisharp-vim'
 
