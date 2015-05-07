@@ -155,7 +155,6 @@ Plug 'gkz/vim-ls'
 Plug 'leafgarland/typescript-vim'
 Plug 'Shougo/vimproc.vim'
 Plug 'tpope/vim-dispatch'
-Plug '~/projects/socketeer', { 'rtp': 'vim' }
 Plug 'tmux-plugins/vim-tmux'
 
 Plug 'OmniSharp/omnisharp-vim'
