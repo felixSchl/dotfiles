@@ -151,6 +151,11 @@ Plug 'raichoo/purescript-vim'
 Plug 'felixschl/gh-preview', { 'rtp': 'vim' }
 Plug 'junegunn/vim-peekaboo'
 Plug 'junegunn/vim-github-dashboard'
+Plug 'plasticboy/vim-markdown'
+
+Plug 'junegunn/vim-easy-align'
+vmap <Enter> <Plug>(EasyAlign)
+nmap ga <Plug>(EasyAlign)
 
 Plug 'OmniSharp/omnisharp-vim'
 let g:OmniSharp_timeout = 1
@@ -215,36 +220,6 @@ nnoremap <leader>ir :IndentLinesReset<CR>
 nnoremap <leader>it :IndentLinesToggle<CR>
 nnoremap <F12>      :IndentLinesToggle<CR>
 let g:indentLine_noConcealCursor=1
-
-Plug 'godlygeek/tabular'
-" Maps hotkeys for tabularize, repeatable by repeat.vim
-function! s:make_align_mappings(first_key, ...)
-    for tabmaps in a:000
-        let second_key = tabmaps[0]
-        let tabularize_args = tabmaps[1]
-        let tabularize_cmd = ":Tabularize " . tabularize_args
-        let repeat_vim_cmd = ":call repeat#set(\"". tabularize_cmd . "<Bslash><lt>CR>\")"
-        let keymap_cmd = a:first_key . second_key . " " . tabularize_cmd . "<CR>" . repeat_vim_cmd . "<CR>"
-        execute "nnoremap " . keymap_cmd
-        execute "vmap " . keymap_cmd
-    endfor
-endfunc
-
-Plug 'plasticboy/vim-markdown'
-
-call s:make_align_mappings(
-    \ "<leader>a"
-    \,[':' , "\/:\\zs/l0r1"]
-    \,[',' , "\/,\\zs/l0r1"]
-    \,['=' , "\/[^=^<^!]=[^=^>]/l0r0"]
-    \,['\~', "\/==/l1r1"]
-    \,['+' , "\/+/l1r1"]
-    \,['-' , "\/-/l1r1"]
-    \,['\|', "\/" . '\|' ."/l1r1"]
-    \,['\[', "\/\[/l1r1"]
-    \,['\]', "\/\]/l1r1"]
-    \,['m' , "\/^[^<]*<[^>]*>\\zs/l0r1"]
-    \)
 
 Plug 'chrismccord/bclose.vim'
 nnoremap <C-W>c :Bclose<CR>
