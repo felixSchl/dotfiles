@@ -134,7 +134,7 @@ Plug 'Shougo/vimproc.vim'
 Plug 'tpope/vim-dispatch'
 Plug 'tmux-plugins/vim-tmux'
 Plug 'raichoo/purescript-vim'
-Plug 'felixschl/gh-preview', { 'rtp': 'vim' }
+Plug 'felixschl/vim-gh-preview'
 Plug 'junegunn/vim-peekaboo'
 Plug 'junegunn/vim-github-dashboard'
 Plug 'plasticboy/vim-markdown'
