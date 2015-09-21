@@ -141,6 +141,23 @@ Plug 'jamescarr/snipmate-nodejs'
 Plug 'guileen/vim-node-dict'
 Plug 'myhere/vim-nodejs-complete'
 Plug 'jelera/vim-javascript-syntax'
+Plug 'tpope/vim-unimpaired'
+Plug 'othree/html5.vim'
+Plug 'Valloric/MatchTagAlways'
+Plug 'tpope/vim-ragtag'
+Plug 'vim-scripts/matchit.zip'
+Plug 'vim-scripts/mediawiki.vim'
+Plug 'chiedojohn/vim-case-convert'
+Plug 'othree/yajs.vim'
+Plug 'jsx/jsx.vim'
+Plug 'mxw/vim-jsx'
+Plug 'fatih/vim-go'
+Plug 'junkblocker/patchreview-vim'
+Plug 'mattn/webapi-vim'
+Plug 'mattn/gist-vim'
+
+Plug 'junegunn/vim-github-dashboard'
+let g:github_dashboard = { 'username': 'felixSchl' }
 
 Plug 'junegunn/vim-easy-align'
 vmap <Enter> <Plug>(EasyAlign)
