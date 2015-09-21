@@ -634,10 +634,15 @@ autocmd BufRead,BufNewFile *.mdown set filetype=markdown
 autocmd BufRead,BufNewFile *.markdown set filetype=markdown
 
 " Haskell
-au filetype haskell nnoremap <script> <buffer> <localLeader>r :!runhaskell %<CR>
-au filetype haskell nnoremap <script> <buffer> <LocalLeader>t :HdevtoolsType<CR>
-au filetype haskell nnoremap <buffer> <F7> :exe "w \| !runhaskell %"<CR>
-au filetype haskell setl omnifunc=necoghc#omnifunc
+autocmd filetype haskell nnoremap <script> <buffer> <localLeader>r :!runhaskell %<CR>
+autocmd filetype haskell nnoremap <script> <buffer> <LocalLeader>t :HdevtoolsType<CR>
+autocmd filetype haskell nnoremap <buffer> <F7> :exe "w \| !runhaskell %"<CR>
+autocmd filetype haskell setl omnifunc=necoghc#omnifunc
+
+" Javascript
+autocmd filetype javascript setl shiftwidth=2
+autocmd BufRead,BufNewFile *.jsx set filetype=jsx
+
 
 " }}}
 " Goodies {{{
