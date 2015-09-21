@@ -162,6 +162,10 @@ let g:github_dashboard = { 'username': 'felixSchl' }
 Plug 'junegunn/vim-easy-align'
 vmap <Enter> <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
+let g:easy_align_delimiters = {
+\ '-': { 'pattern': '-' }
+\ }
+
 Plug 'junegunn/rainbow_parentheses.vim'
 augroup rainbow
   autocmd!
