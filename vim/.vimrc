@@ -223,8 +223,7 @@ au filetype haskell map <buffer> <C-F1>    :HoogleClose<CR>
 au filetype haskell map <buffer> <S-F1>    :HoogleLine<CR>
 
 Plug 'tomtom/tcomment_vim'
-nnoremap <leader>o <C-O>
-nnoremap <C-i> gccj
+nmap <C-i> gccj
 vmap <C-i> gc
 
 Plug 'AndrewRadev/switch.vim'
