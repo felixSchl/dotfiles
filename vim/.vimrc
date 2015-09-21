@@ -233,7 +233,9 @@ Plug 'Yggdroot/indentLine'
 nnoremap <leader>ir :IndentLinesReset<CR>
 nnoremap <leader>it :IndentLinesToggle<CR>
 nnoremap <F12>      :IndentLinesToggle<CR>
-let g:indentLine_noConcealCursor=1
+let g:indentLine_color_term = 233
+let g:indentLine_noConcealCursor = 1
+let g:indentLine_char = '|'
 
 Plug 'chrismccord/bclose.vim'
 nnoremap <C-W>c :Bclose<CR>
