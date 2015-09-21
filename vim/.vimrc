@@ -306,8 +306,10 @@ let g:syntastic_mode_map = { 'mode': 'passive'
 nnoremap <silent> <leader>ss :SyntasticCheck<CR>
 nnoremap <silent> <leader>sr :SyntasticReset<CR>
 
-let g:syntastic_haskell_checkers = ['hlint']
-let g:syntastic_cs_checkers      = ['syntax', 'semantic', 'issues']
+let g:syntastic_python_checkers     = ['pylint']
+let g:syntastic_haskell_checkers    = ['hlint']
+let g:syntastic_cs_checkers         = ['syntax', 'semantic', 'issues']
+let g:syntastic_javascript_checkers = ['eslint']
 
 if (s:isWin)
     let g:syntastic_cs_checkers = ['syntax', 'semantic', 'issues']
