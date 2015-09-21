@@ -32,10 +32,6 @@ endif
 " ------------------------------------------------------------------------------
 set nocompatible
 filetype indent plugin on
-if (s:isWin)
-    set shell=cmd
-    set shellcmdflag=/c
-endif
 " }}}
 " Mappings {{{
 " ------------------------------------------------------------------------------
