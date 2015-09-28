@@ -151,9 +151,6 @@ Plug 'fatih/vim-go', { 'for': 'go' }
 Plug 'mattn/webapi-vim'
 Plug 'mattn/gist-vim'
 
-Plug 'junegunn/vim-github-dashboard'
-let g:github_dashboard = { 'username': 'felixSchl' }
-
 Plug 'junegunn/vim-easy-align'
 vmap <Enter> <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
@@ -282,14 +279,6 @@ imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
 smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
 \ "\<Plug>(neosnippet_expand_or_jump)"
 \: "\<TAB>"
-
-
-Plug 'jondkinney/dragvisuals.vim'
-vmap  <expr>  <S-LEFT>   DVB_Drag('left')
-vmap  <expr>  <S-RIGHT>  DVB_Drag('right')
-vmap  <expr>  <S-DOWN>   DVB_Drag('down')
-vmap  <expr>  <S-UP>     DVB_Drag('up')
-vmap  <expr>  D          DVB_Duplicate()
 
 Plug 'scrooloose/syntastic'
 let g:syntastic_check_on_wq=0
