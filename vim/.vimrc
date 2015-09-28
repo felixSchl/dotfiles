@@ -151,6 +151,8 @@ Plug 'fatih/vim-go', { 'for': 'go' }
 Plug 'mattn/webapi-vim'
 Plug 'mattn/gist-vim'
 
+Plug 'Quramy/tsuquyomi', { 'for': 'typescript' }
+
 Plug 'junegunn/vim-easy-align'
 vmap <Enter> <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
@@ -301,10 +303,10 @@ else
     let g:syntastic_cs_checkers = ['code_checker']
 endif
 
-Plug 'vim-pandoc/vim-pandoc-syntax', { 'for': 'markdown',
-                                            \ 'python',
-                                            \ 'haskell',
-                                            \ 'cs' }
+Plug 'vim-pandoc/vim-pandoc-syntax', { 'for': [ 'markdown',
+                                              \ 'python',
+                                              \ 'haskell',
+                                              \ 'cs' ] }
 let g:pandoc_use_embeds_in_codeblocks_for_langs = [
     \ "python"
     \,"cs"
