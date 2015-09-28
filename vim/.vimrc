@@ -119,36 +119,35 @@ Plug 'tpope/vim-repeat'
 Plug 'Townk/vim-autoclose'
 Plug 'mileszs/ack.vim'
 Plug 'ivyl/vim-bling'
-Plug 'OrangeT/vim-csharp'
-Plug 'tpope/vim-haml'
-Plug 'derekwyatt/vim-scala'
-Plug 'jimenezrick/vimerl'
-Plug 'othree/xml.vim'
-Plug 'gkz/vim-ls'
-Plug 'leafgarland/typescript-vim'
+Plug 'OrangeT/vim-csharp', { 'for': 'cs' }
+Plug 'tpope/vim-haml', { 'for': 'haml' }
+Plug 'derekwyatt/vim-scala', { 'for': 'scala' }
+Plug 'jimenezrick/vimerl', { 'for': 'erlang' }
+Plug 'othree/xml.vim', { 'for': 'xml' }
+Plug 'gkz/vim-ls', { 'for': 'livescript' }
+Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
 Plug 'Shougo/vimproc.vim'
 Plug 'tpope/vim-dispatch'
 Plug 'tmux-plugins/vim-tmux'
-Plug 'raichoo/purescript-vim'
-Plug 'felixschl/vim-gh-preview'
+Plug 'raichoo/purescript-vim', { 'for': 'purescript' }
+Plug 'felixschl/vim-gh-preview', { 'for': 'markdown' }
 Plug 'junegunn/vim-peekaboo'
-Plug 'plasticboy/vim-markdown'
-Plug 'jamescarr/snipmate-nodejs'
-Plug 'guileen/vim-node-dict'
-Plug 'myhere/vim-nodejs-complete'
-Plug 'jelera/vim-javascript-syntax'
+Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
+Plug 'jamescarr/snipmate-nodejs', { 'for': [ 'javascript', 'typescript' ] }
+Plug 'guileen/vim-node-dict', { 'for': [ 'javascript', 'typescript' ] }
+Plug 'myhere/vim-nodejs-complete', { 'for': [ 'javascript', 'typescript' ] }
+Plug 'jelera/vim-javascript-syntax', { 'for': [ 'javascript', 'typescript' ] }
 Plug 'tpope/vim-unimpaired'
-Plug 'othree/html5.vim'
-Plug 'Valloric/MatchTagAlways'
-Plug 'tpope/vim-ragtag'
+Plug 'othree/html5.vim', { 'for': 'html' }
+Plug 'Valloric/MatchTagAlways', { 'for': [ 'xml', 'html' ] }
+Plug 'tpope/vim-ragtag', { 'for': [ 'xml', 'html' ] }
 Plug 'vim-scripts/matchit.zip'
-Plug 'vim-scripts/mediawiki.vim'
+Plug 'vim-scripts/mediawiki.vim', { 'for': 'mediawiki' }
 Plug 'chiedojohn/vim-case-convert'
-Plug 'othree/yajs.vim'
-Plug 'jsx/jsx.vim'
-Plug 'mxw/vim-jsx'
-Plug 'fatih/vim-go'
-Plug 'junkblocker/patchreview-vim'
+Plug 'othree/yajs.vim', { 'for': [ 'javascript', 'typescript' ] }
+Plug 'jsx/jsx.vim', { 'for': [ 'javascript', 'typescript', 'jsx' ] }
+Plug 'mxw/vim-jsx', { 'for': [ 'javascript', 'typescript', 'jsx' ] }
+Plug 'fatih/vim-go', { 'for': 'go' }
 Plug 'mattn/webapi-vim'
 Plug 'mattn/gist-vim'
 
@@ -168,7 +167,7 @@ augroup rainbow
   autocmd FileType * RainbowParentheses
 augroup END
 
-Plug 'OmniSharp/omnisharp-vim'
+Plug 'OmniSharp/omnisharp-vim', { 'for': 'cs' }
 let g:OmniSharp_timeout = 1
 " Use roslyn on linux and osx
 if !s:isWin
@@ -212,7 +211,7 @@ nnoremap <leader>th :OmniSharpHighlightTypes<cr>
 Plug 'vim-scripts/LargeFile'
 let g:LargeFile=50
 
-Plug 'Twinside/vim-hoogle'
+Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
 au filetype haskell map <buffer> <leader>i :HoogleInfo<CR>
 au filetype haskell map <buffer> <F1>      :Hoogle
 au filetype haskell map <buffer> <C-F1>    :HoogleClose<CR>
@@ -313,7 +312,10 @@ else
     let g:syntastic_cs_checkers = ['code_checker']
 endif
 
-Plug 'vim-pandoc/vim-pandoc-syntax'
+Plug 'vim-pandoc/vim-pandoc-syntax', { 'for': 'markdown',
+                                            \ 'python',
+                                            \ 'haskell',
+                                            \ 'cs' }
 let g:pandoc_use_embeds_in_codeblocks_for_langs = [
     \ "python"
     \,"cs"
@@ -326,7 +328,7 @@ au BufNewFile,BufRead *.shader set filetype=glsl.c
 Plug 'dhruvasagar/vim-table-mode'
 let g:table_mode_corner = '+'
 
-Plug 'scrooloose/nerdtree'
+Plug 'scrooloose/nerdtree', { 'on': [ 'NERDTreeCWD', 'NERDTreeToggle' ] }
 nnoremap <F6> :call g:Vimrc_toggle_nerd_tree()<CR>
 let g:vimrc_initial_nerd_tree=1
 function! g:Vimrc_toggle_nerd_tree()
@@ -385,7 +387,7 @@ nnoremap <leader>fs     :CtrlPRTS<CR>
 nnoremap <leader>fu     :CtrlPUndo<CR>
 nnoremap <leader>fl     :CtrlPLine<CR>
 
-Plug 'dbakker/vim-projectroot'
+Plug 'dbakker/vim-projectroot', { 'on': 'ProjectRootCD' }
 nnoremap <leader>cd :ProjectRootCD<cr>
 
 call plug#end()
