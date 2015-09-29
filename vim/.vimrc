@@ -125,7 +125,6 @@ Plug 'derekwyatt/vim-scala', { 'for': 'scala' }
 Plug 'jimenezrick/vimerl', { 'for': 'erlang' }
 Plug 'othree/xml.vim', { 'for': 'xml' }
 Plug 'gkz/vim-ls', { 'for': 'livescript' }
-Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
 Plug 'Shougo/vimproc.vim'
 Plug 'tpope/vim-dispatch'
 Plug 'tmux-plugins/vim-tmux'
@@ -152,6 +151,10 @@ Plug 'mattn/webapi-vim'
 Plug 'mattn/gist-vim'
 
 Plug 'Quramy/tsuquyomi', { 'for': 'typescript' }
+let g:tsuquyomi_use_local_typescript=1
+
+Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
+let g:typescript_indent_disable=1
 
 Plug 'junegunn/vim-easy-align'
 vmap <Enter> <Plug>(EasyAlign)
@@ -179,7 +182,7 @@ augroup omnisharp_commands
     autocmd FileType cs setlocal omnifunc=OmniSharp#Complete
     autocmd FileType cs nnoremap <leader>b :wa!<cr>:OmniSharpBuildAsync<cr>
     autocmd BufWritePost *.cs call OmniSharp#AddToProject()
-    autocmd CursorHold *.cs call OmniSharp#TypeLookupWithoutDocumentation()
+    autocmd CursorHold   *.cs call OmniSharp#TypeLookupWithoutDocumentation()
     autocmd FileType cs nnoremap gd :OmniSharpGotoDefinition<cr>
     autocmd FileType cs nnoremap <leader>fi :OmniSharpFindImplementations<cr>
     autocmd FileType cs nnoremap <leader>ft :OmniSharpFindType<cr>
@@ -190,8 +193,8 @@ augroup omnisharp_commands
     autocmd FileType cs nnoremap <leader>fx :OmniSharpFixUsings<cr>
     autocmd FileType cs nnoremap <leader>tt :OmniSharpTypeLookup<cr>
     autocmd FileType cs nnoremap <leader>dc :OmniSharpDocumentation<cr>
-    autocmd FileType cs nnoremap <C-K> :OmniSharpNavigateUp<cr>
-    autocmd FileType cs nnoremap <C-J> :OmniSharpNavigateDown<cr>
+    autocmd FileType cs nnoremap <C-K>      :OmniSharpNavigateUp<cr>
+    autocmd FileType cs nnoremap <C-J>      :OmniSharpNavigateDown<cr>
 
 augroup END
 
@@ -246,18 +249,18 @@ let g:airline#extensions#tagbar#enabled=0
 let s:neocomplete=0
 if has("lua")
     Plug 'Shougo/neocomplete'
-    let s:neocomplete = 1
-    let g:neocomplete#use_vimproc = 1
-    let g:neocomplete#enable_at_startup = 1
-    let g:neocomplete#enable_smart_case = 1
-    let g:neocomplete#text_mode_filetypes = {
+    let s:neocomplete=1
+    let g:neocomplete#use_vimproc=1
+    let g:neocomplete#enable_at_startup=1
+    let g:neocomplete#enable_smart_case=1
+    let g:neocomplete#text_mode_filetypes={
                                             \ "pandoc": 1
                                             \ }
     if !exists('g:neocomplete#sources#omni#input_patterns')
-        let g:neocomplete#sources#omni#input_patterns = {}
+        let g:neocomplete#sources#omni#input_patterns={}
     endif
     if !exists('g:neocomplete#sources')
-        let g:neocomplete#sources = {}
+        let g:neocomplete#sources={}
     endif
     inoremap <expr><C-g>    neocomplete#undo_completion()
     inoremap <expr><C-l>    neocomplete#complete_common_string()
@@ -392,7 +395,7 @@ if (s:is_initial)
     syntax on
 endif
 " set noswapfile
-set history=100000
+set history=10000
 set noshowmatch
 set undofile
 set noshowmatch
@@ -603,6 +606,9 @@ autocmd filetype html setl shiftwidth=2
 
 " Typescript
 au BufRead,BufNewFile *.ts setl filetype=typescript
+autocmd filetype typescript setl shiftwidth=2
+autocmd filetype typescript setl indentexpr=
+autocmd filetype typescript setl indentkeys=
 
 " Python
 autocmd filetype python setlocal foldmethod=indent
