@@ -451,7 +451,7 @@ set smarttab
 set nrformats-=octal
 set shiftround
 set ttimeout
-set ttimeoutlen=50
+set ttimeoutlen=100
 set exrc
 set hidden
 set nospell
