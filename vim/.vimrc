@@ -371,7 +371,7 @@ let g:ctrlp_extensions = ['tag', 'buffertag', 'quickfix', 'dir', 'rtscript',
                         \ 'undo', 'line', 'changes', 'mixed', 'bookmarkdir'
                         \ ]
 nnoremap [ctrlp] <Nop>
-nmap <leader>u [ctrlp]
+nmap <leader>f [ctrlp]
 nnoremap <silent> [ctrlp]b :CtrlPBuffer<CR>
 nnoremap <silent> [ctrlp]r :CtrlPMRU<CR>
 nnoremap <silent> [ctrlp]o :CtrlPBookmarkDir<CR>
@@ -421,6 +421,19 @@ nnoremap <silent> [unite]g :Unite
                     \<CR>
 
 call plug#end()
+
+" Unite.vim {{{
+call unite#custom#profile('files', 'context', {
+    \   'start_insert': 1,
+    \   'unique': 1,
+    \   'no_split': 1,
+    \   'no_empty': 1,
+    \   'resume': 1,
+    \ })
+call unite#custom#profile('files', 'matchers', [ 'matcher_fuzzy' ])
+call unite#custom#profile('files', 'sorters', [ 'sorter_rank' ])
+" }}}
+
 " }}}
 " Global preferences {{{
 " ------------------------------------------------------------------------------
