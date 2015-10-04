@@ -124,7 +124,6 @@ Plug 'derekwyatt/vim-scala', { 'for': 'scala' }
 Plug 'jimenezrick/vimerl', { 'for': 'erlang' }
 Plug 'othree/xml.vim', { 'for': 'xml' }
 Plug 'gkz/vim-ls', { 'for': 'livescript' }
-Plug 'Shougo/vimproc.vim'
 Plug 'tpope/vim-dispatch'
 Plug 'tmux-plugins/vim-tmux'
 Plug 'raichoo/purescript-vim', { 'for': 'purescript' }
@@ -148,6 +147,13 @@ Plug 'mxw/vim-jsx', { 'for': [ 'javascript', 'typescript', 'jsx' ] }
 Plug 'fatih/vim-go', { 'for': 'go' }
 Plug 'mattn/webapi-vim'
 Plug 'mattn/gist-vim'
+
+function! BuildVimproc(info)
+    " TODO: Compile based on host OS
+    !make -f make_mac.mak
+endfunction
+
+Plug 'Shougo/vimproc.vim', { 'do': function('BuildVimproc') }
 
 Plug 'Quramy/tsuquyomi', { 'for': 'typescript' }
 let g:tsuquyomi_use_local_typescript=1
