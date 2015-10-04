@@ -37,15 +37,10 @@ filetype indent plugin on
 " ------------------------------------------------------------------------------
 let mapleader = "\<SPACE>"
 let maplocalleader = ","
+nnoremap <F2> :e ~/.vimrc<CR>
+nnoremap <F3> :so ~/.vimrc<CR>
 if (s:isWin)
-    nnoremap <F2>           :e ~/_vimrc<CR>
-    nnoremap <F3>           :so ~/_vimrc<CR>
-    nnoremap <leader>E      :Start explorer %:h<CR>
-    nnoremap <leader>C      :Start cmd /K cd /d "%:h"<CR>
-else
-    nnoremap <F2>           :e ~/.vimrc<CR>
-    nnoremap <F3>           :so ~/.vimrc<CR>
-    nnoremap <leader>E      :Start nautilus %:h<CR>
+    nnoremap <leader>E :Start explorer %:h<CR>
 endif
 nnoremap Q <Nop>
 
