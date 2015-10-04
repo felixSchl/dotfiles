@@ -334,30 +334,15 @@ let g:table_mode_corner = '+'
 Plug 'scrooloose/nerdtree', { 'on': [ 'NERDTreeFind',
                                     \ 'NERDTreeCWD',
                                     \ 'NERDTreeToggle' ] }
-nnoremap <F6> :call g:Vimrc_toggle_nerd_tree()<CR>
-let g:vimrc_initial_nerd_tree=1
-function! g:Vimrc_toggle_nerd_tree()
-    if (g:vimrc_initial_nerd_tree==1)
-        execute ":NERDTreeCWD"
-        let g:vimrc_initial_nerd_tree=0
-    else
-        execute ":NERDTreeToggle"
-    endif
-endfunc
 let g:NERDTreeHighlightCursorline=1
 let g:NERDTreeWinPos="right"
-let g:NERDTreeShowLineNumbers=1
+let g:NERDTreeShowLineNumbers=0
+let g:NERDTreeQuitOnOpen=1
 let g:NERDTreeMinimalUI=1
 let g:NERDTreeIgnore = [
     \ s:ignore_files . '[[file]]'
     \,s:ignore_dirs . '[[dir]]'
     \ ]
-autocmd FileType nerdtree call s:nerdtree_settings()
-function! s:nerdtree_settings()
-    let &nu=0
-    let &relativenumber=0
-endfunc
-nnoremap <leader>ff :NERDTreeFind<CR>
 
 Plug 'nelstrom/vim-visual-star-search'
 Plug 'thinca/vim-visualstar'
@@ -395,7 +380,45 @@ nnoremap <silent> [ctrlp]u :CtrlPMixed<CR>
 nnoremap <silent> [ctrlp]l :CtrlPLine<CR>
 
 Plug 'dbakker/vim-projectroot', { 'on': 'ProjectRootCD' }
-nnoremap <leader>cd :ProjectRootCD<cr>
+function! <SID>AutoProjectRootCD()
+  try
+    if &ft != 'help'
+      ProjectRootCD
+    endif
+  catch
+    " Silently ignore invalid buffers
+  endtry
+endfunction
+autocmd BufEnter * call <SID>AutoProjectRootCD()
+nnoremap <leader>C :ProjectRootCD<cr>
+nnoremap <silent> <leader>ft :ProjectRootExe NERDTreeFind<cr>
+
+Plug 'Shougo/unite.vim'
+let g:unite_source_history_yank_enable=1
+nnoremap [unite] <Nop>
+nmap <leader>u [unite]
+nnoremap <silent> [unite]:Unite source
+                    \ -start-insert
+                    \ -no-split
+                    \ -resume
+                    \ -buffer-name=unite
+                    \ <CR>
+nnoremap <silent> [unite]r :Unite
+                    \ -profile-name=files
+                    \ -buffer-name=recent-files
+                    \ neomru/directory
+                    \ neomru/file
+                    \<CR>
+nnoremap <silent> [unite]f :Unite
+                    \ -profile-name=files
+                    \ -buffer-name=files
+                    \ file_rec/async:!
+                    \<CR>
+nnoremap <silent> [unite]g :Unite
+                    \ -profile-name=files
+                    \ -buffer-name=git-files
+                    \ file_rec/git:--cached:--others:--exclude-standard
+                    \<CR>
 
 call plug#end()
 " }}}
