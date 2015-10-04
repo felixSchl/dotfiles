@@ -128,7 +128,6 @@ Plug 'tpope/vim-dispatch'
 Plug 'tmux-plugins/vim-tmux'
 Plug 'raichoo/purescript-vim', { 'for': 'purescript' }
 Plug 'felixschl/vim-gh-preview', { 'for': 'markdown' }
-Plug 'junegunn/vim-peekaboo'
 Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
 Plug 'jamescarr/snipmate-nodejs', { 'for': [ 'javascript', 'typescript' ] }
 Plug 'guileen/vim-node-dict', { 'for': [ 'javascript', 'typescript' ] }
