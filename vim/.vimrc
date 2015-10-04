@@ -368,10 +368,11 @@ nnoremap gx <Plug>(openbrowser-smart-search)
 vmap gx <Plug>(openbrowser-smart-search)
 
 Plug 'kien/ctrlp.vim'
-let g:ctrlp_max_depth = 20
 let g:ctrlp_map = '<C-P>'
+let g:ctrlp_working_path_mode = 'ra'
+let g:ctrlp_max_depth = 20
 let g:ctrlp_clear_cache_on_exit = 0
-let g:ctrlp_cmd = 'CtrlPCurWD'
+let g:ctrlp_cmd = 'CtrlP'
 let g:ctrlp_custom_ignore = {
     \ 'dir':  s:ignore_dirs,
     \ 'file': s:ignore_files
@@ -379,13 +380,14 @@ let g:ctrlp_custom_ignore = {
 let g:ctrlp_extensions = ['tag', 'buffertag', 'quickfix', 'dir', 'rtscript',
                         \ 'undo', 'line', 'changes', 'mixed', 'bookmarkdir'
                         \ ]
-nnoremap <silent> <C-B> :CtrlPBuffer<CR>
-nnoremap <leader>fr     :CtrlPMRU<CR>
-nnoremap <leader>fb     :CtrlPBookmarkDir<CR>
-nnoremap <leader>fd     :execute ":CtrlPDir ".fnameescape(getcwd()) <CR>
-nnoremap <leader>fs     :CtrlPRTS<CR>
-nnoremap <leader>fu     :CtrlPUndo<CR>
-nnoremap <leader>fl     :CtrlPLine<CR>
+nnoremap [ctrlp] <Nop>
+nmap <leader>u [ctrlp]
+nnoremap <silent> [ctrlp]b :CtrlPBuffer<CR>
+nnoremap <silent> [ctrlp]r :CtrlPMRU<CR>
+nnoremap <silent> [ctrlp]o :CtrlPBookmarkDir<CR>
+nnoremap <silent> [ctrlp]f :CtrlP<CR>
+nnoremap <silent> [ctrlp]u :CtrlPMixed<CR>
+nnoremap <silent> [ctrlp]l :CtrlPLine<CR>
 
 Plug 'dbakker/vim-projectroot', { 'on': 'ProjectRootCD' }
 nnoremap <leader>cd :ProjectRootCD<cr>
@@ -447,7 +449,7 @@ set foldlevelstart=99
 set formatoptions-=t
 " set foldcolumn=3
 autocmd FileType qf wincmd J " quickfix list at bottom
-set wildignore=*.o,*.obj,*.bak,*.exe,*.pyc,*.swp
+set wildignore=*.o,*.obj,*.bak,*.exe,*.pyc,*.swo,*.swp,*.swq,*.swr
 set wildignore+=*.png,*.tga,*.psd
 set wildignore+=*.class,*.jar
 set wildignore+=*.meta,*.prefab
