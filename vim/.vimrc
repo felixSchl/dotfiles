@@ -35,8 +35,8 @@ filetype indent plugin on
 " }}}
 " Mappings {{{
 " ------------------------------------------------------------------------------
-let mapleader = ","
-let maplocalleader = "\\"
+let mapleader = "\<SPACE>"
+let maplocalleader = ","
 if (s:isWin)
     nnoremap <F2>           :e ~/_vimrc<CR>
     nnoremap <F3>           :so ~/_vimrc<CR>
