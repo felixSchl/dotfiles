@@ -423,6 +423,12 @@ nnoremap <silent> [unite]g :Unite
 call plug#end()
 
 " Unite.vim {{{
+call unite#custom#source('file_rec/async:!', 'ignore_globs', [
+    \ 'node_modules',
+    \ '.output',
+    \ '.cache',
+    \ '.tmp'
+    \ ])
 call unite#custom#profile('files', 'context', {
     \   'start_insert': 1,
     \   'unique': 1,
