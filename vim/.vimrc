@@ -79,7 +79,7 @@ func! ClearSearch()
     nohl
 endfunc
 nnoremap <F4> :call ClearSearch()<CR>
-
+nnoremap <leader>cs :call ClearSearch()<CR>
 
 " Start the current file as a command
 nnoremap <leader>e :Start %s:h<CR>
