@@ -63,6 +63,16 @@ imap fD <C-C>
 imap Fd <C-C>
 imap FD <C-C>
 
+" Easier copying and pasting
+" Copy and paste from the system register `*`
+nmap <leader>pp "*p
+nmap <leader>pO k"*p
+nmap <leader>po j"*p
+nmap <leader>Pp "*P
+nmap <leader>PO k"*P
+nmap <leader>Po j"*P
+vnoremap <leader>y "*yy
+
 " Quickly remove search highlight
 func! ClearSearch()
     call setreg('/', "you will never find me!")
@@ -70,11 +80,6 @@ func! ClearSearch()
 endfunc
 nnoremap <F4> :call ClearSearch()<CR>
 
-" Easier copying and pasting
-nnoremap <leader>p "*p
-nnoremap <leader>P "*P
-inoremap <C-_>     <C-R>
-vnoremap <leader>y "*yy
 
 " Start the current file as a command
 nnoremap <leader>e :Start %s:h<CR>
