@@ -691,8 +691,6 @@ func! BindCommand(key)
 endfunc
 command! -nargs=+ BindLast :call BindCommand(<q-args>)
 
-
-
 " Working directory per tab
 au TabEnter * if exists("t:wd") | exe "cd " . fnameescape(t:wd) | endif
 au TabLeave * let t:wd=getcwd()
