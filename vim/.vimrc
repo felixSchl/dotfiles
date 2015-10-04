@@ -326,7 +326,9 @@ au BufNewFile,BufRead *.shader set filetype=glsl.c
 Plug 'dhruvasagar/vim-table-mode'
 let g:table_mode_corner = '+'
 
-Plug 'scrooloose/nerdtree', { 'on': [ 'NERDTreeCWD', 'NERDTreeToggle' ] }
+Plug 'scrooloose/nerdtree', { 'on': [ 'NERDTreeFind',
+                                    \ 'NERDTreeCWD',
+                                    \ 'NERDTreeToggle' ] }
 nnoremap <F6> :call g:Vimrc_toggle_nerd_tree()<CR>
 let g:vimrc_initial_nerd_tree=1
 function! g:Vimrc_toggle_nerd_tree()
