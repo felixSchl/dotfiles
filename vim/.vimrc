@@ -58,6 +58,10 @@ imap jk <C-C>
 imap jK <C-C>
 imap Jk <C-C>
 imap JK <C-C>
+imap fd <C-C>
+imap fD <C-C>
+imap Fd <C-C>
+imap FD <C-C>
 
 " Quickly remove search highlight
 func! ClearSearch()
