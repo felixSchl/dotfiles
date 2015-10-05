@@ -397,28 +397,40 @@ Plug 'Shougo/unite.vim'
 let g:unite_source_history_yank_enable=1
 nnoremap [unite] <Nop>
 nmap <leader>u [unite]
-nnoremap <silent> [unite]:Unite source
-                    \ -start-insert
-                    \ -no-split
-                    \ -resume
-                    \ -buffer-name=unite
-                    \ <CR>
+
 nnoremap <silent> [unite]r :Unite
                     \ -profile-name=files
                     \ -buffer-name=recent-files
                     \ neomru/directory
                     \ neomru/file
                     \<CR>
+
 nnoremap <silent> [unite]f :Unite
                     \ -profile-name=files
                     \ -buffer-name=files
                     \ file_rec/async:!
                     \<CR>
-nnoremap <silent> [unite]g :Unite
+
+nnoremap <silent> [unite]u :Unite
                     \ -profile-name=files
                     \ -buffer-name=git-files
                     \ file_rec/git:--cached:--others:--exclude-standard
-                    \<CR>
+                    \<cr>
+
+nnoremap <silent> [unite]o :Unite
+                    \ -profile-name=files
+                    \ -buffer-name=outline
+                    \ outline
+                    \<cr>
+
+" XXX: Integrate this differently? (typescript from `Quramy/tsuquyomi`)
+nnoremap <silent> [unite]s :Unite
+                    \ -profile-name=files
+                    \ -buffer-name=typescript
+                    \ tsproject
+                    \<cr>
+
+Plug 'Shougo/unite-outline'
 
 call plug#end()
 
@@ -437,7 +449,7 @@ call unite#custom#profile('files', 'context', {
     \   'resume': 1,
     \ })
 call unite#custom#profile('files', 'matchers', [ 'matcher_fuzzy' ])
-call unite#custom#profile('files', 'sorters', [ 'sorter_rank' ])
+call unite#custom#profile('files', 'sorters', [ 'sorter_selecta' ])
 " }}}
 
 " }}}
