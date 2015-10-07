@@ -267,7 +267,7 @@ nmap <C-i> gccj
 vmap <C-i> gc
 
 Plug 'AndrewRadev/switch.vim'
-nnoremap - :Switch<CR>
+nnoremap + :Switch<CR>
 
 Plug 'Yggdroot/indentLine'
 nnoremap <leader>ir :IndentLinesReset<CR>
