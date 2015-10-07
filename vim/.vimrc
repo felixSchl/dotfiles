@@ -66,6 +66,9 @@ imap fD <C-C>
 imap Fd <C-C>
 imap FD <C-C>
 
+" Emacs-like control-g to cancel things
+nmap <C-g> <C-C>
+
 " Easier copying and pasting
 " Copy and paste from the system register `*`
 nmap <leader>pp "*p
