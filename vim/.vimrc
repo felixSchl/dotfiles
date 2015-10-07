@@ -404,6 +404,18 @@ nnoremap <silent> [unite]r :Unite
                     \ neomru/file
                     \<CR>
 
+nnoremap <silent> [unite]b :Unite
+                    \ -profile-name=files
+                    \ -buffer-name=buffers
+                    \ buffer
+                    \<CR>
+
+nnoremap <silent> [unite]w :Unite
+                    \ -profile-name=files
+                    \ -buffer-name=windows
+                    \ window
+                    \<CR>
+
 nnoremap <silent> [unite]f :Unite
                     \ -profile-name=files
                     \ -buffer-name=files
@@ -429,26 +441,39 @@ nnoremap <silent> [unite]s :Unite
                     \ tsproject
                     \<cr>
 
+nmap <C-P> <leader>uu
+
 Plug 'Shougo/unite-outline'
 
 call plug#end()
 
 " Unite.vim {{{
+autocmd FileType unite call s:unite_my_settings()
+function! s:unite_my_settings()
+    imap <silent><buffer><expr> <C-v> unite#do_action('vsplitswitch')
+endfunction
+
 call unite#custom#source('file_rec/async:!', 'ignore_globs', [
     \ 'node_modules',
     \ '.output',
     \ '.cache',
     \ '.tmp'
     \ ])
+
 call unite#custom#profile('files', 'context', {
     \   'start_insert': 1,
     \   'unique': 1,
     \   'no_split': 1,
     \   'no_empty': 1,
-    \   'resume': 1,
+    \   'resume': 0,
     \ })
-call unite#custom#profile('files', 'matchers', [ 'matcher_fuzzy' ])
-call unite#custom#profile('files', 'sorters', [ 'sorter_selecta' ])
+call unite#custom#profile('files', 'sorters', [ 'sorter_rank' ])
+call unite#custom#profile('files', 'matchers', [ 'matcher_fuzzy',
+                                               \ 'matcher_hide_hidden_files',
+                                               \ 'matcher_hide_current_file' ])
+call unite#custom#profile('files', 'converters', [ 'converter_relative_abbr',
+                                                 \ 'converter_smart_path',
+                                                 \ 'converter_file_directory' ])
 " }}}
 
 " }}}
