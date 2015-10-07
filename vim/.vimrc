@@ -44,6 +44,9 @@ if (s:isWin)
 endif
 nnoremap Q <Nop>
 
+" Quickly close buffer
+nnoremap QQ <C-w>q
+
 " Toggle cursor column
 map <F11> :set cursorcolumn!<CR>
 
