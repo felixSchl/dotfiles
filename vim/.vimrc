@@ -165,6 +165,26 @@ Plug 'mxw/vim-jsx', { 'for': [ 'javascript', 'typescript', 'jsx' ] }
 Plug 'fatih/vim-go', { 'for': 'go' }
 Plug 'mattn/webapi-vim'
 Plug 'mattn/gist-vim'
+Plug 'tpope/vim-surround'
+Plug 'Shougo/vimshell.vim'
+Plug 'romgrk/vimfiler-prompt'
+
+Plug 'Shougo/vimfiler.vim'
+let g:loaded_netrwPlugin = 1
+let g:vimfiler_as_default_explorer = 1
+let g:vimfiler_ignore_filters = [ 'matcher_ignore_pattern',
+                                \ 'matcher_ignore_wildignore']
+let g:vimfiler_safe_mode_by_default = 0
+nmap - :VimFiler -fnamewidth=80<CR>
+
+" Start vimfiler automatically if no files given
+function! ShowVimFiler()
+    if !argc()
+        VimFiler -fnamewidth=80
+    endif
+endfunction
+
+autocmd VimEnter * call ShowVimFiler()
 
 function! BuildVimproc(info)
     " TODO: Compile based on host OS
