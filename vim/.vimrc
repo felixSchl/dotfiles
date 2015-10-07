@@ -365,19 +365,6 @@ au BufNewFile,BufRead *.shader set filetype=glsl.c
 Plug 'dhruvasagar/vim-table-mode'
 let g:table_mode_corner = '+'
 
-Plug 'scrooloose/nerdtree', { 'on': [ 'NERDTreeFind',
-                                    \ 'NERDTreeCWD',
-                                    \ 'NERDTreeToggle' ] }
-let g:NERDTreeHighlightCursorline=1
-let g:NERDTreeWinPos="right"
-let g:NERDTreeShowLineNumbers=0
-let g:NERDTreeQuitOnOpen=1
-let g:NERDTreeMinimalUI=1
-let g:NERDTreeIgnore = [
-    \ s:ignore_files . '[[file]]'
-    \,s:ignore_dirs . '[[dir]]'
-    \ ]
-
 Plug 'nelstrom/vim-visual-star-search'
 Plug 'thinca/vim-visualstar'
 nnoremap * <Plug>(visualstar-*)N
@@ -391,28 +378,6 @@ let g:netrw_nogx = 1
 nnoremap gx <Plug>(openbrowser-smart-search)
 vmap gx <Plug>(openbrowser-smart-search)
 
-Plug 'kien/ctrlp.vim'
-let g:ctrlp_map = '<C-P>'
-let g:ctrlp_working_path_mode = 'ra'
-let g:ctrlp_max_depth = 20
-let g:ctrlp_clear_cache_on_exit = 0
-let g:ctrlp_cmd = 'CtrlP'
-let g:ctrlp_custom_ignore = {
-    \ 'dir':  s:ignore_dirs,
-    \ 'file': s:ignore_files
-    \ }
-let g:ctrlp_extensions = ['tag', 'buffertag', 'quickfix', 'dir', 'rtscript',
-                        \ 'undo', 'line', 'changes', 'mixed', 'bookmarkdir'
-                        \ ]
-nnoremap [ctrlp] <Nop>
-nmap <leader>f [ctrlp]
-nnoremap <silent> [ctrlp]b :CtrlPBuffer<CR>
-nnoremap <silent> [ctrlp]r :CtrlPMRU<CR>
-nnoremap <silent> [ctrlp]o :CtrlPBookmarkDir<CR>
-nnoremap <silent> [ctrlp]f :CtrlP<CR>
-nnoremap <silent> [ctrlp]u :CtrlPMixed<CR>
-nnoremap <silent> [ctrlp]l :CtrlPLine<CR>
-
 Plug 'dbakker/vim-projectroot', { 'on': 'ProjectRootCD' }
 function! <SID>AutoProjectRootCD()
   try
@@ -425,7 +390,7 @@ function! <SID>AutoProjectRootCD()
 endfunction
 autocmd BufEnter * call <SID>AutoProjectRootCD()
 nnoremap <leader>C :ProjectRootCD<cr>
-nnoremap <silent> <leader>ft :ProjectRootExe NERDTreeFind<cr>
+nnoremap <silent> <leader>ft :ProjectRootExe VimFiler<cr>
 
 Plug 'Shougo/unite.vim'
 let g:unite_source_history_yank_enable=1
