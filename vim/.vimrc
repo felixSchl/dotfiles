@@ -74,7 +74,7 @@ nmap <C-g> <C-C>
 nmap <leader>pp "*p
 nmap <leader>pO k"*p
 nmap <leader>po j"*p
-nmap <leader>Pp "*P
+nmap <leader>PP "*P
 nmap <leader>PO k"*P
 nmap <leader>Po j"*P
 vnoremap <leader>y "*yy
