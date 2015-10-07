@@ -116,6 +116,14 @@ nnoremap <leader>' :%s:::gc<Left><Left><Left><Left>
 " View last command output (hack)
 nnoremap <leader>s :!cat<CR>
 
+" Save
+nmap <leader>w :w!<CR>
+
+" Run things
+nnoremap [run] <Nop>
+nmap <leader>r [run]
+nnoremap [run]t :!npm test<CR>
+
 " }}}
 
 " Plugins {{{
