@@ -338,10 +338,14 @@ smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
 Plug 'scrooloose/syntastic'
 let g:syntastic_check_on_wq=0
 let g:syntastic_aggregate_errors = 1
-let g:syntastic_mode_map = { 'mode': 'passive'
-                           \,'active_filetypes': ['javascript', 'cs']
-                           \,'passive_filetypes': []
-                           \}
+let g:syntastic_mode_map = {
+    \'mode': 'passive',
+    \'active_filetypes': [
+        \'javascript',
+        \'cs',
+        \'typescript'],
+    \'passive_filetypes': []
+    \}
 nnoremap <silent> <leader>ss :SyntasticCheck<CR>
 nnoremap <silent> <leader>sr :SyntasticReset<CR>
 
@@ -349,6 +353,7 @@ let g:syntastic_python_checkers     = ['pylint']
 let g:syntastic_haskell_checkers    = ['hlint']
 let g:syntastic_cs_checkers         = ['syntax', 'semantic', 'issues']
 let g:syntastic_javascript_checkers = ['eslint']
+let g:syntastic_typescript_checkers = ['tslint']
 
 if (s:isWin)
     let g:syntastic_cs_checkers = ['syntax', 'semantic', 'issues']
