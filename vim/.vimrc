@@ -287,9 +287,9 @@ let g:indentLine_char = '|'
 Plug 'chrismccord/bclose.vim'
 nnoremap <C-W>c :Bclose<CR>
 
-if !s:isWin
-    " Too slow on windows...
+if !s:isWin " Too slow on windows...
     Plug 'airblade/vim-gitgutter'
+    nmap <leader>th :GitGutterLineHighlightsToggle<CR>
 endif
 
 Plug 'bling/vim-airline'
