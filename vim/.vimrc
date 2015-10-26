@@ -470,6 +470,9 @@ function! s:unite_my_settings()
     imap <silent><buffer><expr> <C-v> unite#do_action('vsplitswitch')
 endfunction
 
+call unite#custom#source('file_rec/git', 'ignore_globs',
+          \ split(&wildignore, ','))
+
 call unite#custom#source('file_rec/async:!', 'ignore_globs', [
     \ 'node_modules',
     \ '.output',
@@ -550,7 +553,7 @@ set formatoptions-=t
 " set foldcolumn=3
 autocmd FileType qf wincmd J " quickfix list at bottom
 set wildignore=*.o,*.obj,*.bak,*.exe,*.pyc,*.swo,*.swp,*.swq,*.swr
-set wildignore+=*.png,*.tga,*.psd
+set wildignore+=*.png,*.tga,*.psd,*.jpg,*.jpeg,*.svg
 set wildignore+=*.class,*.jar
 set wildignore+=*.meta,*.prefab
 set suffixes+=.class,.exe,.o,.obj,.dat,.dll,.aux,.pdf,.gch
