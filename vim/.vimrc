@@ -192,6 +192,11 @@ function! ShowVimFiler()
 endfunction
 
 autocmd VimEnter * call ShowVimFiler()
+autocmd FileType vimfiler nnoremap <silent><buffer> u :Unite
+                            \ -profile-name=files
+                            \ -buffer-name=git-files
+                            \ file_rec/git:--cached:--others:--exclude-standard
+                            \<cr>
 
 function! BuildVimproc(info)
     " TODO: Compile based on host OS
