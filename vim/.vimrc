@@ -390,7 +390,7 @@ let g:netrw_nogx = 1
 nnoremap gx <Plug>(openbrowser-smart-search)
 vmap gx <Plug>(openbrowser-smart-search)
 
-Plug 'dbakker/vim-projectroot', { 'on': 'ProjectRootCD' }
+Plug 'dbakker/vim-projectroot', { 'on': ['ProjectRootExe', 'ProjectRootCD'] }
 function! <SID>AutoProjectRootCD()
   try
     if &ft != 'help'
