@@ -174,6 +174,7 @@ Plug 'mattn/gist-vim'
 Plug 'tpope/vim-surround'
 Plug 'Shougo/vimshell.vim'
 Plug 'romgrk/vimfiler-prompt'
+Plug 'evanmiller/nginx-vim-syntax'
 
 Plug 'Shougo/vimfiler.vim'
 let g:loaded_netrwPlugin = 1
