@@ -116,8 +116,14 @@ nnoremap <leader>' :%s:::gc<Left><Left><Left><Left>
 " View last command output (hack)
 nnoremap <leader>s :!cat<CR>
 
-" Save
-nmap <leader>w :w!<CR>
+" SPC f - file
+nmap <leader>fw :w<CR>
+nmap <leader>fW :w!<CR>
+nmap <leader>fA :wa!<CR>
+nmap <leader>fa :wa<CR>
+
+" SPC w - window
+nnoremap <leader>w <C-w>
 
 " Run things
 nnoremap [run] <Nop>
