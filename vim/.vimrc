@@ -173,10 +173,9 @@ Plug 'mattn/webapi-vim'
 Plug 'mattn/gist-vim'
 Plug 'tpope/vim-surround'
 Plug 'Shougo/vimshell.vim'
-Plug 'romgrk/vimfiler-prompt'
 Plug 'evanmiller/nginx-vim-syntax'
 
-Plug 'Shougo/vimfiler.vim'
+Plug 'Shougo/vimfiler.vim', { 'on':  [ 'VimFilerBufferDir', 'VimfFiler' ]}
 let g:loaded_netrwPlugin = 1
 let g:vimfiler_as_default_explorer = 1
 let g:vimfiler_ignore_filters = [ 'matcher_ignore_pattern',
