@@ -15,6 +15,7 @@ if [[ -f ~/antigen.zsh ]]; then
     antigen bundle zsh-users/zsh-syntax-highlighting
     antigen bundle zsh-users/zsh-history-substring-search
     antigen bundle tarruda/zsh-autosuggestions
+    antigen bundle uvaes/fzf-marks
 
     # Liquid prompt
     LP_ENABLE_TIME=1
@@ -31,14 +32,44 @@ fi
 export EDITOR='vim'
 export KEYTIMEOUT=1
 export DISABLE_AUTO_TITLE=true
+export PATH="/usr/local/bin:$PATH"
 
 # Aliases
 alias _='sudo'
 alias tmux='tmux -2'
 alias emacs='TERM=xterm-256color emacs -nw'
 alias cdu='cd-gitroot'
+if type rlwrap > /dev/null; then
+    alias node='rlwrap node'
+fi
 
 # Fuzzy finder
 if [[ -f ~/.fzf.zsh ]]; then
     source ~/.fzf.zsh
+fi
+
+# Node - Node.js
+PATH="$PATH:.node/bin"
+
+# Go - The go language
+export GOPATH=~/go
+export PATH="$PATH:$GOPATH/bin"
+export PATH="/usr/local/bin:$PATH"
+export PATH="$PATH:/usr/local/opt/go/libexec/bin"
+
+# Nvm - Node version manager
+export NVM_DIR=~/.nvm
+if type brew > /dev/null; then
+    source $(brew --prefix nvm)/nvm.sh
+    nvm use 0.12 &> /dev/null
+else
+    if [[ -f ~/.nvm/nvm.sh ]]; then
+        source  -f ~/.nvm/nvm.sh
+        nvm use 0.12 &> /dev/null
+    fi
+fi
+
+# Fuck - command correction
+if type thefuck > /dev/null; then
+    eval $(thefuck --alias)
 fi
