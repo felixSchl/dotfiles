@@ -65,7 +65,7 @@ if type brew > /dev/null; then
     nvm use 0.12 &> /dev/null
 else
     if [[ -f ~/.nvm/nvm.sh ]]; then
-        source  -f ~/.nvm/nvm.sh
+        source ~/.nvm/nvm.sh
         nvm use 0.12 &> /dev/null
     fi
 fi
