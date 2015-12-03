@@ -128,6 +128,7 @@ nnoremap <leader>w <C-w>
 " Run things
 nnoremap [run] <Nop>
 nmap <leader>r [run]
+nnoremap [run]b :!npm run build<CR>
 nnoremap [run]t :!npm test<CR>
 
 " }}}
