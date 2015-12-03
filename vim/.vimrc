@@ -200,7 +200,7 @@ autocmd VimEnter * call ShowVimFiler()
 autocmd FileType vimfiler nnoremap <silent><buffer> u :Unite
                             \ -profile-name=files
                             \ -buffer-name=git-files
-                            \ file_rec/git:--cached:--others:--exclude-standard
+                            \ file_rec/git:--cached:--others:--exclude-standard:--recursive
                             \<cr>
 
 function! BuildVimproc(info)
