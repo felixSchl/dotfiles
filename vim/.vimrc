@@ -271,7 +271,7 @@ nnoremap <leader>sp :OmniSharpStopServer<cr>
 nnoremap <leader>th :OmniSharpHighlightTypes<cr>
 
 Plug 'vim-scripts/LargeFile'
-let g:LargeFile=50
+let g:LargeFile=1
 
 Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
 au filetype haskell map <buffer> <leader>i :HoogleInfo<CR>
