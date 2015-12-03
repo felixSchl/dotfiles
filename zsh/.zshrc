@@ -47,6 +47,7 @@ fi
 if [[ -f ~/.fzf.zsh ]]; then
     source ~/.fzf.zsh
 fi
+export FZF_TMUX=1
 
 # Node - Node.js
 PATH="$PATH:.node/bin"
@@ -73,3 +74,7 @@ fi
 if type thefuck > /dev/null; then
     eval $(thefuck --alias)
 fi
+
+# Explicitely set language
+export LC_CTYPE=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
