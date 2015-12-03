@@ -569,6 +569,7 @@ set ttimeoutlen=50
 set enc=utf-8
 set fileencoding=utf-8
 set fileencodings=ucs-bom,utf8,prc
+set synmaxcol=120
 exec "set listchars=tab:\\|→"
 exec "set list lcs+=trail:\uB7,nbsp:~"
 " }}}
