@@ -1,31 +1,38 @@
-# Antigen bundles
-if [[ -f ~/antigen.zsh ]]; then
-    source ~/antigen.zsh
-    antigen use oh-my-zsh
-    antigen bundle git                  # Completions for git
-    antigen bundle node                 # Completions for node
-    antigen bundle tmux                 # Completions for tmux
-    antigen bundle python               # Completions for python
-    antigen bundle brew                 # Completions for brew
-    antigen bundle bower                # Completions for bower
-    antigen bundle vi-mode              # Vim navigation for zsh
-    antigen bundle hchbaw/opp.zsh       # Vim text objects for zsh
-    antigen bundle nojhan/liquidprompt  # Prompt style
-    antigen bundle mollifier/cd-gitroot # CD to nearest git repo
-    antigen bundle zsh-users/zsh-syntax-highlighting
-    antigen bundle zsh-users/zsh-history-substring-search
-    antigen bundle tarruda/zsh-autosuggestions
-    antigen bundle uvaes/fzf-marks
+if [[ -f ~/.zplug/zplug ]]; then
+    source ~/.zplug/zplug
+
+    # Triaging
+    zplug "b5b4r07/enhancd", at:v1, of:enhancd.sh
+    zplug "tarruda/zsh-autosuggestions"
+    zplug "uvaes/fzf-marks"
+
+    zplug "zsh-users/zsh-syntax-highlighting"
+    zplug "zsh-users/zsh-history-substring-search"
+
+    # Completions etc.
+    zplug "plugins/git", from:oh-my-zsh
+
+    # VIM key-mappings for zsh
+    zplug "plugins/vi-mode", from:oh-my-zsh
+    zplug "hchbaw/opp.zsh", of:opp.zsh
+    bindkey -M vicmd 'k' history-substring-search-up
+    bindkey -M vicmd 'j' history-substring-search-down
 
     # Liquid prompt
     LP_ENABLE_TIME=1
     LP_USER_ALWAYS=1
+    zplug "nojhan/liquidprompt"
 
-    # Search history (in vi-mode)
-    bindkey -M vicmd 'k' history-substring-search-up
-    bindkey -M vicmd 'j' history-substring-search-down
+    # Navigate to the .git project root
+    zplug "mollifier/cd-gitroot"
+    alias cdu='cd-gitroot'
 
-    antigen apply
+    zplug load
+
+    # Refer to [zplug issue #26](https://github.com/b4b4r07/zplug/issues/26)
+    if [[ -f ~/.zplug/repos/zsh-users/zsh-syntax-highlighting ]]; then
+        source ~/.zplug/repos/zsh-users/zsh-syntax-highlighting
+    fi
 fi
 
 # Exports
@@ -43,7 +50,7 @@ if type rlwrap > /dev/null; then
     alias node='rlwrap node'
 fi
 
-# Fuzzy finder
+# FZF
 if [[ -f ~/.fzf.zsh ]]; then
     source ~/.fzf.zsh
 fi
