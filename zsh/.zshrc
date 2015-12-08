@@ -1,5 +1,6 @@
 if [[ -f ~/.zplug/zplug ]]; then
     source ~/.zplug/zplug
+    zplug "b4b4r07/zplug"
 
     # Triaging
     zplug "b5b4r07/enhancd", at:v1, of:enhancd.sh
