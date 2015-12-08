@@ -28,6 +28,7 @@ if [[ -f ~/.zplug/zplug ]]; then
     zplug "mollifier/cd-gitroot"
     alias cdu='cd-gitroot'
 
+    zplug check || zplug install
     zplug load
 fi
 
