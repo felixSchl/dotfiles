@@ -3,7 +3,6 @@ if [[ -f ~/.zplug/zplug ]]; then
     zplug "b4b4r07/zplug"
 
     # Triaging
-    zplug "b5b4r07/enhancd", at:v1, of:enhancd.sh
     zplug "tarruda/zsh-autosuggestions"
     zplug "uvaes/fzf-marks"
 
@@ -27,6 +26,9 @@ if [[ -f ~/.zplug/zplug ]]; then
     # Navigate to the .git project root
     zplug "mollifier/cd-gitroot"
     alias cdu='cd-gitroot'
+
+    # Can't use this for now, see [b4b4r07/enhanced#17](https://github.com/b4b4r07/enhancd/issues/17)
+    # zplug "b4b4r07/enhancd", of:enhancd.sh
 
     zplug check || zplug install
     zplug load
