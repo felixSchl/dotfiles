@@ -178,6 +178,9 @@ Plug 'evanmiller/nginx-vim-syntax'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'digitaltoad/vim-jade'
 
+Plug 'editorconfig/editorconfig-vim'
+let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
+
 Plug 'shumphrey/fugitive-gitlab.vim'
 let g:fugitive_gitlab_domains = ['https://git.dn3010.com']
 
