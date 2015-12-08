@@ -29,11 +29,6 @@ if [[ -f ~/.zplug/zplug ]]; then
     alias cdu='cd-gitroot'
 
     zplug load
-
-    # Refer to [zplug issue #26](https://github.com/b4b4r07/zplug/issues/26)
-    if [[ -f ~/.zplug/repos/zsh-users/zsh-syntax-highlighting ]]; then
-        source ~/.zplug/repos/zsh-users/zsh-syntax-highlighting
-    fi
 fi
 
 # Exports
