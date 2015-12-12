@@ -5,9 +5,13 @@ if [[ -f ~/.zplug/zplug ]]; then
     # Triaging
     zplug "tarruda/zsh-autosuggestions"
     zplug "uvaes/fzf-marks"
-
-    zplug "zsh-users/zsh-syntax-highlighting"
     zplug "zsh-users/zsh-history-substring-search"
+
+    # Cannot use right now, breaks tmux initial cwd
+    # zplug "b4b4r07/enhancd", of:enhancd.sh
+
+    # Syntax highlighting
+    zplug "zsh-users/zsh-syntax-highlighting"
 
     # Completions etc.
     zplug "plugins/git", from:oh-my-zsh
@@ -27,11 +31,7 @@ if [[ -f ~/.zplug/zplug ]]; then
     zplug "mollifier/cd-gitroot"
     alias cdu='cd-gitroot'
 
-    # Can't use this for now, see [b4b4r07/enhanced#17](https://github.com/b4b4r07/enhancd/issues/17)
-    # zplug "b4b4r07/enhancd", of:enhancd.sh
-
-    zplug check || zplug install
-    zplug load
+    zplug load > /dev/null
 fi
 
 # Exports
@@ -66,14 +66,9 @@ export PATH="$PATH:/usr/local/opt/go/libexec/bin"
 
 # Nvm - Node version manager
 export NVM_DIR=~/.nvm
-if type brew > /dev/null; then
-    source $(brew --prefix nvm)/nvm.sh
+if [[ -f ~/.nvm/nvm.sh ]]; then
+    source ~/.nvm/nvm.sh
     nvm use 0.12 &> /dev/null
-else
-    if [[ -f ~/.nvm/nvm.sh ]]; then
-        source ~/.nvm/nvm.sh
-        nvm use 0.12 &> /dev/null
-    fi
 fi
 
 # Fuck - command correction
@@ -84,3 +79,4 @@ fi
 # Explicitely set language
 export LC_CTYPE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
+
