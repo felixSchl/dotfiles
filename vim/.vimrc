@@ -390,9 +390,7 @@ au BufNewFile,BufRead *.shader set filetype=glsl.c
 Plug 'dhruvasagar/vim-table-mode'
 let g:table_mode_corner = '+'
 
-Plug 'nelstrom/vim-visual-star-search'
-Plug 'thinca/vim-visualstar'
-nnoremap * <Plug>(visualstar-*)N
+Plug 'bronson/vim-visual-star-search'
 
 Plug 'milkypostman/vim-togglelist'
 nnoremap <script> <silent> <leader>l :call ToggleLocationList()<CR>
