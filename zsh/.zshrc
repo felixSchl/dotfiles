@@ -31,7 +31,8 @@ if [[ -f ~/.zplug/zplug ]]; then
     zplug "mollifier/cd-gitroot"
     alias cdu='cd-gitroot'
 
-    zplug load > /dev/null
+    zplug check || zplug install
+    zplug load --verbose
 fi
 
 # Exports
@@ -51,6 +52,7 @@ fi
 
 # FZF
 if [[ -f ~/.fzf.zsh ]]; then
+    echo "Loading fzf..."
     source ~/.fzf.zsh
 fi
 export FZF_TMUX=1
@@ -67,12 +69,14 @@ export PATH="$PATH:/usr/local/opt/go/libexec/bin"
 # Nvm - Node version manager
 export NVM_DIR=~/.nvm
 if [[ -f ~/.nvm/nvm.sh ]]; then
+    echo "Loading nvm..."
     source ~/.nvm/nvm.sh
-    nvm use 0.12 &> /dev/null
+    nvm use 0.12
 fi
 
 # Fuck - command correction
 if type thefuck > /dev/null; then
+    echo "Loading thefuck..."
     eval $(thefuck --alias)
 fi
 
@@ -80,3 +84,4 @@ fi
 export LC_CTYPE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
+clear
