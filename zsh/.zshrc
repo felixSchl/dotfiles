@@ -1,4 +1,4 @@
-if [[ -f ~/.zplug/zplug ]]; then
+kgg]c
     source ~/.zplug/zplug
     zplug "b4b4r07/zplug"
 
@@ -6,6 +6,7 @@ if [[ -f ~/.zplug/zplug ]]; then
     zplug "tarruda/zsh-autosuggestions"
     zplug "uvaes/fzf-marks"
     zplug "zsh-users/zsh-history-substring-search"
+    zplug "zsh-users/zsh-completions"
 
     # Cannot use right now, breaks tmux initial cwd
     # zplug "b4b4r07/enhancd", of:enhancd.sh
