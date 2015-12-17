@@ -55,6 +55,31 @@ fi
 if [[ -f ~/.fzf.zsh ]]; then
     echo "Loading fzf..."
     source ~/.fzf.zsh
+
+    # Interactively select and activate a given docker-machine
+    docker-activate () {
+        input=$(docker-machine ls | tail -n+2 | fzf)
+        if [[ $? = 0 ]]; then
+            machine=$(echo "$input" | tr -s ' ' | cut -d' ' -f1,3)
+            machine_name=$(echo "$machine" | cut -d' ' -f1)
+            machine_status=$(echo "$machine" | cut -d' ' -f2)
+            (if [[ $machine_status = "Stopped" ]]; then
+                docker-machine start "$machine_name"
+            fi || exit $?)
+            echo "Activating docker machine '$machine_name'..."
+            eval "$(docker-machine env $machine_name)"
+        fi
+    }
+
+    # Interactively select and kill a running docker container
+    docker-kill () {
+        input=$(docker ps | tail -n+2 | fzf)
+        if [[ $? = 0 ]]; then
+            container=$(echo "$input" | cut -d' ' -f1)
+            echo "Killing container '$container'..."
+            docker kill "$container"
+        fi
+    }
 fi
 export FZF_COMPLETION_TRIGGER='~~'
 export FZF_TMUX=1
