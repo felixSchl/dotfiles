@@ -177,6 +177,7 @@ Plug 'Shougo/vimshell.vim'
 Plug 'evanmiller/nginx-vim-syntax'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'digitaltoad/vim-jade'
+Plug 'wellle/targets.vim'
 
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
