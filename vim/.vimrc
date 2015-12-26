@@ -735,6 +735,8 @@ autocmd filetype python nnoremap <buffer> <F7> :exe "w \| !python %"<CR>
 
 " Purescript
 autocmd filetype purescript setl shiftwidth=2
+" Note: Ensure auto-comment insertion (does not work by default):
+autocmd filetype purescript setl comments=sl:--,mb:--
 
 " Ruby
 autocmd filetype ruby setl shiftwidth=2
