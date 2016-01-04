@@ -56,6 +56,9 @@ nnoremap <C-V>     v
 vnoremap    v   <C-V>
 vnoremap <C-V>     v
 
+" use :w!! to write a file with sudo
+cmap w!! w !sudo dd of=%
+
 " Fastest insert mode leaving
 imap jk <C-C>
 imap jK <C-C>
