@@ -696,13 +696,8 @@ else
     set t_Co=256
     if (s:isLinux)
         call SetRandomColorScheme([
-            \  'xoria256'
-            \, 'jellybeans'
-            \, 'kolor'
-            \, 'herald'
-            \, 'Tomorrow-Night'
-            \, 'Tomorrow-Night-Eighties'
-            \, 'Tomorrow-Night-Bright'
+            \ 'Tomorrow-Night',
+            \ 'Tomorrow-Night-Eighties'
         \])
     endif
     hi CursorLine term=NONE cterm=NONE ctermbg=236
