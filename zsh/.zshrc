@@ -1,4 +1,4 @@
-kgg]c
+if [[ -f ~/.zplug/zplug ]]; then
     source ~/.zplug/zplug
     zplug "b4b4r07/zplug"
 
