@@ -1,0 +1,4 @@
+.weechat/logs
+.weechat/*.log
+.weechat/*.cache
+.weechat/urlserver_list.txt
