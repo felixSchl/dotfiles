@@ -326,9 +326,7 @@ if has("lua")
     let g:neocomplete#use_vimproc=1
     let g:neocomplete#enable_at_startup=1
     let g:neocomplete#enable_smart_case=1
-    let g:neocomplete#text_mode_filetypes={
-                                            \ "pandoc": 1
-                                            \ }
+    let g:neocomplete#text_mode_filetypes={ "pandoc": 1 }
     if !exists('g:neocomplete#sources#omni#input_patterns')
         let g:neocomplete#sources#omni#input_patterns={}
     endif
@@ -503,13 +501,21 @@ call unite#custom#profile('files', 'context', {
     \   'no_empty': 1,
     \   'resume': 0,
     \ })
-call unite#custom#profile('files', 'sorters', [ 'sorter_rank' ])
-call unite#custom#profile('files', 'matchers', [ 'matcher_fuzzy',
-                                               \ 'matcher_hide_hidden_files',
-                                               \ 'matcher_hide_current_file' ])
-call unite#custom#profile('files', 'converters', [ 'converter_relative_abbr',
-                                                 \ 'converter_smart_path',
-                                                 \ 'converter_file_directory' ])
+
+call unite#custom#profile('files', 'sorters', [
+        \ 'sorter_rank'
+        \ ])
+
+call unite#custom#profile('files', 'matchers', [
+        \ 'matcher_fuzzy',
+        \ 'matcher_hide_hidden_files'
+        \ ])
+
+call unite#custom#profile('files', 'converters', [
+        \ 'converter_relative_abbr',
+        \ 'converter_smart_path',
+        \ 'converter_file_directory'
+        \ ])
 " }}}
 
 " }}}
