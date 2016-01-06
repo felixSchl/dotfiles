@@ -12,7 +12,7 @@ if [[ -f ~/.zplug/zplug ]]; then
     # zplug "b4b4r07/enhancd", of:enhancd.sh
 
     # Syntax highlighting
-    zplug "zsh-users/zsh-syntax-highlighting"
+    # zplug "zsh-users/zsh-syntax-highlighting"
 
     # Completions etc.
     zplug "plugins/git", from:oh-my-zsh
