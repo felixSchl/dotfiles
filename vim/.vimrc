@@ -752,6 +752,9 @@ autocmd filetype haskell setl omnifunc=necoghc#omnifunc
 autocmd filetype javascript setl shiftwidth=2
 autocmd BufRead,BufNewFile *.jsx set filetype=jsx
 
+" Json templates
+autocmd BufRead,BufNewFile *.json.template set filetype=json
+
 " Jade
 au BufNewFile,BufReadPost *.jade set filetype=jade
 autocmd filetype jade setl shiftwidth=2
