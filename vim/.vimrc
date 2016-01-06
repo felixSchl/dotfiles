@@ -168,7 +168,6 @@ Plug 'Valloric/MatchTagAlways', { 'for': [ 'xml', 'html' ] }
 Plug 'tpope/vim-ragtag', { 'for': [ 'xml', 'html' ] }
 Plug 'vim-scripts/matchit.zip'
 Plug 'vim-scripts/mediawiki.vim', { 'for': 'mediawiki' }
-Plug 'chiedojohn/vim-case-convert'
 Plug 'othree/yajs.vim', { 'for': [ 'javascript', 'typescript' ] }
 Plug 'jsx/jsx.vim', { 'for': [ 'javascript', 'typescript', 'jsx' ] }
 Plug 'mxw/vim-jsx', { 'for': [ 'javascript', 'typescript', 'jsx' ] }
