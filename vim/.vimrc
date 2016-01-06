@@ -375,16 +375,6 @@ else
     let g:syntastic_cs_checkers = ['code_checker']
 endif
 
-Plug 'vim-pandoc/vim-pandoc-syntax', { 'for': [ 'markdown',
-                                              \ 'python',
-                                              \ 'haskell',
-                                              \ 'cs' ] }
-let g:pandoc_use_embeds_in_codeblocks_for_langs = [
-    \ "python"
-    \,"cs"
-    \,"haskell"
-    \ ]
-
 Plug 'vim-scripts/glsl.vim'
 au BufNewFile,BufRead *.shader set filetype=glsl.c
 
