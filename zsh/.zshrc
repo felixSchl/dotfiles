@@ -115,4 +115,14 @@ fi
 export LC_CTYPE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
+# weechat
+# TODO: Find a more sophisticated way...
+if [[ ! -f ~/.weechat/python/autoload/wee_slack.py ]]; then
+    echo "weechat: installing \`wee_slack.py\`..."
+    mkdir -p ~/.weechat/python/autoload
+    curl -fLo ~/.weechat/python/autoload/wee_slack.py \
+        https://raw.githubusercontent.com/rawdigits/wee-slack/master/wee_slack.py \
+        2> /dev/null
+fi
+
 clear
