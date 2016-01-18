@@ -193,12 +193,12 @@ let g:vimfiler_as_default_explorer = 1
 let g:vimfiler_ignore_filters = [ 'matcher_ignore_pattern',
                                 \ 'matcher_ignore_wildignore']
 let g:vimfiler_safe_mode_by_default = 0
-nmap - :VimFilerBufferDir -fnamewidth=80<CR>
+nmap - :VimFilerBufferDir -project -find -fnamewidth=80<CR>
 
 " Start vimfiler automatically if no files given
 function! ShowVimFiler()
     if !argc()
-        VimFiler -fnamewidth=80
+        VimFiler -project -find -fnamewidth=80
     endif
 endfunction
 
