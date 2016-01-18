@@ -202,12 +202,15 @@ function! ShowVimFiler()
     endif
 endfunction
 
-autocmd VimEnter * call ShowVimFiler()
-autocmd FileType vimfiler nnoremap <silent><buffer> u :Unite
-                            \ -profile-name=files
-                            \ -buffer-name=git-files
-                            \ file_rec/git:--cached:--others:--exclude-standard:--recursive
-                            \<cr>
+augroup vimrc_vimfiler
+  au!
+  au VimEnter * call ShowVimFiler()
+  au FileType vimfiler nnoremap <silent><buffer> u :Unite
+    \ -profile-name=files
+    \ -buffer-name=git-files
+    \ file_rec/git:--cached:--others:--exclude-standard:--recursive
+    \<cr>
+augroup END
 
 function! BuildVimproc(info)
     " TODO: Compile based on host OS
@@ -242,26 +245,24 @@ if !s:isWin
     let g:OmniSharp_server_type = 'roslyn'
 endif
 
-augroup omnisharp_commands
-    autocmd!
-
-    autocmd FileType cs setlocal omnifunc=OmniSharp#Complete
-    autocmd FileType cs nnoremap <leader>b :wa!<cr>:OmniSharpBuildAsync<cr>
-    autocmd BufWritePost *.cs call OmniSharp#AddToProject()
-    autocmd CursorHold   *.cs call OmniSharp#TypeLookupWithoutDocumentation()
-    autocmd FileType cs nnoremap gd :OmniSharpGotoDefinition<cr>
-    autocmd FileType cs nnoremap <leader>fi :OmniSharpFindImplementations<cr>
-    autocmd FileType cs nnoremap <leader>ft :OmniSharpFindType<cr>
-    autocmd FileType cs nnoremap <leader>fs :OmniSharpFindSymbol<cr>
-    autocmd FileType cs nnoremap <leader>fu :OmniSharpFindUsages<cr>
-    autocmd FileType cs nnoremap <leader>fm :OmniSharpFindMembers<cr>
-    autocmd FileType cs nnoremap <leader>x  :OmniSharpFixIssue<cr>
-    autocmd FileType cs nnoremap <leader>fx :OmniSharpFixUsings<cr>
-    autocmd FileType cs nnoremap <leader>tt :OmniSharpTypeLookup<cr>
-    autocmd FileType cs nnoremap <leader>dc :OmniSharpDocumentation<cr>
-    autocmd FileType cs nnoremap <C-K>      :OmniSharpNavigateUp<cr>
-    autocmd FileType cs nnoremap <C-J>      :OmniSharpNavigateDown<cr>
-
+augroup vimrc_omnisharp
+    au!
+    au FileType cs setlocal omnifunc=OmniSharp#Complete
+    au FileType cs nnoremap <leader>b :wa!<cr>:OmniSharpBuildAsync<cr>
+    au BufWritePost *.cs call OmniSharp#AddToProject()
+    au CursorHold   *.cs call OmniSharp#TypeLookupWithoutDocumentation()
+    au FileType cs nnoremap gd :OmniSharpGotoDefinition<cr>
+    au FileType cs nnoremap <leader>fi :OmniSharpFindImplementations<cr>
+    au FileType cs nnoremap <leader>ft :OmniSharpFindType<cr>
+    au FileType cs nnoremap <leader>fs :OmniSharpFindSymbol<cr>
+    au FileType cs nnoremap <leader>fu :OmniSharpFindUsages<cr>
+    au FileType cs nnoremap <leader>fm :OmniSharpFindMembers<cr>
+    au FileType cs nnoremap <leader>x  :OmniSharpFixIssue<cr>
+    au FileType cs nnoremap <leader>fx :OmniSharpFixUsings<cr>
+    au FileType cs nnoremap <leader>tt :OmniSharpTypeLookup<cr>
+    au FileType cs nnoremap <leader>dc :OmniSharpDocumentation<cr>
+    au FileType cs nnoremap <C-K>      :OmniSharpNavigateUp<cr>
+    au FileType cs nnoremap <C-J>      :OmniSharpNavigateDown<cr>
 augroup END
 
 nnoremap <leader><space> :OmniSharpGetCodeActions<cr>
@@ -402,7 +403,10 @@ function! <SID>AutoProjectRootCD()
     " Silently ignore invalid buffers
   endtry
 endfunction
-autocmd BufEnter * call <SID>AutoProjectRootCD()
+augroup vimrc_project
+  au!
+  au BufEnter * call <SID>AutoProjectRootCD()
+augroup END
 nnoremap <leader>C :ProjectRootCD<cr>
 nnoremap <silent> <leader>ft :ProjectRootExe VimFiler<cr>
 
@@ -462,10 +466,14 @@ Plug 'Shougo/unite-outline'
 call plug#end()
 
 " Unite.vim {{{
-autocmd FileType unite call s:unite_my_settings()
-function! s:unite_my_settings()
+augroup vimrc_unite
+  au!
+  au FileType unite call s:unite_my_settings()
+augroup END
+
+fu! s:unite_my_settings()
     imap <silent><buffer><expr> <C-v> unite#do_action('vsplitswitch')
-endfunction
+endfu
 
 call unite#custom#source('file_rec/git', 'ignore_globs',
           \ split(&wildignore, ','))
@@ -556,7 +564,10 @@ set foldmethod=syntax
 set foldlevelstart=99
 set formatoptions-=t
 " set foldcolumn=3
-autocmd FileType qf wincmd J " quickfix list at bottom
+augroup vimrc_qf
+  au!
+  au FileType qf wincmd J " quickfix list at bottom
+augroup END
 set wildignore=*.o,*.obj,*.bak,*.exe,*.pyc,*.swo,*.swp,*.swq,*.swr
 set wildignore+=*.png,*.tga,*.psd,*.jpg,*.jpeg,*.svg
 set wildignore+=*.class,*.jar
@@ -688,76 +699,47 @@ endif
 " }}}
 " Filetypes {{{
 " ------------------------------------------------------------------------------
-" Adobe extend script 
-autocmd BufRead,BufNewFile *.jsx setlocal filetype=javascript
-autocmd BufRead,BufNewFile *.jsxinc setlocal filetype=javascript
-autocmd BufRead,BufNewFile *.mxi setlocal filetype=xml
+augroup vimrc_filetypes
+au!
 
-" CSharp
-autocmd BufRead,BufNewFile *.cshtml setlocal filetype=xml.javascript
+  " Help vim recognize file types
+  au BufRead,BufNewFile *.jsx           setl ft=javascript
+  au BufRead,BufNewFile *.jsxinc        setl ft=javascript
+  au BufRead,BufNewFile *.mxi           setl ft=xml
+  au BufRead,BufNewFile *.cshtml        setl ft=xml.javascript
+  au BufRead,BufNewFile *.ls            setl ft=ls
+  au BufRead,BufNewFile *.as            setl ft=as3
+  au BufRead,BufNewFile *.shader        setl ft=cg
+  au BufRead,BufNewFile *.dart          setl ft=dart
+  au BufRead,BufNewFile *.slim          setl ft=slim
+  au BufRead,BufNewFile *.ts            setl ft=typescript
+  au BufRead,BufNewFile *.md            setl ft=markdown
+  au BufRead,BufNewFile *.mdown         setl ft=markdown
+  au BufRead,BufNewFile *.markdown      setl ft=markdown
+  au BufRead,BufNewFile *.jsx           setl ft=jsx
+  au BufRead,BufNewFile *.json.template setl ft=json
+  au BufRead,BufNewFile *.jade          setl ft=jade
 
-" Livescript
-autocmd BufRead,BufNewFile *.ls setlocal filetype=ls
+  " Configure indentation based on language
+  au filetype html       setl shiftwidth=2
+  au filetype typescript setl shiftwidth=2
+  au filetype purescript setl shiftwidth=2
+  au filetype ruby       setl shiftwidth=2
+  au filetype javascript setl shiftwidth=2
+  au filetype jade       setl shiftwidth=2
 
-" ActionScript3
-autocmd BufRead,BufNewFile *.as setlocal filetype=as3
+  " Configure Typescript
+  au filetype typescript setl indentexpr=
+  au filetype typescript setl indentkeys=
 
-" Java
-let java_highlight_all=1
-let java_highlight_debug=1
-autocmd filetype java setlocal suffixesadd+=.java
+  " Configure Python
+  au filetype python setlocal foldmethod=indent
+  au filetype python nnoremap <buffer> <F7> :exe "w \| !python %"<CR>
 
-" Unity Shaders
-autocmd BufRead,BufNewFile *.shader setlocal filetype=cg
-
-" Dart
-autocmd BufRead,BufNewFile *.dart setlocal filetype=dart
-
-" HTML
-autocmd filetype html setl shiftwidth=2
-
-" Typescript
-au BufRead,BufNewFile *.ts setl filetype=typescript
-autocmd filetype typescript setl shiftwidth=2
-autocmd filetype typescript setl indentexpr=
-autocmd filetype typescript setl indentkeys=
-
-" Python
-autocmd filetype python setlocal foldmethod=indent
-autocmd filetype python nnoremap <buffer> <F7> :exe "w \| !python %"<CR>
-
-" Purescript
-autocmd filetype purescript setl shiftwidth=2
-" Note: Ensure auto-comment insertion (does not work by default):
-autocmd filetype purescript setl comments=sl:--,mb:--
-
-" Ruby
-autocmd filetype ruby setl shiftwidth=2
-
-" Rails asset pipeline
-autocmd BufRead,BufNewFile *.slim set filetype=slim
-
-" Markdown
-autocmd BufRead,BufNewFile *.md set filetype=markdown
-autocmd BufRead,BufNewFile *.mdown set filetype=markdown
-autocmd BufRead,BufNewFile *.markdown set filetype=markdown
-
-" Haskell
-autocmd filetype haskell nnoremap <script> <buffer> <localLeader>r :!runhaskell %<CR>
-autocmd filetype haskell nnoremap <script> <buffer> <LocalLeader>t :HdevtoolsType<CR>
-autocmd filetype haskell nnoremap <buffer> <F7> :exe "w \| !runhaskell %"<CR>
-autocmd filetype haskell setl omnifunc=necoghc#omnifunc
-
-" Javascript
-autocmd filetype javascript setl shiftwidth=2
-autocmd BufRead,BufNewFile *.jsx set filetype=jsx
-
-" Json templates
-autocmd BufRead,BufNewFile *.json.template set filetype=json
-
-" Jade
-au BufNewFile,BufReadPost *.jade set filetype=jade
-autocmd filetype jade setl shiftwidth=2
+  " Configure Purescript
+  " Note: Ensure auto-comment insertion (does not work by default)
+  au filetype purescript setl comments=sl:--,mb:--
+augroup END
 
 " }}}
 " Goodies {{{
@@ -769,14 +751,17 @@ command! -nargs=* -complete=help Vh vertical belowright help <args>
 " Bind the last run command to a hotkey
 " e.g.: :BindLast <F7>
 func! BindCommand(key)
-    let b:cmd  = histget('cmd', -2)
-    let b:comp = ":w! \\| ".b:cmd
-    exec ":nnoremap ".a:key." :exe \"".b:comp."\"<CR>"
+  let b:cmd  = histget('cmd', -2)
+  let b:comp = ":w! \\| ".b:cmd
+  exec ":nnoremap ".a:key." :exe \"".b:comp."\"<CR>"
 endfunc
 command! -nargs=+ BindLast :call BindCommand(<q-args>)
 
 " Working directory per tab
-au TabEnter * if exists("t:wd") | exe "cd " . fnameescape(t:wd) | endif
-au TabLeave * let t:wd=getcwd()
+augroup vimrc_tabs
+  au!
+  au TabEnter * if exists("t:wd") | exe "cd " . fnameescape(t:wd) | endif
+  au TabLeave * let t:wd=getcwd()
+augroup END
 
 " }}}
