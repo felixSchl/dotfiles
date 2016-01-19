@@ -476,37 +476,37 @@ fu! s:unite_my_settings()
 endfu
 
 call unite#custom#source('file_rec/git', 'ignore_globs',
-          \ split(&wildignore, ','))
+  \ split(&wildignore, ','))
 
 call unite#custom#source('file_rec/async:!', 'ignore_globs', [
-    \ 'node_modules',
-    \ '.output',
-    \ '.cache',
-    \ '.tmp'
-    \ ])
+  \ 'node_modules',
+  \ '.output',
+  \ '.cache',
+  \ '.tmp'
+  \ ])
 
 call unite#custom#profile('files', 'context', {
-    \   'start_insert': 1,
-    \   'unique': 1,
-    \   'no_split': 1,
-    \   'no_empty': 1,
-    \   'resume': 0,
-    \ })
+  \ 'start_insert': 1,
+  \ 'unique': 1,
+  \ 'no_split': 1,
+  \ 'no_empty': 1,
+  \ 'resume': 0,
+  \ })
 
 call unite#custom#profile('files', 'sorters', [
-        \ 'sorter_rank'
-        \ ])
+  \ 'sorter_rank'
+  \ ])
 
 call unite#custom#profile('files', 'matchers', [
-        \ 'matcher_fuzzy',
-        \ 'matcher_hide_hidden_files'
-        \ ])
+  \ 'matcher_fuzzy',
+  \ 'matcher_hide_hidden_files'
+  \ ])
 
 call unite#custom#profile('files', 'converters', [
-        \ 'converter_relative_abbr',
-        \ 'converter_smart_path',
-        \ 'converter_file_directory'
-        \ ])
+  \ 'converter_relative_abbr',
+  \ 'converter_smart_path',
+  \ 'converter_file_directory'
+  \ ])
 " }}}
 
 " }}}
@@ -727,6 +727,7 @@ au!
   au filetype ruby       setl shiftwidth=2
   au filetype javascript setl shiftwidth=2
   au filetype jade       setl shiftwidth=2
+  au filetype vim        setl shiftwidth=2
 
   " Configure Typescript
   au filetype typescript setl indentexpr=
@@ -762,6 +763,22 @@ augroup vimrc_tabs
   au!
   au TabEnter * if exists("t:wd") | exe "cd " . fnameescape(t:wd) | endif
   au TabLeave * let t:wd=getcwd()
+augroup END
+
+" Working with the fugitive commit buffer
+func! SetFugitiveTextWidth()
+  if (line('.') == 1)
+    setl tw=50
+  else
+    setl tw=72
+  endif
+endfunc
+
+augroup vimrc_fugitive
+  au!
+  au CursorMoved  *COMMIT_EDITMSG call SetFugitiveTextWidth()
+  au CursorMovedI *COMMIT_EDITMSG call SetFugitiveTextWidth()
+  au BufEnter     *COMMIT_EDITMSG call SetFugitiveTextWidth()
 augroup END
 
 " }}}
