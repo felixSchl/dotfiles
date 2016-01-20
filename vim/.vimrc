@@ -181,6 +181,9 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'digitaltoad/vim-jade'
 Plug 'wellle/targets.vim'
 
+Plug 'rust-lang/rust.vim'
+let g:rustfmt_autosave = 1
+
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
 
