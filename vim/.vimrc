@@ -180,6 +180,7 @@ Plug 'evanmiller/nginx-vim-syntax'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'digitaltoad/vim-jade'
 Plug 'wellle/targets.vim'
+Plug 'gregsexton/gitv'
 
 Plug 'rust-lang/rust.vim'
 let g:rustfmt_autosave = 1
