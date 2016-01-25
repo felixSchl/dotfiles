@@ -317,14 +317,37 @@ endif
 Plug 'itchyny/lightline.vim'
 
 let g:lightline = {
+\   'component': {
+\     'lineinfo': '%3l:%-2v',
+\   },
+\   'active': {
+\     'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ] ],
+\     'right': [ [ 'syntastic', 'lineinfo' ], ['percent'],
+\                [ 'fileformat', 'fileencoding', 'filetype' ],
+\              ]
+\   },
 \   'component_function': {
-\     'filename': 'ResolveStatusbarFilepath'
-\   }
+\     'readonly':     'LightLineReadonly',
+\     'fugitive':     'LightLineFugitive',
+\     'filename':     'ResolveStatusbarFilepath',
+\     'modified':     'LightLineModified',
+\     'fileformat':   'LightLineFileformat',
+\     'filetype':     'LightLineFiletype',
+\     'fileencoding': 'LightLineFileencoding',
+\     'mode':         'LightLineMode',
+\   },
+\   'component_type': {
+\      'syntastic': 'error',
+\    },
 \ }
 
-let g:unite_force_overwrite_statusline = 0
-let g:vimfiler_force_overwrite_statusline = 0
-let g:vimshell_force_overwrite_statusline = 0
+function! LightLineModified()
+  return &ft =~ 'help\|vimfiler\|gundo' ? '' : &modified ? '+' : &modifiable ? '' : '-'
+endfunction
+
+function! LightLineReadonly()
+  return &ft !~? 'help\|vimfiler\|gundo' && &readonly ? 'RO' : ''
+endfunction
 
 function! ResolveStatusbarFilepath()
   let dir=fugitive#extract_git_dir(expand('%:p'))
@@ -337,6 +360,46 @@ function! ResolveStatusbarFilepath()
     return pathshorten(fnamemodify(expand('%'), ":."))
   endif
 endfunction
+
+function! LightLineFilename()
+  let ro = (LightLineReadonly() != '' ? LightLineReadonly() . ' ' : '')
+  let special =
+      \ (&ft == 'vimfiler' ? vimfiler#get_status_string() :
+      \  &ft == 'unite' ? unite#get_status_string() :
+      \  &ft == 'vimshell' ? vimshell#get_status_string() : '')
+  let modified = LightLineModified() != '' ? ' ' . LightLineModified() : ''
+  let filepath = call ResolveStatusbarFilepath()
+  let filepath = filepath != '' ? filepath : '[No Name]'
+  return ro . special . filepath .  modified
+endfunction
+
+function! LightLineFugitive()
+  if exists('*fugitive#head')
+      let _ = fugitive#head()
+      return strlen(_) ? ' '._ : ''
+  endif
+  return ''
+endfunction
+
+function! LightLineFileformat()
+  return winwidth(0) > 70 ? &fileformat : ''
+endfunction
+
+function! LightLineFiletype()
+  return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype : 'no ft') : ''
+endfunction
+
+function! LightLineFileencoding()
+  return winwidth(0) > 70 ? (strlen(&fenc) ? &fenc : &enc) : ''
+endfunction
+
+function! LightLineMode()
+  return winwidth(0) > 60 ? lightline#mode() : ''
+endfunction
+
+let g:unite_force_overwrite_statusline = 0
+let g:vimfiler_force_overwrite_statusline = 0
+let g:vimshell_force_overwrite_statusline = 0
 
 let s:neocomplete=0
 if has("lua")
