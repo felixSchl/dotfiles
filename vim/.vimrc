@@ -1,4 +1,4 @@
-" vim: fdm=marker:
+"  vim: fdm=marker:
 " Globals {{{
 " -------------------------------------------------------------------------------
 if !exists('g:chosen_color')
@@ -181,9 +181,10 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'digitaltoad/vim-jade'
 Plug 'wellle/targets.vim'
 Plug 'gregsexton/gitv'
+Plug 'idanarye/vim-merginal'
 
 Plug 'rust-lang/rust.vim'
-let g:rustfmt_autosave = 1
+" let g:rustfmt_autosave = 1
 
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
@@ -313,9 +314,29 @@ if !s:isWin " Too slow on windows...
     nmap <leader>th :GitGutterLineHighlightsToggle<CR>
 endif
 
-Plug 'bling/vim-airline'
-" Disable Tagbar for airline, too slow!
-let g:airline#extensions#tagbar#enabled=0
+Plug 'itchyny/lightline.vim'
+
+let g:lightline = {
+\   'component_function': {
+\     'filename': 'ResolveStatusbarFilepath'
+\   }
+\ }
+
+let g:unite_force_overwrite_statusline = 0
+let g:vimfiler_force_overwrite_statusline = 0
+let g:vimshell_force_overwrite_statusline = 0
+
+function! ResolveStatusbarFilepath()
+  let dir=fugitive#extract_git_dir(expand('%:p'))
+  if dir !=# ''
+    " remove `.git` from the end:
+    let dir = strpart(dir, 0, len(dir) - 4)
+    let filepath = fnamemodify(expand('%'), ":.")
+    return substitute(filepath, dir, '', '')
+  else
+    return pathshorten(fnamemodify(expand('%'), ":."))
+  endif
+endfunction
 
 let s:neocomplete=0
 if has("lua")
