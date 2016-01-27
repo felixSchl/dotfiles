@@ -1,15 +1,22 @@
+raw_z () {
+  echo "$(z -e | tail | awk '{ print $2 }')"
+}
+
+fzf_z () {
+    dir=$(raw_z | fzf)
+    if [[ $? = 0 ]]; then
+        cd "$dir"
+    fi
+}
+
 if [[ -f ~/.zplug/zplug ]]; then
     source ~/.zplug/zplug
     zplug "b4b4r07/zplug"
 
     # Triaging
     zplug "tarruda/zsh-autosuggestions"
-    zplug "uvaes/fzf-marks"
     zplug "zsh-users/zsh-history-substring-search"
     zplug "zsh-users/zsh-completions"
-
-    # Cannot use right now, breaks tmux initial cwd
-    # zplug "b4b4r07/enhancd", of:enhancd.sh
 
     # Syntax highlighting
     # zplug "zsh-users/zsh-syntax-highlighting"
@@ -23,6 +30,10 @@ if [[ -f ~/.zplug/zplug ]]; then
     bindkey -M vicmd 'k' history-substring-search-up
     bindkey -M vicmd 'j' history-substring-search-down
 
+    # Z - jump to recent directories
+    zplug "rupa/z", of:z.sh
+    bindkey -s '^k' '^qfzf_z\n'
+
     # Liquid prompt
     LP_ENABLE_TIME=1
     LP_USER_ALWAYS=1
@@ -32,8 +43,14 @@ if [[ -f ~/.zplug/zplug ]]; then
     zplug "mollifier/cd-gitroot"
     alias cdu='cd-gitroot'
 
+    # Install / load plugins
     zplug check || zplug install
-    zplug load --verbose
+    zplug load
+
+    # Add <TAB> completion handlers for fzf *after* fzf is loaded
+    _fzf_complete_z() {
+      _fzf_complete "--multi --reverse" "$@" < <(raw_z)
+    }
 fi
 
 # Exports
@@ -81,7 +98,8 @@ if [[ -f ~/.fzf.zsh ]]; then
         fi
     }
 fi
-export FZF_COMPLETION_TRIGGER='~~'
+
+export FZF_COMPLETION_TRIGGER='**'
 export FZF_TMUX=1
 export FZF_DEFAULT_COMMAND='
   (git ls-tree -r --name-only HEAD ||
