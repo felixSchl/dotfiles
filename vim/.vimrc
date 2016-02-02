@@ -821,6 +821,8 @@ au!
   au filetype javascript setl shiftwidth=2
   au filetype jade       setl shiftwidth=2
   au filetype vim        setl shiftwidth=2
+  au filetype yaml       setl shiftwidth=2
+  au filetype sh         setl shiftwidth=2
 
   " Configure Typescript
   au filetype typescript setl indentexpr=
