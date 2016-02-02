@@ -134,6 +134,11 @@ nmap <leader>r [run]
 nnoremap [run]b :!npm run build<CR>
 nnoremap [run]t :!npm test<CR>
 
+" Neovim - escape terminal mode
+if has('nvim')
+  tnoremap jk <C-\><C-n>
+endif
+
 " }}}
 
 " Plugins {{{
