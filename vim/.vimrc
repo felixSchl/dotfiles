@@ -139,6 +139,7 @@ nnoremap [run]t :!npm test<CR>
 " Plugins {{{
 " ------------------------------------------------------------------------------
 call plug#begin("~/.vim/plugged")
+Plug 'xolox/vim-misc'
 Plug 'flazz/vim-colorschemes'
 Plug 'ChrisKempson/Tomorrow-Theme', { 'rtp': 'vim' }
 Plug 'tpope/vim-fugitive'
@@ -202,9 +203,13 @@ nmap - :VimFilerBufferDir -project -find -fnamewidth=80<CR>
 
 " Start vimfiler automatically if no files given
 function! ShowVimFiler()
-    if !argc()
-        VimFiler -project -find -fnamewidth=80
-    endif
+  if !argc()
+    VimFiler -project -find -fnamewidth=80
+  elseif argc() == 1 && isdirectory(argv(0))
+    let dir=xolox#misc#path#absolute(argv(0))
+    args!
+    exe 'VimFiler -fnamewidth=80 "' . dir . '"'
+  endif
 endfunction
 
 augroup vimrc_vimfiler
