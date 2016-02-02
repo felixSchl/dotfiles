@@ -32,7 +32,6 @@ if [[ -f ~/.zplug/zplug ]]; then
 
     # Z - jump to recent directories
     zplug "rupa/z", of:z.sh
-    bindkey -s '^k' '^qfzf_z\n'
 
     # Liquid prompt
     LP_ENABLE_TIME=1
@@ -46,6 +45,9 @@ if [[ -f ~/.zplug/zplug ]]; then
     # Install / load plugins
     zplug check || zplug install
     zplug load
+
+    # Bind <C-K> to `z`
+    bindkey -s '^k' '^qfzf_z\n'
 
     # Add <TAB> completion handlers for fzf *after* fzf is loaded
     _fzf_complete_z() {
