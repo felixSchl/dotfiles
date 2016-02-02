@@ -122,7 +122,8 @@ export NVM_DIR=~/.nvm
 if [[ -f ~/.nvm/nvm.sh ]]; then
     echo "Loading nvm..."
     source ~/.nvm/nvm.sh
-    nvm use 0.12
+    nvm alias default 0.12
+    nvm use default
 fi
 
 # Fuck - command correction
