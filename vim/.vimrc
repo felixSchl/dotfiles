@@ -1,54 +1,21 @@
-"  vim: fdm=marker:
-" Globals {{{
-" -------------------------------------------------------------------------------
-if !exists('g:chosen_color')
-    let g:chosen_color = ""
-endif
-let s:is_initial=1
-if !exists('g:initial_load')
-    let g:initial_load=1
-else
-    let s:is_initial=0
-endif
-
-let s:ignore_dirs='\v[\/]((\.(git|hg|svn))|(build|obj|temp))$'
-let s:ignore_files='\v\.('
-                 \.'meta|exe|so|dll|fbx|png|tga|jpg|bmp|csproj|sln|'
-                 \.'unityproj|userprefs|suo|asset|prefab|db|dwlt|mdb|class|jar|'
-                 \.'mat|apk|obb|cache|controller|user|ttf|guiskin|unity|pyc|o|a|so|dylib'
-                 \.')$'
-" }}}
-" Init globals {{{
-" -------------------------------------------------------------------------------
-let s:isWin=0
-let s:isLinux=0
-if has('win32') || has('win64')
-  let s:isWin=1
-else
-  let s:isLinux=1
-endif
-" }}}
-" Mandatory settings {{{
-" ------------------------------------------------------------------------------
 set nocompatible
 filetype indent plugin on
-" }}}
-" Mappings {{{
-" ------------------------------------------------------------------------------
+
 let mapleader = "\<SPACE>"
 let maplocalleader = ","
+
+let s:ignore_dirs='\v[\/]((\.(git|hg|svn))|(build|obj|temp))$'
+
+let s:ignore_files=''
+\'\v\.('
+\.'meta|exe|so|dll|fbx|png|tga|jpg|bmp|csproj|sln|'
+\.'unityproj|userprefs|suo|asset|prefab|db|dwlt|mdb|class|jar|'
+\.'mat|apk|obb|cache|controller|user|ttf|guiskin|unity|pyc|o|a|so|dylib'
+\.')$'
+
+" Edit / reload vimrc
 nnoremap <F2> :e ~/.vimrc<CR>
 nnoremap <F3> :so ~/.vimrc<CR>
-if (s:isWin)
-    nnoremap <leader>E :Start explorer %:h<CR>
-endif
-nnoremap Q <Nop>
-
-" Quickly close buffer
-nnoremap QQ <C-w>q
-
-" Toggle cursor column
-map <F11> :set cursorcolumn!<CR>
 
 " Swap v and CTRL-v (prefer block mode)
 nnoremap    v   <C-V>
@@ -64,10 +31,6 @@ imap jk <C-C>
 imap jK <C-C>
 imap Jk <C-C>
 imap JK <C-C>
-imap fd <C-C>
-imap fD <C-C>
-imap Fd <C-C>
-imap FD <C-C>
 
 " Emacs-like control-g to cancel things
 nmap <C-g> <C-C>
@@ -75,58 +38,23 @@ nmap <C-g> <C-C>
 " Easier copying and pasting
 " Copy and paste from the system register `*`
 nmap <leader>pp "*p
-nmap <leader>pO k"*p
-nmap <leader>po j"*p
 nmap <leader>PP "*P
-nmap <leader>PO k"*P
-nmap <leader>Po j"*P
-vnoremap <leader>y "*yy
 
 " Quickly remove search highlight
 func! ClearSearch()
-    call setreg('/', "you will never find me!")
-    nohl
+  call setreg('/', "you will never find me!")
+  nohl
 endfunc
 nnoremap <F4> :call ClearSearch()<CR>
 nnoremap <leader>cs :call ClearSearch()<CR>
 
-" Start the current file as a command
-nnoremap <leader>e :Start %s:h<CR>
-
 " ':Wa' is not editor command annoyance
-command! -bang Wa wa<bang>
-command! -bang Wq wq<bang>
-
-" Easier window navigation
-nnoremap <C-H> <C-W>h
-nnoremap <C-J> <C-W>j
-nnoremap <C-K> <C-W>k
-nnoremap <C-L> <C-W>l
-
-" Mouse scrolling
-map <ScrollWheelUp>     <C-Y>
-map <S-ScrollWheelUp>   <C-U>
-map <ScrollWheelDown>   <C-E>
-map <S-ScrollWheelDown> <C-D>
-
-" Faster substitute prompt
-" Substitute with last search, confirm on/off
-nnoremap <leader>/ :%s:<C-R>/::g<Left><Left>
-" Substitute from blank, confirm on/off
-nnoremap <leader>; :%s:::g<Left><Left><Left>
-nnoremap <leader>' :%s:::gc<Left><Left><Left><Left>
+command! -bang Wa  wa<bang>
+command! -bang Wq  wq<bang>
+command! -bang Qal qal<bang>
 
 " View last command output (hack)
 nnoremap <leader>s :!cat<CR>
-
-" SPC f - file
-nmap <leader>fw :w<CR>
-nmap <leader>fW :w!<CR>
-nmap <leader>fA :wa!<CR>
-nmap <leader>fa :wa<CR>
-
-" SPC w - window
-nnoremap <leader>w <C-w>
 
 " Run things
 nnoremap [run] <Nop>
@@ -139,13 +67,10 @@ if has('nvim')
   tnoremap jk <C-\><C-n>
 endif
 
-" }}}
-
 " Plugins {{{
 " ------------------------------------------------------------------------------
 call plug#begin("~/.vim/plugged")
 Plug 'xolox/vim-misc'
-Plug 'flazz/vim-colorschemes'
 Plug 'ChrisKempson/Tomorrow-Theme', { 'rtp': 'vim' }
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
@@ -153,7 +78,6 @@ Plug 'tpope/vim-repeat'
 Plug 'Townk/vim-autoclose'
 Plug 'mileszs/ack.vim'
 Plug 'ivyl/vim-bling'
-Plug 'OrangeT/vim-csharp', { 'for': 'cs' }
 Plug 'tpope/vim-haml', { 'for': 'haml' }
 Plug 'derekwyatt/vim-scala', { 'for': 'scala' }
 Plug 'jimenezrick/vimerl', { 'for': 'erlang' }
@@ -180,17 +104,15 @@ Plug 'mxw/vim-jsx', { 'for': [ 'javascript', 'typescript', 'jsx' ] }
 Plug 'fatih/vim-go', { 'for': 'go' }
 Plug 'mattn/webapi-vim'
 Plug 'mattn/gist-vim'
-Plug 'tpope/vim-surround'
-Plug 'Shougo/vimshell.vim'
-Plug 'evanmiller/nginx-vim-syntax'
+Plug 'evanmiller/nginx-vim-syntax', { 'for': 'nginx' }
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'digitaltoad/vim-jade'
+Plug 'digitaltoad/vim-jade', { 'for': 'jade' }
 Plug 'wellle/targets.vim'
 Plug 'gregsexton/gitv'
 Plug 'idanarye/vim-merginal'
 
 Plug 'rust-lang/rust.vim'
-" let g:rustfmt_autosave = 1
+" let g:rustfmt_autosave = 1 (TODO: enable based on `rustfmt` exists)
 
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
@@ -224,12 +146,15 @@ augroup vimrc_vimfiler
     \ -profile-name=files
     \ -buffer-name=git-files
     \ file_rec/git:--cached:--others:--exclude-standard:--recursive
-    \<cr>
+    \ <CR>
 augroup END
 
 function! BuildVimproc(info)
-    " TODO: Compile based on host OS
+  if !(has('win32') || has('win64'))
     !make -f make_mac.mak
+  else
+    " TODO: Compile for windows
+  endif
 endfunction
 
 Plug 'Shougo/vimproc.vim', { 'do': function('BuildVimproc') }
@@ -252,45 +177,6 @@ augroup rainbow
   autocmd!
   autocmd FileType * RainbowParentheses
 augroup END
-
-Plug 'OmniSharp/omnisharp-vim', { 'for': 'cs' }
-let g:OmniSharp_timeout = 1
-" Use roslyn on linux and osx
-if !s:isWin
-    let g:OmniSharp_server_type = 'roslyn'
-endif
-
-augroup vimrc_omnisharp
-    au!
-    au FileType cs setlocal omnifunc=OmniSharp#Complete
-    au FileType cs nnoremap <leader>b :wa!<cr>:OmniSharpBuildAsync<cr>
-    au BufWritePost *.cs call OmniSharp#AddToProject()
-    au CursorHold   *.cs call OmniSharp#TypeLookupWithoutDocumentation()
-    au FileType cs nnoremap gd :OmniSharpGotoDefinition<cr>
-    au FileType cs nnoremap <leader>fi :OmniSharpFindImplementations<cr>
-    au FileType cs nnoremap <leader>ft :OmniSharpFindType<cr>
-    au FileType cs nnoremap <leader>fs :OmniSharpFindSymbol<cr>
-    au FileType cs nnoremap <leader>fu :OmniSharpFindUsages<cr>
-    au FileType cs nnoremap <leader>fm :OmniSharpFindMembers<cr>
-    au FileType cs nnoremap <leader>x  :OmniSharpFixIssue<cr>
-    au FileType cs nnoremap <leader>fx :OmniSharpFixUsings<cr>
-    au FileType cs nnoremap <leader>tt :OmniSharpTypeLookup<cr>
-    au FileType cs nnoremap <leader>dc :OmniSharpDocumentation<cr>
-    au FileType cs nnoremap <C-K>      :OmniSharpNavigateUp<cr>
-    au FileType cs nnoremap <C-J>      :OmniSharpNavigateDown<cr>
-augroup END
-
-nnoremap <leader><space> :OmniSharpGetCodeActions<cr>
-vnoremap <leader><space> :call OmniSharp#GetCodeActions('visual')<cr>
-
-nnoremap <leader>nm :OmniSharpRename<cr>
-command! -nargs=1 Rename :call OmniSharp#RenameTo("<args>")
-nnoremap <leader>rl :OmniSharpReloadSolution<cr>
-nnoremap <leader>cf :OmniSharpCodeFormat<cr>
-nnoremap <leader>tp :OmniSharpAddToProject<cr>
-nnoremap <leader>ss :OmniSharpStartServer<cr>
-nnoremap <leader>sp :OmniSharpStopServer<cr>
-nnoremap <leader>th :OmniSharpHighlightTypes<cr>
 
 Plug 'vim-scripts/LargeFile'
 let g:LargeFile=1
@@ -315,13 +201,14 @@ nnoremap <F12>      :IndentLinesToggle<CR>
 let g:indentLine_color_term = 233
 let g:indentLine_noConcealCursor = 1
 let g:indentLine_char = '|'
+let g:indentLine_fileTypeExclude = ['thumbnail', 'json']
 
 Plug 'chrismccord/bclose.vim'
 nnoremap <C-W>c :Bclose<CR>
 
-if !s:isWin " Too slow on windows...
-    Plug 'airblade/vim-gitgutter'
-    nmap <leader>th :GitGutterLineHighlightsToggle<CR>
+if !(has('win32') || has('win64'))
+  Plug 'airblade/vim-gitgutter'
+  nmap <leader>th :GitGutterLineHighlightsToggle<CR>
 endif
 
 Plug 'itchyny/lightline.vim'
@@ -412,27 +299,26 @@ let g:vimfiler_force_overwrite_statusline = 0
 let g:vimshell_force_overwrite_statusline = 0
 
 let s:neocomplete=0
-if has("lua")
-    Plug 'Shougo/neocomplete'
-    let s:neocomplete=1
-    let g:neocomplete#use_vimproc=1
-    let g:neocomplete#enable_at_startup=1
-    let g:neocomplete#enable_smart_case=1
-    let g:neocomplete#text_mode_filetypes={ "pandoc": 1 }
-    if !exists('g:neocomplete#sources#omni#input_patterns')
-        let g:neocomplete#sources#omni#input_patterns={}
-    endif
-    if !exists('g:neocomplete#sources')
-        let g:neocomplete#sources={}
-    endif
-    inoremap <expr><C-g>    neocomplete#undo_completion()
-    inoremap <expr><C-l>    neocomplete#complete_common_string()
-    inoremap <expr><C-h>    neocomplete#smart_close_popup()."\<C-h>"
-    inoremap <expr><BS>     neocomplete#smart_close_popup()."\<C-h>"
-    inoremap <expr><C-y>    neocomplete#close_popup()
-    inoremap <expr><C-e>    neocomplete#cancel_popup()
-else
-    Plug 'ervandew/supertab'
+
+if !has('nvim') && has('lua')
+  Plug 'Shougo/neocomplete'
+  let s:neocomplete=1
+  let g:neocomplete#use_vimproc=1
+  let g:neocomplete#enable_at_startup=1
+  let g:neocomplete#enable_smart_case=1
+  let g:neocomplete#text_mode_filetypes={ "pandoc": 1 }
+  if !exists('g:neocomplete#sources#omni#input_patterns')
+      let g:neocomplete#sources#omni#input_patterns={}
+  endif
+  if !exists('g:neocomplete#sources')
+      let g:neocomplete#sources={}
+  endif
+  inoremap <expr><C-g> neocomplete#undo_completion()
+  inoremap <expr><C-l> neocomplete#complete_common_string()
+  inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+  inoremap <expr><BS>  neocomplete#smart_close_popup()."\<C-h>"
+  inoremap <expr><C-y> neocomplete#close_popup()
+  inoremap <expr><C-e> neocomplete#cancel_popup()
 endif
 
 Plug 'Shougo/neosnippet.vim'
@@ -452,27 +338,19 @@ Plug 'scrooloose/syntastic'
 let g:syntastic_check_on_wq=0
 let g:syntastic_aggregate_errors = 1
 let g:syntastic_mode_map = {
-    \'mode': 'passive',
-    \'active_filetypes': [
-        \'javascript',
-        \'cs',
-        \'typescript'],
-    \'passive_filetypes': []
-    \}
+  \'mode': 'passive',
+  \'active_filetypes': [
+      \'javascript',
+      \'typescript'],
+  \'passive_filetypes': []
+  \}
 nnoremap <silent> <leader>ss :SyntasticCheck<CR>
 nnoremap <silent> <leader>sr :SyntasticReset<CR>
 
 let g:syntastic_python_checkers     = ['pylint']
 let g:syntastic_haskell_checkers    = ['hlint']
-let g:syntastic_cs_checkers         = ['syntax', 'semantic', 'issues']
 let g:syntastic_javascript_checkers = ['eslint']
 let g:syntastic_typescript_checkers = ['tslint']
-
-if (s:isWin)
-    let g:syntastic_cs_checkers = ['syntax', 'semantic', 'issues']
-else
-    let g:syntastic_cs_checkers = ['code_checker']
-endif
 
 Plug 'vim-scripts/glsl.vim'
 au BufNewFile,BufRead *.shader set filetype=glsl.c
@@ -610,13 +488,10 @@ call unite#custom#profile('files', 'converters', [
 " }}}
 " Global preferences {{{
 " ------------------------------------------------------------------------------
+syn on
 set foldlevelstart=20
 set conceallevel=0
 set mouse=
-if (s:is_initial)
-    syntax on
-endif
-" set noswapfile
 set history=10000
 set noshowmatch
 set undofile
@@ -686,113 +561,32 @@ exec "set list lcs+=trail:\uB7,nbsp:~"
 " ------------------------------------------------------------------------------
 set colorcolumn=+1
 
-" Random Colors {{{2
-func! Rand(lower, upper)
-" Gets random number in range (lower, upper)
-python << EOF
-import vim, random
-r = random.randint(int(vim.eval('a:lower')), int(vim.eval('a:upper')))
-vim.command('return ' + str(r))
-EOF
-endfunc
-
-func! SetRandomColorScheme(colors)
-
-    let color = ""
-
-    if (g:chosen_color != "")
-        let color = g:chosen_color
-    else
-        let color = a:colors[Rand(0, len(a:colors) - 1)]
-    endif
-
-    " Load the color scheme
-    execute 'colorscheme ' . color
-    let g:chosen_color = g:colors_name
-
-    " Cursor line default colors
-    let cursor_line_normal_bg = "#333333"
-    let cursor_line_insert_bg = "#002143"
-
-    hi! link Conceal SpecialKey
-
-    " Overwrites
-    if (g:colors_name == "molokai")
-        hi! link ColorColumn WarningMsg
-    elseif (g:colors_name == "candyman")
-        let cursor_line_normal_bg = "#222222"
-        hi! link ColorColumn SpecialKey
-    elseif (g:colors_name == "jellybeans")
-        let cursor_line_normal_bg = "#222222"
-        hi! link ColorColumn SpecialKey
-    elseif (g:colors_name == "xoria256")
-        hi! link ColorColumn VertSplit
-    elseif (g:colors_name == "herald")
-        if has("gui_running")
-            hi! link ColorColumn StatusLine
-        else
-            hi! link ColorColumn StatusLineNC
-        endif
-    elseif (g:colors_name == "lilypink")
-        hi! link ColorColumn StatusLineNC
-    elseif (g:colors_name == "wombat256mod")
-        hi! link ColorColumn SpecialKey
-    elseif (g:colors_name == "inkpot")
-        hi! link ColorColumn LineNr
-    elseif (g:colors_name == "pf_earth")
-        hi! link ColorColumn LineNr
-    elseif (g:colors_name == "kolor")
-        hi! link ColorColumn LineNr
-    elseif (g:colors_name == "graywh")
-    endif
-
-    " Set the cursor line color
-    execute "hi! CursorLine guibg=".cursor_line_normal_bg." guifg=NONE"
-    execute "au InsertEnter * hi! CursorLine guibg=".cursor_line_insert_bg." guifg=NONE"
-    execute "au InsertLeave * hi! CursorLine guibg=".cursor_line_normal_bg." guifg=NONE"
-
-endfunc
-" }}}2
-
 if has("gui_running")
 
-    call SetRandomColorScheme([
-        \  'jellybeans'
-        \, 'lilypink'
-        \, 'wombat256mod'
-        \, 'kolor'
-        \, 'herald'
-    \])
+  colo Tomorrow-Night
 
-    " TagHighlight classes
-    highlight Class guifg=#5199C0
-    highlight LocalVariable guifg=#ffffff
-    highlight Function guifg=#F4F885
+  if (s:isWin)
+    set guifont=Consolas:h12:cANSI
+  else
+    set guifont=Monaco
+  endif
 
-    if (s:isWin)
-        set guifont=Consolas:h12:cANSI
-    else
-        set guifont=Monaco
-    endif
-    set guifontwide=NSimsun:h12
-    set guioptions-=m
-    set guioptions-=e
-    set guioptions+=c
-    set guioptions-=l
-    set guioptions-=L
-    set guioptions-=r
-    set guioptions-=R
-    set guioptions-=b
-    set guioptions-=T
+  set guifontwide=NSimsun:h12
+  set guioptions-=m
+  set guioptions-=e
+  set guioptions+=c
+  set guioptions-=l
+  set guioptions-=L
+  set guioptions-=r
+  set guioptions-=R
+  set guioptions-=b
+  set guioptions-=T
 else
-    set t_Co=256
-    if (s:isLinux)
-        call SetRandomColorScheme([
-            \ 'Tomorrow-Night',
-            \ 'Tomorrow-Night-Eighties'
-        \])
-    endif
-    hi CursorLine term=NONE cterm=NONE ctermbg=236
+  set t_Co=256
+  if !(has('win32') || has('win64'))
+    colo Tomorrow-Night
+  endif
+  hi CursorLine term=NONE cterm=NONE ctermbg=236
 endif
 " }}}
 " Filetypes {{{
