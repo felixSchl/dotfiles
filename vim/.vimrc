@@ -78,10 +78,6 @@ Plug 'tpope/vim-repeat'
 Plug 'Townk/vim-autoclose'
 Plug 'mileszs/ack.vim'
 Plug 'ivyl/vim-bling'
-Plug 'tpope/vim-haml', { 'for': 'haml' }
-Plug 'derekwyatt/vim-scala', { 'for': 'scala' }
-Plug 'jimenezrick/vimerl', { 'for': 'erlang' }
-Plug 'othree/xml.vim', { 'for': 'xml' }
 Plug 'gkz/vim-ls', { 'for': 'livescript' }
 Plug 'tpope/vim-dispatch'
 Plug 'tmux-plugins/vim-tmux'
@@ -91,28 +87,21 @@ Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
 Plug 'jamescarr/snipmate-nodejs', { 'for': [ 'javascript', 'typescript' ] }
 Plug 'guileen/vim-node-dict', { 'for': [ 'javascript', 'typescript' ] }
 Plug 'myhere/vim-nodejs-complete', { 'for': [ 'javascript', 'typescript' ] }
-Plug 'jelera/vim-javascript-syntax', { 'for': [ 'javascript', 'typescript' ] }
 Plug 'tpope/vim-unimpaired'
-Plug 'othree/html5.vim', { 'for': 'html' }
 Plug 'Valloric/MatchTagAlways', { 'for': [ 'xml', 'html' ] }
 Plug 'tpope/vim-ragtag', { 'for': [ 'xml', 'html' ] }
 Plug 'vim-scripts/matchit.zip'
 Plug 'vim-scripts/mediawiki.vim', { 'for': 'mediawiki' }
-Plug 'othree/yajs.vim', { 'for': [ 'javascript', 'typescript' ] }
-Plug 'jsx/jsx.vim', { 'for': [ 'javascript', 'typescript', 'jsx' ] }
-Plug 'mxw/vim-jsx', { 'for': [ 'javascript', 'typescript', 'jsx' ] }
-Plug 'fatih/vim-go', { 'for': 'go' }
 Plug 'mattn/webapi-vim'
 Plug 'mattn/gist-vim'
 Plug 'evanmiller/nginx-vim-syntax', { 'for': 'nginx' }
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'digitaltoad/vim-jade', { 'for': 'jade' }
 Plug 'wellle/targets.vim'
 Plug 'gregsexton/gitv'
 Plug 'idanarye/vim-merginal'
-
-Plug 'rust-lang/rust.vim'
-" let g:rustfmt_autosave = 1 (TODO: enable based on `rustfmt` exists)
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'benmills/vimux'
+Plug 'sheerun/vim-polyglot'
 
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
@@ -341,6 +330,7 @@ let g:syntastic_mode_map = {
   \'mode': 'passive',
   \'active_filetypes': [
       \'javascript',
+      \'sh',
       \'typescript'],
   \'passive_filetypes': []
   \}
@@ -351,9 +341,7 @@ let g:syntastic_python_checkers     = ['pylint']
 let g:syntastic_haskell_checkers    = ['hlint']
 let g:syntastic_javascript_checkers = ['eslint']
 let g:syntastic_typescript_checkers = ['tslint']
-
-Plug 'vim-scripts/glsl.vim'
-au BufNewFile,BufRead *.shader set filetype=glsl.c
+let g:syntastic_sh_checkers         = ['shellcheck']
 
 Plug 'dhruvasagar/vim-table-mode'
 let g:table_mode_corner = '+'
@@ -611,6 +599,8 @@ au!
   au BufRead,BufNewFile *.jsx           setl ft=jsx
   au BufRead,BufNewFile *.json.template setl ft=json
   au BufRead,BufNewFile *.jade          setl ft=jade
+  au BufRead,BufNewFile Dockerfile.*    setl ft=dockerfile
+  au BufNewFile,BufRead *.shader        setl ft=glsl.c
 
   " Configure indentation based on language
   au filetype html       setl shiftwidth=2
