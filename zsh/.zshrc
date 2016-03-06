@@ -122,14 +122,8 @@ export NVM_DIR=~/.nvm
 if [[ -f ~/.nvm/nvm.sh ]]; then
     echo "Loading nvm..."
     source ~/.nvm/nvm.sh
-    nvm alias default 0.12
-    nvm use default
-fi
-
-# Fuck - command correction
-if type thefuck > /dev/null; then
-    echo "Loading thefuck..."
-    eval $(thefuck --alias)
+    # nvm alias default 4 > /dev/null
+    # nvm use default     > /dev/null
 fi
 
 # Explicitely set language
