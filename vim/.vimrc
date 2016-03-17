@@ -290,11 +290,8 @@ let g:unite_force_overwrite_statusline = 0
 let g:vimfiler_force_overwrite_statusline = 0
 let g:vimshell_force_overwrite_statusline = 0
 
-let s:neocomplete=0
-
 if !has('nvim') && has('lua')
   Plug 'Shougo/neocomplete'
-  let s:neocomplete=1
   let g:neocomplete#use_vimproc=1
   let g:neocomplete#enable_at_startup=1
   let g:neocomplete#enable_smart_case=1
@@ -311,6 +308,9 @@ if !has('nvim') && has('lua')
   inoremap <expr><BS>  neocomplete#smart_close_popup()."\<C-h>"
   inoremap <expr><C-y> neocomplete#close_popup()
   inoremap <expr><C-e> neocomplete#cancel_popup()
+elseif has('nvim')
+  Plug 'Shougo/deoplete.nvim'
+  let g:deoplete#enable_at_startup = 1
 endif
 
 Plug 'Shougo/neosnippet.vim'
