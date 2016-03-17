@@ -103,6 +103,9 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'benmills/vimux'
 Plug 'sheerun/vim-polyglot'
 
+Plug 'majutsushi/tagbar'
+nmap <F8> :TagbarToggle<CR>
+
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
 
