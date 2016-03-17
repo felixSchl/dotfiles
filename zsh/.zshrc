@@ -141,5 +141,3 @@ if [[ ! -f ~/.weechat/python/autoload/wee_slack.py ]]; then
         https://raw.githubusercontent.com/rawdigits/wee-slack/master/wee_slack.py \
         2> /dev/null
 fi
-
-clear
