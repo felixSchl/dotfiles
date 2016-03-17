@@ -19,7 +19,7 @@ if [[ -f ~/.zplug/zplug ]]; then
     zplug "zsh-users/zsh-completions"
 
     # Syntax highlighting
-    # zplug "zsh-users/zsh-syntax-highlighting"
+    zplug "zsh-users/zsh-syntax-highlighting"
 
     # Completions etc.
     zplug "plugins/git", from:oh-my-zsh
