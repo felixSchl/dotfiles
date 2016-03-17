@@ -60,6 +60,7 @@ export EDITOR='vim'
 export KEYTIMEOUT=1
 export DISABLE_AUTO_TITLE=true
 export PATH="/usr/local/bin:$PATH"
+export COLORTERM=xterm-256color
 
 # Aliases
 alias _='sudo'
