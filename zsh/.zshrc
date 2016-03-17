@@ -105,9 +105,10 @@ fi
 export FZF_COMPLETION_TRIGGER='**'
 export FZF_TMUX=1
 export FZF_DEFAULT_COMMAND='
-  (git ls-tree -r --name-only HEAD ||
+  (git ls-files --cached --others --exclude-standard ||
    find . -path "*/\.*" -prune -o -type f -print -o -type l -print |
       sed s/^..//) 2> /dev/null'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 # Node - Node.js
 PATH="$PATH:.node/bin"
