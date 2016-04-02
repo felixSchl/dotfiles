@@ -664,6 +664,7 @@ endfunc
 
 augroup vimrc_fugitive
   au!
+  au BufEnter     *COMMIT_EDITMSG setl spell
   au CursorMoved  *COMMIT_EDITMSG call SetFugitiveTextWidth()
   au CursorMovedI *COMMIT_EDITMSG call SetFugitiveTextWidth()
   au BufEnter     *COMMIT_EDITMSG call SetFugitiveTextWidth()
