@@ -12,6 +12,11 @@ fzf_z () {
 # Disable oh-my-zsh update prompts
 DISABLE_UPDATE_PROMPT=true
 
+if [[ ! -d ~/.zplug ]]; then
+    echo "[zshrc] installing zplug..."
+    git clone https://github.com/b4b4r07/zplug ~/.zplug
+fi
+
 if [[ -f ~/.zplug/zplug ]]; then
     source ~/.zplug/zplug
     zplug "b4b4r07/zplug"
@@ -76,7 +81,7 @@ fi
 
 # FZF
 if [[ -f ~/.fzf.zsh ]]; then
-    echo "Loading fzf..."
+    echo "[zshrc] loading fzf..."
     source ~/.fzf.zsh
 
     # Interactively select and activate a given docker-machine
@@ -125,7 +130,7 @@ export PATH="$PATH:/usr/local/opt/go/libexec/bin"
 # Nvm - Node version manager
 export NVM_DIR=~/.nvm
 if [[ -f ~/.nvm/nvm.sh ]]; then
-    echo "Loading nvm..."
+    echo "[zshrc] loading nvm..."
     source ~/.nvm/nvm.sh
     # nvm alias default 4 > /dev/null
     # nvm use default     > /dev/null
@@ -138,7 +143,7 @@ export LC_ALL=en_US.UTF-8
 # weechat
 # TODO: Find a more sophisticated way...
 if [[ ! -f ~/.weechat/python/autoload/wee_slack.py ]]; then
-    echo "weechat: installing \`wee_slack.py\`..."
+    echo "[zshrc] weechat: installing \`wee_slack.py\`..."
     mkdir -p ~/.weechat/python/autoload
     curl -fLo ~/.weechat/python/autoload/wee_slack.py \
         https://raw.githubusercontent.com/rawdigits/wee-slack/master/wee_slack.py \
