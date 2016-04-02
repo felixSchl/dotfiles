@@ -22,7 +22,6 @@ if [[ -f ~/.zplug/zplug ]]; then
     zplug "b4b4r07/zplug"
 
     # Triaging
-    zplug "tarruda/zsh-autosuggestions"
     zplug "zsh-users/zsh-history-substring-search"
     zplug "zsh-users/zsh-completions"
 
