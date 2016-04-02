@@ -9,6 +9,9 @@ fzf_z () {
     fi
 }
 
+# Disable oh-my-zsh update prompts
+DISABLE_UPDATE_PROMPT=true
+
 if [[ -f ~/.zplug/zplug ]]; then
     source ~/.zplug/zplug
     zplug "b4b4r07/zplug"
