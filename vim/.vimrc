@@ -102,6 +102,7 @@ Plug 'idanarye/vim-merginal'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'benmills/vimux'
 Plug 'sheerun/vim-polyglot'
+Plug 'Konfekt/FastFold'
 
 Plug 'majutsushi/tagbar'
 nmap <F8> :TagbarToggle<CR>
