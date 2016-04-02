@@ -46,8 +46,8 @@ if [[ -f ~/.zplug/zplug ]]; then
     alias cdu='cd-gitroot'
 
     # Install / load plugins
-    zplug check || zplug install >/dev/null
-    zplug load >/dev/null
+    zplug check || zplug install
+    zplug load
 
     # Bind <C-K> to `z`
     bindkey -s '^k' '^qfzf_z\n'
