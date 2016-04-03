@@ -197,7 +197,7 @@ nnoremap <F12>      :IndentLinesToggle<CR>
 let g:indentLine_color_term = 233
 let g:indentLine_noConcealCursor = 1
 let g:indentLine_char = '|'
-let g:indentLine_fileTypeExclude = ['thumbnail', 'json']
+let g:indentLine_fileTypeExclude = ['thumbnail', 'json', 'markdown']
 
 Plug 'chrismccord/bclose.vim'
 nnoremap <C-W>c :Bclose<CR>
