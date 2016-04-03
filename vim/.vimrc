@@ -628,6 +628,7 @@ au!
   au BufRead,BufNewFile *.mdown         setl ft=markdown
   au BufRead,BufNewFile *.markdown      setl ft=markdown
   au BufRead,BufNewFile *.jsx           setl ft=jsx
+  au BufRead,BufNewFile *.json          setl ft=json
   au BufRead,BufNewFile *.json.template setl ft=json
   au BufRead,BufNewFile *.jade          setl ft=jade
   au BufRead,BufNewFile Dockerfile.*    setl ft=dockerfile
@@ -643,6 +644,7 @@ au!
   au filetype vim        setl shiftwidth=2
   au filetype yaml       setl shiftwidth=2
   au filetype sh         setl shiftwidth=2
+  au filetype json       setl shiftwidth=2
 
   " Configure Typescript
   au filetype typescript setl indentexpr=
