@@ -107,6 +107,9 @@ Plug 'Konfekt/FastFold'
 Plug 'majutsushi/tagbar'
 nmap <F8> :TagbarToggle<CR>
 
+Plug 'elzr/vim-json'
+let g:vim_json_syntax_conceal = 0
+
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
 
