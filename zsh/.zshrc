@@ -126,6 +126,10 @@ export PATH="$PATH:$GOPATH/bin"
 export PATH="/usr/local/bin:$PATH"
 export PATH="$PATH:/usr/local/opt/go/libexec/bin"
 
+# Manpages
+# Set case-insensitve searching on man pages
+export MANPAGER='less -I'
+
 # Nvm - Node version manager
 export NVM_DIR=~/.nvm
 if [[ -f ~/.nvm/nvm.sh ]]; then
