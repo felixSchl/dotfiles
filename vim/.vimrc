@@ -634,6 +634,10 @@ au!
   au BufRead,BufNewFile Dockerfile.*    setl ft=dockerfile
   au BufNewFile,BufRead *.shader        setl ft=glsl.c
 
+  " fix foldmethod for neocomplete/deoplete
+  " Refer: https://github.com/Shougo/deoplete.nvim/issues/27
+  au BufEnter,BufRead,BufNewFile * setl fdm=marker
+
   " Configure indentation based on language
   au filetype html       setl shiftwidth=2
   au filetype typescript setl shiftwidth=2
