@@ -314,7 +314,23 @@ if !has('nvim') && has('lua')
   inoremap <expr><C-e> neocomplete#cancel_popup()
 elseif has('nvim')
   Plug 'Shougo/deoplete.nvim'
-  let g:deoplete#enable_at_startup = 1
+  let g:deoplete#enable_at_startup=1
+  let g:deoplete#auto_completion_start_length=1
+  let g:deoplete#enable_smart_case=1
+  let g:deoplete#enable_refresh_always=1
+  let g:deoplete#text_mode_filetypes={ "pandoc": 1 }
+  if !exists('g:deoplete#sources#omni#input_patterns')
+      let g:deoplete#sources#omni#input_patterns={}
+  endif
+  if !exists('g:deoplete#sources')
+      let g:deoplete#sources={}
+  endif
+  inoremap <expr><C-g> deoplete#undo_completion()
+  inoremap <expr><C-l> deoplete#complete_common_string()
+  inoremap <expr><C-h> deoplete#smart_close_popup()."\<C-h>"
+  inoremap <expr><BS>  deoplete#smart_close_popup()."\<C-h>"
+  inoremap <expr><C-y> deoplete#close_popup()
+  inoremap <expr><C-e> deoplete#cancel_popup()
 endif
 
 Plug 'Shougo/neosnippet.vim'
@@ -435,6 +451,14 @@ nmap <C-P> <leader>uu
 Plug 'Shougo/unite-outline'
 
 call plug#end()
+
+if has('nvim')
+  call deoplete#custom#set(
+        \ '_',
+        \ 'matchers',
+        \ ['matcher_fuzzy']
+        \)
+endif
 
 " Unite.vim {{{
 augroup vimrc_unite
