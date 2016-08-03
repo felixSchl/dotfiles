@@ -107,6 +107,8 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'benmills/vimux'
 Plug 'sheerun/vim-polyglot'
 Plug 'Konfekt/FastFold'
+Plug 'tpope/vim-abolish'
+
 let g:AutoCloseExpandSpace = 0
 Plug 'Townk/vim-autoclose'
 
