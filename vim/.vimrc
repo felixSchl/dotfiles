@@ -128,7 +128,12 @@ nmap - :VimFilerBufferDir -project -find -fnamewidth=80<CR>
 " Start vimfiler automatically if no files given
 function! ShowVimFiler()
   if !argc()
-    VimFiler -project -find -fnamewidth=80
+    if getcwd() =~? '[[:alpha:]]:\\windows\\system32'
+      cd ~
+      VimFiler -fnamewidth=80
+    else
+      VimFiler -project -find -fnamewidth=80
+    endif
   elseif argc() == 1 && isdirectory(argv(0))
     let dir=xolox#misc#path#absolute(argv(0))
     args!
