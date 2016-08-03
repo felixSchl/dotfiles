@@ -76,6 +76,7 @@ endif
 call plug#begin("~/.vim/plugged")
 Plug 'xolox/vim-misc'
 Plug 'ChrisKempson/Tomorrow-Theme', { 'rtp': 'vim' }
+Plug 'notpratheek/vim-luna'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
@@ -591,7 +592,7 @@ set colorcolumn=+1
 
 if has("gui_running")
 
-  colo Tomorrow-Night
+  colo luna
 
   set guifont=Consolas:h12:cANSI
   set guifontwide=NSimsun:h12
@@ -606,9 +607,7 @@ if has("gui_running")
   set guioptions-=T
 else
   set t_Co=256
-  if !s:is_windows
-    colo Tomorrow-Night
-  endif
+  colo luna-term
   hi CursorLine term=NONE cterm=NONE ctermbg=236
 endif
 " }}}
