@@ -3,6 +3,7 @@ filetype indent plugin on
 
 let mapleader = "\<SPACE>"
 let maplocalleader = ","
+let s:is_windows = has('win32') || has('win64')
 
 let s:ignore_dirs='\v[\/]((\.(git|hg|svn))|(build|obj|temp))$'
 
@@ -146,7 +147,7 @@ augroup vimrc_vimfiler
 augroup END
 
 function! BuildVimproc(info)
-  if !(has('win32') || has('win64'))
+  if !s:is_windows
     !make -f make_mac.mak
   else
     " TODO: Compile for windows
@@ -202,7 +203,7 @@ let g:indentLine_fileTypeExclude = ['thumbnail', 'json', 'markdown']
 Plug 'chrismccord/bclose.vim'
 nnoremap <C-W>c :Bclose<CR>
 
-if !(has('win32') || has('win64'))
+if !s:is_windows
   Plug 'airblade/vim-gitgutter'
   nmap <leader>th :GitGutterLineHighlightsToggle<CR>
 endif
@@ -584,12 +585,7 @@ if has("gui_running")
 
   colo Tomorrow-Night
 
-  if (s:isWin)
-    set guifont=Consolas:h12:cANSI
-  else
-    set guifont=Monaco
-  endif
-
+  set guifont=Consolas:h12:cANSI
   set guifontwide=NSimsun:h12
   set guioptions-=m
   set guioptions-=e
@@ -602,7 +598,7 @@ if has("gui_running")
   set guioptions-=T
 else
   set t_Co=256
-  if !(has('win32') || has('win64'))
+  if !s:is_windows
     colo Tomorrow-Night
   endif
   hi CursorLine term=NONE cterm=NONE ctermbg=236
