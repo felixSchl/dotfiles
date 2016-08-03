@@ -13,40 +13,41 @@ fzf_z () {
 DISABLE_UPDATE_PROMPT=true
 
 if [[ ! -d ~/.zplug ]]; then
-    echo "[zshrc] installing zplug..."
+    echo '[zshrc] installing zplug...'
     git clone https://github.com/b4b4r07/zplug ~/.zplug
 fi
 
 if [[ -f ~/.zplug/zplug ]]; then
     source ~/.zplug/zplug
-    zplug "b4b4r07/zplug"
+    zplug 'b4b4r07/zplug'
 
     # Triaging
-    zplug "zsh-users/zsh-history-substring-search"
-    zplug "zsh-users/zsh-completions"
+    zplug 'zsh-users/zsh-history-substring-search'
+    zplug 'zsh-users/zsh-completions'
+    zplug 'supercrabtree/k'
 
     # Syntax highlighting
-    zplug "zsh-users/zsh-syntax-highlighting"
+    zplug 'zsh-users/zsh-syntax-highlighting'
 
     # Completions etc.
-    zplug "plugins/git", from:oh-my-zsh
+    zplug 'plugins/git', from:oh-my-zsh
 
     # VIM key-mappings for zsh
-    zplug "plugins/vi-mode", from:oh-my-zsh
-    zplug "hchbaw/opp.zsh", of:opp.zsh
+    zplug 'plugins/vi-mode', from:oh-my-zsh
+    zplug 'hchbaw/opp.zsh', of:opp.zsh
     bindkey -M vicmd 'k' history-substring-search-up
     bindkey -M vicmd 'j' history-substring-search-down
 
     # Z - jump to recent directories
-    zplug "rupa/z", of:z.sh
+    zplug 'rupa/z', of:z.sh
 
     # Liquid prompt
     LP_ENABLE_TIME=1
     LP_USER_ALWAYS=1
-    zplug "nojhan/liquidprompt"
+    zplug 'nojhan/liquidprompt'
 
     # Navigate to the .git project root
-    zplug "mollifier/cd-gitroot"
+    zplug 'mollifier/cd-gitroot'
     alias cdu='cd-gitroot'
 
     # Install / load plugins
@@ -58,7 +59,7 @@ if [[ -f ~/.zplug/zplug ]]; then
 
     # Add <TAB> completion handlers for fzf *after* fzf is loaded
     _fzf_complete_z() {
-      _fzf_complete "--multi --reverse" "$@" < <(raw_z)
+      _fzf_complete '--multi --reverse' "$@" < <(raw_z)
     }
 fi
 
@@ -133,7 +134,7 @@ export MANPAGER='less -I'
 # Nvm - Node version manager
 export NVM_DIR=~/.nvm
 if [[ -f ~/.nvm/nvm.sh ]]; then
-    echo "[zshrc] loading nvm..."
+    echo '[zshrc] loading nvm...'
     source ~/.nvm/nvm.sh
     # nvm alias default 4 > /dev/null
     # nvm use default     > /dev/null
@@ -146,7 +147,7 @@ export LC_ALL=en_US.UTF-8
 # weechat
 # TODO: Find a more sophisticated way...
 if [[ ! -f ~/.weechat/python/autoload/wee_slack.py ]]; then
-    echo "[zshrc] weechat: installing \`wee_slack.py\`..."
+    echo '[zshrc] weechat: installing "wee_slack.py"...'
     mkdir -p ~/.weechat/python/autoload
     curl -fLo ~/.weechat/python/autoload/wee_slack.py \
         https://raw.githubusercontent.com/rawdigits/wee-slack/master/wee_slack.py \
