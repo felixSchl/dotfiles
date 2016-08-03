@@ -79,6 +79,13 @@ if type rlwrap > /dev/null; then
     alias node='rlwrap node'
 fi
 
+# Less syntax highlighting
+# install on OSX: brew install source-highlight
+if [ "$(which src-hilite-lesspipe.sh)" ]; then
+    export LESSOPEN='| src-hilite-lesspipe.sh %s'
+    export LESS=' -R '
+fi
+
 # FZF
 if [[ -f ~/.fzf.zsh ]]; then
     echo "[zshrc] loading fzf..."
