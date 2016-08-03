@@ -80,7 +80,6 @@ Plug 'notpratheek/vim-luna'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
-Plug 'Townk/vim-autoclose'
 Plug 'mileszs/ack.vim'
 Plug 'ivyl/vim-bling'
 Plug 'gkz/vim-ls', { 'for': 'livescript' }
@@ -108,6 +107,8 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'benmills/vimux'
 Plug 'sheerun/vim-polyglot'
 Plug 'Konfekt/FastFold'
+let g:AutoCloseExpandSpace = 0
+Plug 'Townk/vim-autoclose'
 
 Plug 'majutsushi/tagbar'
 nmap <F8> :TagbarToggle<CR>
