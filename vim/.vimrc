@@ -24,6 +24,9 @@ nnoremap <C-V>     v
 vnoremap    v   <C-V>
 vnoremap <C-V>     v
 
+" Delete non-selected text from the buffer
+map <F5> :<C-U>1,'<-1:delete<CR>:'>+1,$:delete<CR>
+
 " use :w!! to write a file with sudo
 cmap w!! w !sudo dd of=%
 
