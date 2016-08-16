@@ -34,12 +34,12 @@ if [[ -f ~/.zplug/zplug ]]; then
 
     # VIM key-mappings for zsh
     zplug 'plugins/vi-mode', from:oh-my-zsh
-    zplug 'hchbaw/opp.zsh', of:opp.zsh
+    zplug 'hchbaw/opp.zsh', use:opp.zsh
     bindkey -M vicmd 'k' history-substring-search-up
     bindkey -M vicmd 'j' history-substring-search-down
 
     # Z - jump to recent directories
-    zplug 'rupa/z', of:z.sh
+    zplug 'rupa/z', use:z.sh
 
     # Liquid prompt
     LP_ENABLE_TIME=1

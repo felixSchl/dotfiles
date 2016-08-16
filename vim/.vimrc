@@ -120,6 +120,7 @@ Plug 'benmills/vimux'
 Plug 'sheerun/vim-polyglot'
 Plug 'Konfekt/FastFold'
 Plug 'tpope/vim-abolish'
+Plug 'FrigoEU/psc-ide-vim'
 
 let g:AutoCloseExpandSpace = 0
 Plug 'Townk/vim-autoclose'
@@ -381,6 +382,7 @@ let g:syntastic_mode_map = {
   \'active_filetypes': [
       \'javascript',
       \'sh',
+      \'purescript',
       \'typescript'],
   \'passive_filetypes': []
   \}
@@ -392,6 +394,7 @@ let g:syntastic_haskell_checkers    = ['hlint']
 let g:syntastic_javascript_checkers = ['eslint']
 let g:syntastic_typescript_checkers = ['tslint']
 let g:syntastic_sh_checkers         = ['shellcheck']
+let g:syntastic_purescript_checkers = ['pscide']
 
 Plug 'dhruvasagar/vim-table-mode'
 let g:table_mode_corner = '+'
