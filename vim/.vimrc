@@ -3,7 +3,19 @@ filetype indent plugin on
 
 let mapleader = "\<SPACE>"
 let maplocalleader = ","
+
+" Detect the operating system
 let s:is_windows = has('win32') || has('win64')
+let s:is_linux = 0
+let s:is_osx = 0
+if has("unix")
+  let s:uname = system('uname -s')
+  if s:uname == 'Darwin'
+    let s:is_osx = 1
+  else
+    let s:is_linux = 1
+  endif
+endif
 
 let s:ignore_dirs='\v[\/]((\.(git|hg|svn))|(build|obj|temp))$'
 
@@ -159,9 +171,11 @@ augroup vimrc_vimfiler
 augroup END
 
 function! BuildVimproc(info)
-  if !s:is_windows
+  if s:is_osx
     !make -f make_mac.mak
-  else
+  elseif s:is_linux
+    !make
+  elseif s:is_windows
     " TODO: Compile for windows
   endif
 endfunction
