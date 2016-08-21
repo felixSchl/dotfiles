@@ -1,8 +1,12 @@
+" Personal vim configuration
+" Author: Felix schlitter <felixschlitter@gmail.com>
+" Source: https://github.com/felixSchl/dotfiles
+
 set nocompatible
 filetype indent plugin on
 
-let mapleader = "\<SPACE>"
-let maplocalleader = ","
+let mapleader = '\<SPACE>'
+let maplocalleader = ','
 
 " Detect the operating system
 let s:is_windows = has('win32') || has('win64')
@@ -85,7 +89,7 @@ endif
 
 " Plugins {{{
 " ------------------------------------------------------------------------------
-call plug#begin("~/.vim/plugged")
+call plug#begin('~/.vim/plugged')
 Plug 'xolox/vim-misc'
 Plug 'ChrisKempson/Tomorrow-Theme', { 'rtp': 'vim' }
 Plug 'notpratheek/vim-luna'
