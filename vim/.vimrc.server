@@ -1,0 +1,74 @@
+" Personal vim configuration suitable for use on a server
+" Author: Felix schlitter <felixschlitter@gmail.com>
+" Source: https://github.com/felixSchl/dotfiles
+
+filetype indent plugin on
+set nocompatible
+set number
+syntax on
+
+" Leave insert-mode with jk
+imap jk <C-C>
+imap jK <C-C>
+imap Jk <C-C>
+imap JK <C-C>
+
+" Settings
+set conceallevel=0
+set mouse=
+set history=10000
+set undofile
+set updatetime=500
+set completeopt=longest,menuone,preview
+set cmdheight=2
+set splitbelow
+set lazyredraw
+set sessionoptions-=options
+set sessionoptions-=folds
+set viminfo='50,<1000,s100,n~/.viminfo
+set autoindent
+set backspace=indent,eol,start
+set complete-=1
+set showmatch
+set smarttab
+set nrformats-=octal
+set shiftround
+set ttimeout
+set ttimeoutlen=100
+set exrc
+set hidden
+set nospell
+set showcmd
+set incsearch
+set hlsearch
+set number
+set nowrap
+set ruler
+set linebreak
+let &showbreak='... '
+set cursorline
+set ignorecase
+set smartcase
+set expandtab
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set textwidth=80
+set foldmethod=syntax
+set foldlevelstart=99
+set formatoptions-=t
+set wildignore=*.o,*.obj,*.bak,*.exe,*.pyc,*.swo,*.swp,*.swq,*.swr
+set wildignore+=*.png,*.tga,*.psd,*.jpg,*.jpeg,*.svg
+set wildignore+=*.class,*.jar
+set wildignore+=*.meta,*.prefab
+set suffixes+=.class,.exe,.o,.obj,.dat,.dll,.aux,.pdf,.gch
+set wildmenu
+set wildmode=longest:list,full
+set laststatus=2
+set ttimeoutlen=50
+set enc=utf-8
+set fileencoding=utf-8
+set fileencodings=ucs-bom,utf8,prc
+set synmaxcol=120
+exec "set listchars=tab:\\|→"
+exec "set list lcs+=trail:\uB7,nbsp:~"
