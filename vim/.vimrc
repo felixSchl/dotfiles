@@ -692,6 +692,7 @@ au!
   " Configure Purescript
   " Note: Ensure auto-comment insertion (does not work by default)
   au filetype purescript setl comments=sl:--,mb:--
+  au filetype purescript iabbrev forall ∀
 augroup END
 
 " }}}
