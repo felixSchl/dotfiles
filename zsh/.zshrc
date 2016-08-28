@@ -63,6 +63,19 @@ if [[ -f ~/.zplug/zplug ]]; then
     }
 fi
 
+# Delete to slashes via C-W
+# Refer: http://unix.stackexchange.com/a/250700
+my-backward-delete-word() {
+    local WORDCHARS=${WORDCHARS/\//}
+    zle backward-delete-word
+}
+zle -N my-backward-delete-word
+bindkey '^W' my-backward-delete-word
+
+# Use <C-P> and <C-N> to naviagte history
+bindkey "^P" up-line-or-search
+bindkey "^N" down-line-or-search
+
 # Exports
 export EDITOR='vim'
 export KEYTIMEOUT=1
@@ -71,6 +84,7 @@ export PATH="/usr/local/bin:$PATH"
 export COLORTERM=xterm-256color
 
 # Aliases
+alias ll='ls -lh'
 alias _='sudo'
 alias tmux='tmux -2'
 alias emacs='TERM=xterm-256color emacs -nw'
