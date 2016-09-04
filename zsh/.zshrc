@@ -73,8 +73,8 @@ zle -N my-backward-delete-word
 bindkey '^W' my-backward-delete-word
 
 # Use <C-P> and <C-N> to naviagte history
-bindkey "^P" up-line-or-search
-bindkey "^N" down-line-or-search
+bindkey "^P" up-line-or-history
+bindkey "^N" down-line-or-history
 
 # Exports
 export EDITOR='vim'
