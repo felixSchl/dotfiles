@@ -681,6 +681,10 @@ au!
   au filetype typescript setl indentexpr=
   au filetype typescript setl indentkeys=
 
+  " Configure Shell
+  au filetype sh setl noexpandtab
+  au filetype sh setl shiftwidth=4
+
   " Configure Python
   au filetype python setlocal foldmethod=indent
   au filetype python nnoremap <buffer> <F7> :exe "w \| !python %"<CR>
