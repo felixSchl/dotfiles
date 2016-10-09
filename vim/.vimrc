@@ -534,7 +534,6 @@ call unite#custom#profile('files', 'matchers', [
 call unite#custom#profile('files', 'converters', [
   \ 'converter_relative_abbr',
   \ 'converter_smart_path',
-  \ 'converter_file_directory'
   \ ])
 " }}}
 
