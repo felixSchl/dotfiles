@@ -125,6 +125,9 @@ Plug 'sheerun/vim-polyglot'
 Plug 'Konfekt/FastFold'
 Plug 'tpope/vim-abolish'
 Plug 'FrigoEU/psc-ide-vim'
+Plug 'vim-scripts/Align'
+Plug 'vim-scripts/SQLUtilities'
+Plug 'tomtom/tcomment_vim'
 
 let g:AutoCloseExpandSpace = 0
 Plug 'Townk/vim-autoclose'
@@ -214,10 +217,6 @@ au filetype haskell map <buffer> <leader>i :HoogleInfo<CR>
 au filetype haskell map <buffer> <F1>      :Hoogle
 au filetype haskell map <buffer> <C-F1>    :HoogleClose<CR>
 au filetype haskell map <buffer> <S-F1>    :HoogleLine<CR>
-
-Plug 'tomtom/tcomment_vim'
-nmap ` gccj
-vmap ` gc
 
 Plug 'AndrewRadev/switch.vim'
 nnoremap + :Switch<CR>
