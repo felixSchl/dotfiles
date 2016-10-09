@@ -5,7 +5,7 @@
 set nocompatible
 filetype indent plugin on
 
-let mapleader = '\<SPACE>'
+let mapleader = "\<SPACE>"
 let maplocalleader = ','
 
 " Detect the operating system
