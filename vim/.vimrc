@@ -734,4 +734,12 @@ augroup vimrc_fugitive
   au BufEnter     *COMMIT_EDITMSG call SetFugitiveTextWidth()
 augroup END
 
+augroup quickfix
+    au!
+    " Enable line-wrapping in the quickfix list:
+    au FileType qf setlocal wrap
+    " Close vim if quickfix window is last window:
+    au WinEnter * if winnr('$') == 1 && getbufvar(winbufnr(winnr()), "&buftype") == "quickfix"|q|endif
+augroup END
+
 " }}}
