@@ -1,45 +1,24 @@
-raw_z () {
-  echo "$(z -e | tail | awk '{ print $2 }')"
-}
-
-fzf_z () {
-    dir=$(raw_z | fzf)
-    if [[ $? = 0 ]]; then
-        cd "$dir"
-    fi
-}
-
-# Disable oh-my-zsh update prompts
+# disable oh-my-zsh update prompts
 DISABLE_UPDATE_PROMPT=true
 
+# auto-install zplug
 if [[ ! -d ~/.zplug ]]; then
     echo '[zshrc] installing zplug...'
     git clone https://github.com/b4b4r07/zplug ~/.zplug
 fi
 
-if [[ -f ~/.zplug/zplug ]]; then
-    source ~/.zplug/zplug
+# load zplug and register / load plugins
+if [[ -f ~/.zplug/init.zsh ]]; then
+    source ~/.zplug/init.zsh
     zplug 'b4b4r07/zplug'
 
-    # Triaging
-    zplug 'zsh-users/zsh-history-substring-search'
-    zplug 'zsh-users/zsh-completions'
-    zplug 'supercrabtree/k'
-
-    # Syntax highlighting
     zplug 'zsh-users/zsh-syntax-highlighting'
-
-    # Completions etc.
     zplug 'plugins/git', from:oh-my-zsh
-
-    # VIM key-mappings for zsh
     zplug 'plugins/vi-mode', from:oh-my-zsh
     zplug 'hchbaw/opp.zsh', use:opp.zsh
+
     bindkey -M vicmd 'k' history-substring-search-up
     bindkey -M vicmd 'j' history-substring-search-down
-
-    # Z - jump to recent directories
-    zplug 'rupa/z', use:z.sh
 
     # Liquid prompt
     LP_ENABLE_TIME=1
@@ -53,9 +32,6 @@ if [[ -f ~/.zplug/zplug ]]; then
     # Install / load plugins
     zplug check || zplug install
     zplug load
-
-    # Bind <C-K> to `z`
-    bindkey -s '^k' '^qfzf_z\n'
 
     # Add <TAB> completion handlers for fzf *after* fzf is loaded
     _fzf_complete_z() {
