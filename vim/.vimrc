@@ -53,7 +53,7 @@ imap Jk <C-C>
 imap JK <C-C>
 
 " Emacs-like control-g to cancel things
-nmap <C-g> <C-C>
+nmap <C-G> <C-C>
 
 " Easier copying and pasting
 " Copy and paste from the system register `*`
@@ -97,7 +97,6 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'mileszs/ack.vim'
-Plug 'ivyl/vim-bling'
 Plug 'gkz/vim-ls', { 'for': 'livescript' }
 Plug 'tpope/vim-dispatch'
 Plug 'tmux-plugins/vim-tmux'
@@ -126,8 +125,8 @@ Plug 'Konfekt/FastFold'
 Plug 'tpope/vim-abolish'
 Plug 'FrigoEU/psc-ide-vim'
 Plug 'vim-scripts/Align'
-Plug 'vim-scripts/SQLUtilities'
 Plug 'tomtom/tcomment_vim'
+Plug 'szw/vim-maximizer'
 
 let g:AutoCloseExpandSpace = 0
 Plug 'Townk/vim-autoclose'
@@ -337,12 +336,12 @@ if !has('nvim') && has('lua')
   if !exists('g:neocomplete#sources')
       let g:neocomplete#sources={}
   endif
-  inoremap <expr><C-g> neocomplete#undo_completion()
-  inoremap <expr><C-l> neocomplete#complete_common_string()
-  inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+  inoremap <expr><C-G> neocomplete#undo_completion()
+  inoremap <expr><C-L> neocomplete#complete_common_string()
+  inoremap <expr><C-H> neocomplete#smart_close_popup()."\<C-h>"
   inoremap <expr><BS>  neocomplete#smart_close_popup()."\<C-h>"
-  inoremap <expr><C-y> neocomplete#close_popup()
-  inoremap <expr><C-e> neocomplete#cancel_popup()
+  inoremap <expr><C-Y> neocomplete#close_popup()
+  inoremap <expr><C-E> neocomplete#cancel_popup()
 elseif has('nvim')
   Plug 'Shougo/deoplete.nvim'
   let g:deoplete#enable_at_startup=1
@@ -356,12 +355,12 @@ elseif has('nvim')
   if !exists('g:deoplete#sources')
       let g:deoplete#sources={}
   endif
-  inoremap <expr><C-g> deoplete#undo_completion()
-  inoremap <expr><C-l> deoplete#complete_common_string()
-  inoremap <expr><C-h> deoplete#smart_close_popup()."\<C-h>"
+  inoremap <expr><C-G> deoplete#undo_completion()
+  inoremap <expr><C-L> deoplete#complete_common_string()
+  inoremap <expr><C-H> deoplete#smart_close_popup()."\<C-h>"
   inoremap <expr><BS>  deoplete#smart_close_popup()."\<C-h>"
-  inoremap <expr><C-y> deoplete#close_popup()
-  inoremap <expr><C-e> deoplete#cancel_popup()
+  inoremap <expr><C-Y> deoplete#close_popup()
+  inoremap <expr><C-E> deoplete#cancel_popup()
 endif
 
 Plug 'Shougo/neosnippet.vim'
@@ -380,6 +379,7 @@ Plug 'scrooloose/syntastic'
 let g:syntastic_check_on_wq=0
 let g:syntastic_check_on_open = 1
 let g:syntastic_aggregate_errors = 1
+let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_mode_map = {
   \'mode': 'passive',
   \'active_filetypes': [
@@ -497,6 +497,10 @@ endif
 augroup vimrc_unite
   au!
   au FileType unite call s:unite_my_settings()
+
+  " do not use <C-P> in command window
+  au CmdwinEnter * nnoremap <buffer> <C-P> <C-P>
+  au CmdwinEnter * nnoremap <buffer> <C-P> <C-P>
 augroup END
 
 fu! s:unite_my_settings()
@@ -526,6 +530,7 @@ call unite#custom#profile('files', 'sorters', [
   \ ])
 
 call unite#custom#profile('files', 'matchers', [
+  \ 'matcher_default',
   \ 'matcher_fuzzy',
   \ 'matcher_hide_hidden_files'
   \ ])
@@ -534,7 +539,7 @@ call unite#custom#profile('files', 'converters', [
   \ 'converter_relative_abbr',
   \ 'converter_smart_path',
   \ ])
-" }}}
+}}}
 
 " }}}
 " Global preferences {{{
@@ -605,6 +610,7 @@ set enc=utf-8
 set fileencoding=utf-8
 set fileencodings=ucs-bom,utf8,prc
 set synmaxcol=120
+set cmdwinheight=1
 exec "set listchars=tab:\\|→"
 exec "set list lcs+=trail:\uB7,nbsp:~"
 " }}}
@@ -708,6 +714,18 @@ func! BindCommand(key)
   exec ":nnoremap ".a:key." :exe \"".b:comp."\"<CR>"
 endfunc
 command! -nargs=+ BindLast :call BindCommand(<q-args>)
+
+augroup vimrc_cmdwin
+  au!
+  " have <Ctrl-C> leave cmdline-window
+  autocmd CmdwinEnter * nnoremap <buffer> <C-C> :q\|echo ""<CR>
+  autocmd CmdwinEnter * nnoremap <buffer> <C-G> :q\|echo ""<CR>
+  autocmd CmdwinEnter * inoremap <buffer> <C-G> <ESC>:q\|echo ""<CR>
+
+  " start command line window in insert mode and no line numbers
+  autocmd CmdwinEnter * set nonumber
+  autocmd CmdwinEnter * set foldmethod=marker
+augroup END
 
 " Working directory per tab
 augroup vimrc_tabs
