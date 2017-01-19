@@ -539,7 +539,7 @@ call unite#custom#profile('files', 'converters', [
   \ 'converter_relative_abbr',
   \ 'converter_smart_path',
   \ ])
-}}}
+" }}}
 
 " }}}
 " Global preferences {{{
