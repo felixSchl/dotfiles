@@ -434,10 +434,10 @@ nnoremap <leader>C :ProjectRootCD<cr>
 nnoremap <silent> <leader>ft :ProjectRootExe VimFiler<cr>
 
 if has('nvim')
-  Plug 'Shougo/denite.nvim'
-else
   Plug 'Shougo/unite.vim'
   Plug 'Shougo/unite-outline'
+else
+  Plug 'Shougo/denite.nvim'
 endif
 
 let g:unite_source_history_yank_enable=1
@@ -508,7 +508,11 @@ set splitbelow
 set lazyredraw
 set sessionoptions-=options
 set sessionoptions-=folds
-set viminfo='50,<1000,s100,n~/.viminfo
+if has('nvim')
+  set viminfo='50,<1000,s100,n~/.nviminfo
+else
+  set viminfo='50,<1000,s100,n~/.viminfo
+endif
 set autoindent
 set backspace=indent,eol,start
 set complete-=1
