@@ -127,6 +127,9 @@ Plug 'FrigoEU/psc-ide-vim'
 Plug 'vim-scripts/Align'
 Plug 'tomtom/tcomment_vim'
 Plug 'szw/vim-maximizer'
+Plug 'joshdick/onedark.vim'
+Plug 'itchyny/vim-haskell-indent'
+Plug 'ElmCast/elm-vim'
 
 let g:AutoCloseExpandSpace = 0
 Plug 'Townk/vim-autoclose'
@@ -211,11 +214,11 @@ augroup END
 Plug 'vim-scripts/LargeFile'
 let g:LargeFile=1
 
-Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
-au filetype haskell map <buffer> <leader>i :HoogleInfo<CR>
-au filetype haskell map <buffer> <F1>      :Hoogle
-au filetype haskell map <buffer> <C-F1>    :HoogleClose<CR>
-au filetype haskell map <buffer> <S-F1>    :HoogleLine<CR>
+" Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
+" au filetype haskell map <buffer> <leader>i :HoogleInfo<CR>
+" au filetype haskell map <buffer> <F1>      :Hoogle
+" au filetype haskell map <buffer> <C-F1>    :HoogleClose<CR>
+" au filetype haskell map <buffer> <S-F1>    :HoogleLine<CR>
 
 Plug 'AndrewRadev/switch.vim'
 nnoremap + :Switch<CR>
@@ -232,10 +235,10 @@ let g:indentLine_fileTypeExclude = ['thumbnail', 'json', 'markdown']
 Plug 'chrismccord/bclose.vim'
 nnoremap <C-W>c :Bclose<CR>
 
-if !s:is_windows
-  Plug 'airblade/vim-gitgutter'
-  nmap <leader>th :GitGutterLineHighlightsToggle<CR>
-endif
+" if !s:is_windows
+"   Plug 'airblade/vim-gitgutter'
+"   nmap <leader>th :GitGutterLineHighlightsToggle<CR>
+" endif
 
 Plug 'itchyny/lightline.vim'
 
@@ -430,70 +433,26 @@ augroup END
 nnoremap <leader>C :ProjectRootCD<cr>
 nnoremap <silent> <leader>ft :ProjectRootExe VimFiler<cr>
 
-Plug 'Shougo/unite.vim'
+if has('nvim')
+  Plug 'Shougo/denite.nvim'
+else
+  Plug 'Shougo/unite.vim'
+  Plug 'Shougo/unite-outline'
+endif
+
 let g:unite_source_history_yank_enable=1
 nnoremap [unite] <Nop>
 nmap <leader>u [unite]
-
-nnoremap <silent> [unite]r :Unite
-                    \ -profile-name=files
-                    \ -buffer-name=recent-files
-                    \ neomru/directory
-                    \ neomru/file
-                    \<CR>
-
-nnoremap <silent> [unite]b :Unite
-                    \ -profile-name=files
-                    \ -buffer-name=buffers
-                    \ buffer
-                    \<CR>
-
-nnoremap <silent> [unite]w :Unite
-                    \ -profile-name=files
-                    \ -buffer-name=windows
-                    \ window
-                    \<CR>
-
-nnoremap <silent> [unite]f :Unite
-                    \ -profile-name=files
-                    \ -buffer-name=files
-                    \ file_rec/async:!
-                    \<CR>
-
 nnoremap <silent> [unite]u :Unite
                     \ -profile-name=files
                     \ -buffer-name=git-files
                     \ file_rec/git:--cached:--others:--exclude-standard
                     \<cr>
-
-nnoremap <silent> [unite]o :Unite
-                    \ -profile-name=files
-                    \ -buffer-name=outline
-                    \ outline
-                    \<cr>
-
-" XXX: Integrate this differently? (typescript from `Quramy/tsuquyomi`)
-nnoremap <silent> [unite]s :Unite
-                    \ -profile-name=files
-                    \ -buffer-name=typescript
-                    \ tsproject
-                    \<cr>
-
 nmap <C-P> <leader>uu
-
-Plug 'Shougo/unite-outline'
 
 call plug#end()
 
-if has('nvim')
-  call deoplete#custom#set(
-        \ '_',
-        \ 'matchers',
-        \ ['matcher_fuzzy']
-        \)
-endif
-
-" Unite.vim {{{
+" Unite.vim / Denite.vim {{{
 augroup vimrc_unite
   au!
   au FileType unite call s:unite_my_settings()
@@ -506,16 +465,6 @@ augroup END
 fu! s:unite_my_settings()
     imap <silent><buffer><expr> <C-v> unite#do_action('vsplitswitch')
 endfu
-
-call unite#custom#source('file_rec/git', 'ignore_globs',
-  \ split(&wildignore, ','))
-
-call unite#custom#source('file_rec/async:!', 'ignore_globs', [
-  \ 'node_modules',
-  \ '.output',
-  \ '.cache',
-  \ '.tmp'
-  \ ])
 
 call unite#custom#profile('files', 'context', {
   \ 'start_insert': 1,
@@ -611,6 +560,7 @@ set fileencoding=utf-8
 set fileencodings=ucs-bom,utf8,prc
 set synmaxcol=120
 set cmdwinheight=1
+set regexpengine=1
 exec "set listchars=tab:\\|→"
 exec "set list lcs+=trail:\uB7,nbsp:~"
 " }}}
@@ -635,14 +585,22 @@ if has("gui_running")
   set guioptions-=T
 else
   set t_Co=256
-  colo luna-term
+  " colo luna-term
+  colo onedark
   hi CursorLine term=NONE cterm=NONE ctermbg=236
 endif
 " }}}
 " Filetypes {{{
 " ------------------------------------------------------------------------------
+fun! s:DetectHaskellScript()
+    if getline(1) == '#!/usr/bin/env stack'
+        set ft=haskell
+    endif
+endfun
+
 augroup vimrc_filetypes
 au!
+  au BufNewFile,BufRead * call s:DetectHaskellScript()
 
   " Help vim recognize file types
   au BufRead,BufNewFile *.jsx           setl ft=javascript
@@ -681,6 +639,8 @@ au!
   au filetype sh         setl shiftwidth=2
   au filetype json       setl shiftwidth=2
 
+  au filetype haskell setl indentexpr=
+
   " Configure Typescript
   au filetype typescript setl indentexpr=
   au filetype typescript setl indentkeys=
@@ -697,6 +657,7 @@ au!
   " Note: Ensure auto-comment insertion (does not work by default)
   au filetype purescript setl comments=sl:--,mb:--
   au filetype purescript iabbrev forall ∀
+  au filetype purescript setl nowritebackup
 augroup END
 
 " }}}
