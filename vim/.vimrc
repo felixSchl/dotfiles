@@ -4,6 +4,7 @@
 
 set nocompatible
 filetype indent plugin on
+let g:loaded_matchparen = 1
 
 let mapleader = "\<SPACE>"
 let maplocalleader = ','
@@ -91,15 +92,12 @@ endif
 " ------------------------------------------------------------------------------
 call plug#begin('~/.vim/plugged')
 Plug 'xolox/vim-misc'
-Plug 'ChrisKempson/Tomorrow-Theme', { 'rtp': 'vim' }
 Plug 'notpratheek/vim-luna'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
-Plug 'mileszs/ack.vim'
 Plug 'gkz/vim-ls', { 'for': 'livescript' }
 Plug 'tpope/vim-dispatch'
-Plug 'tmux-plugins/vim-tmux'
 Plug 'raichoo/purescript-vim', { 'for': 'purescript' }
 Plug 'felixschl/vim-gh-preview', { 'for': 'markdown' }
 Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
@@ -118,33 +116,26 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'wellle/targets.vim'
 Plug 'gregsexton/gitv'
 Plug 'idanarye/vim-merginal'
-Plug 'christoomey/vim-tmux-navigator'
-Plug 'benmills/vimux'
 Plug 'sheerun/vim-polyglot'
 Plug 'Konfekt/FastFold'
-Plug 'tpope/vim-abolish'
 Plug 'FrigoEU/psc-ide-vim'
-Plug 'vim-scripts/Align'
 Plug 'tomtom/tcomment_vim'
 Plug 'szw/vim-maximizer'
-Plug 'joshdick/onedark.vim'
-Plug 'itchyny/vim-haskell-indent'
-Plug 'ElmCast/elm-vim'
+Plug 'begriffs/haskell-vim-now'
+Plug 'pbrisbin/vim-syntax-shakespeare'
+
+Plug 'ElmCast/elm-vim', { 'for': 'elm' }
+let g:elm_syntastic_show_warnings = 1
+let g:elm_format_autosave = 1
 
 let g:AutoCloseExpandSpace = 0
 Plug 'Townk/vim-autoclose'
 
-Plug 'majutsushi/tagbar'
-nmap <F8> :TagbarToggle<CR>
-
-Plug 'elzr/vim-json'
+Plug 'elzr/vim-json', { 'for': 'json' }
 let g:vim_json_syntax_conceal = 0
 
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
-
-Plug 'shumphrey/fugitive-gitlab.vim'
-let g:fugitive_gitlab_domains = ['https://git.dn3010.com']
 
 Plug 'Shougo/vimfiler.vim', { 'on':  [ 'VimFilerBufferDir', 'VimfFiler' ]}
 let g:loaded_netrwPlugin = 1
@@ -388,6 +379,7 @@ let g:syntastic_mode_map = {
   \'active_filetypes': [
       \'javascript',
       \'sh',
+      \'elm',
       \'purescript',
       \'typescript'],
   \'passive_filetypes': []
@@ -401,6 +393,7 @@ let g:syntastic_javascript_checkers = ['eslint']
 let g:syntastic_typescript_checkers = ['tslint']
 let g:syntastic_sh_checkers         = ['shellcheck']
 let g:syntastic_purescript_checkers = ['pscide']
+let g:syntastic_elm_checkers        = ['elm_make']
 
 Plug 'dhruvasagar/vim-table-mode'
 let g:table_mode_corner = '+'
@@ -434,10 +427,10 @@ nnoremap <leader>C :ProjectRootCD<cr>
 nnoremap <silent> <leader>ft :ProjectRootExe VimFiler<cr>
 
 if has('nvim')
+  Plug 'Shougo/denite.nvim'
+else
   Plug 'Shougo/unite.vim'
   Plug 'Shougo/unite-outline'
-else
-  Plug 'Shougo/denite.nvim'
 endif
 
 let g:unite_source_history_yank_enable=1
@@ -573,9 +566,7 @@ exec "set list lcs+=trail:\uB7,nbsp:~"
 set colorcolumn=+1
 
 if has("gui_running")
-
   colo luna
-
   set guifont=Consolas:h12:cANSI
   set guifontwide=NSimsun:h12
   set guioptions-=m
@@ -590,7 +581,7 @@ if has("gui_running")
 else
   set t_Co=256
   " colo luna-term
-  colo onedark
+  colo luna
   hi CursorLine term=NONE cterm=NONE ctermbg=236
 endif
 " }}}
@@ -662,6 +653,12 @@ au!
   au filetype purescript setl comments=sl:--,mb:--
   au filetype purescript iabbrev forall ∀
   au filetype purescript setl nowritebackup
+
+  " Configure Elm
+  " Note: Remove this once https://github.com/ElmCast/elm-vim/issues/114 is fixed
+  au filetype elm setl shiftwidth=2
+  au BufWritePre *.elm call elm#Format()
+  au BufWritePost *.elm call elm#util#EchoStored()
 augroup END
 
 " }}}
