@@ -9,16 +9,21 @@ fi
 
 # load zplug and register / load plugins
 if [[ -f ~/.zplug/init.zsh ]]; then
+    rm -f ~/.zplug/zcompdump*
+
     source ~/.zplug/init.zsh
     zplug 'b4b4r07/zplug'
 
-    zplug 'zsh-users/zsh-syntax-highlighting'
+    # zplug 'zsh-users/zsh-syntax-highlighting'
     zplug 'plugins/git', from:oh-my-zsh
-    zplug 'plugins/vi-mode', from:oh-my-zsh
     zplug 'hchbaw/opp.zsh', use:opp.zsh
 
-    bindkey -M vicmd 'k' history-substring-search-up
-    bindkey -M vicmd 'j' history-substring-search-down
+    # define RPS1 in order to avoid the annoying vim status
+    export RPS1=" "
+    zplug 'plugins/vi-mode', from:oh-my-zsh
+
+    # bindkey -M vicmd 'k' history-substring-search-up
+    # bindkey -M vicmd 'j' history-substring-search-down
 
     # Liquid prompt
     LP_ENABLE_TIME=1
@@ -78,7 +83,7 @@ fi
 
 # FZF
 if [[ -f ~/.fzf.zsh ]]; then
-    echo "[zshrc] loading fzf..."
+    # echo "[zshrc] loading fzf..."
     source ~/.fzf.zsh
 
     # Interactively select and activate a given docker-machine
@@ -97,12 +102,11 @@ if [[ -f ~/.fzf.zsh ]]; then
     }
 
     # Interactively select and kill a running docker container
-    docker-kill () {
-        input=$(docker ps | tail -n+2 | fzf)
+    select-adb-device () {
+        input=$(adb devices | tail -n+2 | sed -e '$ d' | cut -f1 | fzf)
         if [[ $? = 0 ]]; then
-            container=$(echo "$input" | cut -d' ' -f1)
-            echo "Killing container '$container'..."
-            docker kill "$container"
+            echo "selected adb device: ${input}"
+            export ADB_DEVICE=$input
         fi
     }
 
@@ -153,6 +157,7 @@ export GOPATH=~/go
 export PATH="$PATH:$GOPATH/bin"
 export PATH="/usr/local/bin:$PATH"
 export PATH="$PATH:/usr/local/opt/go/libexec/bin"
+export PATH="/Users/felix/.local/bin:$PATH"
 
 # Manpages
 # Set case-insensitve searching on man pages
@@ -161,11 +166,17 @@ export MANPAGER='less -I'
 # Nvm - Node version manager
 export NVM_DIR=~/.nvm
 if [[ -f ~/.nvm/nvm.sh ]]; then
-    echo '[zshrc] loading nvm...'
+    # echo '[zshrc] loading nvm...'
     source ~/.nvm/nvm.sh
-    # nvm alias default 4 > /dev/null
-    # nvm use default     > /dev/null
+    nvm alias default 6 > /dev/null
+    nvm use default     > /dev/null
 fi
+
+# Android dev
+export ANDROID_HOME=~/Library/Android/sdk
+export ANDROID_NDK_HOME=$ANDROID_HOME/ndk-bundle
+export PATH=$PATH:${ANDROID_HOME}/tools
+export PATH=$PATH:${ANDROID_HOME}/platform-tools
 
 # Explicitely set language
 export LC_CTYPE=en_US.UTF-8
@@ -180,3 +191,7 @@ if [[ ! -f ~/.weechat/python/autoload/wee_slack.py ]]; then
         https://raw.githubusercontent.com/rawdigits/wee-slack/master/wee_slack.py \
         2> /dev/null
 fi
+
+alias nngg='npm run build && npm publish && git push && git push --tags'
+
+. /Users/felix/.nix-profile/etc/profile.d/nix.sh
