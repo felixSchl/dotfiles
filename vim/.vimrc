@@ -121,12 +121,13 @@ Plug 'Konfekt/FastFold'
 Plug 'FrigoEU/psc-ide-vim'
 Plug 'tomtom/tcomment_vim'
 Plug 'szw/vim-maximizer'
-Plug 'begriffs/haskell-vim-now'
 Plug 'pbrisbin/vim-syntax-shakespeare'
-
-Plug 'ElmCast/elm-vim', { 'for': 'elm' }
-let g:elm_syntastic_show_warnings = 1
-let g:elm_format_autosave = 1
+Plug 'joshdick/onedark.vim'
+Plug 'ElmCast/elm-vim'
+Plug 'neovimhaskell/haskell-vim'
+Plug 'eagletmt/ghcmod-vim'
+Plug 'bitc/vim-hdevtools'
+Plug 'eagletmt/neco-ghc'
 
 let g:AutoCloseExpandSpace = 0
 Plug 'Townk/vim-autoclose'
@@ -381,6 +382,7 @@ let g:syntastic_mode_map = {
       \'sh',
       \'elm',
       \'purescript',
+      \'haskell',
       \'typescript'],
   \'passive_filetypes': []
   \}
@@ -388,7 +390,7 @@ nnoremap <silent> <leader>ss :SyntasticCheck<CR>
 nnoremap <silent> <leader>sr :SyntasticReset<CR>
 
 let g:syntastic_python_checkers     = ['pylint']
-let g:syntastic_haskell_checkers    = ['hlint']
+let g:syntastic_haskell_checkers    = ['hdevtools', 'hlint']
 let g:syntastic_javascript_checkers = ['eslint']
 let g:syntastic_typescript_checkers = ['tslint']
 let g:syntastic_sh_checkers         = ['shellcheck']
@@ -634,7 +636,9 @@ au!
   au filetype sh         setl shiftwidth=2
   au filetype json       setl shiftwidth=2
 
+  " Configure Haskell
   au filetype haskell setl indentexpr=
+  au filetype haskell setl tags=tags;/,codex.tags;/
 
   " Configure Typescript
   au filetype typescript setl indentexpr=
