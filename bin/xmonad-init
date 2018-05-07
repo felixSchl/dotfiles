@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+# Touchpad settings
+synclient MaxTapTime=0
+synclient HorizTwoFingerScroll=1
+synclient PalmDetect=1
+
+# Start xmobar
+xmobar &
+
+# Start a systray
+trayer \
+    --edge top \
+    --align right \
+    --SetDockType true \
+    --SetPartialStrut true \
+    --expand true \
+    --width 1 \
+    --height 36 \
+    --transparent true \
+    --tint 0x000000 &
+
+exec xmonad
