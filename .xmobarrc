@@ -4,7 +4,12 @@ Config
   , border = TopB
   , bgColor = "black"
   , fgColor = "grey"
-  , position = TopW L 100
+  , position = TopW L 90
+  , lowerOnStart = False
+  , hideOnStart = False
+  , overrideRedirect = False
+  , persistent = True
+  , allDesktops = True
   , commands =
       [ Run Cpu ["-L","3","-H","50","--normal","green","--high","red"] 10
       , Run Memory ["-t","Mem: <usedratio>%"] 10
@@ -21,13 +26,9 @@ Config
           , "-o", "<left>% (<timeleft>)"
           , "-O", "<fc=#dAA520>Charging</fc>"
           ] 50
+      , Run StdinReader
       ]
   , sepChar = "%"
   , alignSep = "}{"
-    -- note: the trailing whitespace allows us to draw 'trayer' over the top.
-    --       there's appearently no built-in way to achieve a smooth
-    --       co-existence between 'xmobar' and 'trayer', but the following,
-    --       ingenius hack makes it work nicely:
-    --  see: https://github.com/jfly/dotfiles/commit/1ee867c4b77d03274ea06219af4adabd463b4d13
-  , template = "%battery% | %cpu% | %memory%}{<fc=#ee9a00>%date%</fc> |   "
+  , template = "%StdinReader% | %battery% | %cpu% | %memory% }{ <fc=#ee9a00>%date%</fc> |"
   }
