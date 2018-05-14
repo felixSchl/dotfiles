@@ -7,13 +7,26 @@ PATH=/home/felix/.local/bin:/home/felix/bin:$PATH
 # See: https://superuser.com/questions/1311722/synclient-does-not-affect-my-touchpad
 touchpad_ids=($(xinput list | grep Touchpad | cut -f2 | cut -d'=' -f2))
 for touchpad_id in ${touchpad_ids[@]}; do
+	# disable tap-to-click
 	xinput set-prop "$touchpad_id" "Synaptics Tap Action" 0
 	xinput set-prop "$touchpad_id" "Synaptics Palm Detection" 1
+
+	# enable natural scrolling
 	xinput set-prop "$touchpad_id" "Synaptics Scrolling Distance" -106 -106
+
+	# disable <mouse-12> to prevent random, palm-triggered clicks, losing focus.
+	# see: https://askubuntu.com/questions/725607/how-to-disable-physical-mouse-buttons-below-touchpad
+	xinput --set-button-map "$touchpad_id" 1 2 3 4 5 6 7 8 9 10 11 0
 done
+
+# Configure key-repeats
+xset r rate 500 100
 
 # Start up emacs daemon
 emacs25 --daemon &
+
+# Start up tmux
+tmux new-session -s root -d
 
 # Network manager applet (tray)
 nm-applet &
