@@ -1,4 +1,8 @@
-resolver: lts-9.6
+resolver: lts-11.9
+
+flags:
+  xmonad-extras:
+    with_brightness: true
 
 packages:
 - '.'

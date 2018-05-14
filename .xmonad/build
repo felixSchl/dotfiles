@@ -3,4 +3,8 @@
 EXEC_PATH="$1"
 
 stack install
+      # --flag xmobar:with_xft \
+      # --flag xmobar:with_alsas \
+      # --flag xmonad-exras:with_brightness
+
 ln -sf ~/.local/bin/xmonad $EXEC_PATH

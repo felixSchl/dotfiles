@@ -8,5 +8,6 @@ executable xmonad
   build-depends:       base
                      , xmonad
                      , xmonad-contrib
+                     , xmonad-extras >= 0.13.3
                      , X11
   default-language:    Haskell2010
