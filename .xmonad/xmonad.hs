@@ -21,6 +21,12 @@ main = do
     , terminal = "gnome-terminal"
     , handleEventHook = docksEventHook <+> handleEventHook def
     , startupHook = docksStartupHook <+> startupHook def
+    , workspaces =
+        [ "1:surf"
+        , "2:tests"
+        , "3:emacs"
+        , "4:term"
+        ]
     , logHook =
         dynamicLogWithPP xmobarPP
           { ppOutput = hPutStrLn xmproc

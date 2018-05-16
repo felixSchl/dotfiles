@@ -1,7 +1,6 @@
 Config
   { font = "xft:Deja Vu Sans Mono-10"
-  , borderColor = "black"
-  , border = TopB
+  , border = NoBorder
   , bgColor = "black"
   , fgColor = "grey"
   , position = TopW L 90
@@ -14,21 +13,25 @@ Config
       [ Run Cpu ["-L","3","-H","50","--normal","green","--high","red"] 10
       , Run Memory ["-t","Mem: <usedratio>%"] 10
       , Run Swap [] 10
+      , Run DateZone "%H:%M" "de_DE.UTF-8" "Asia/Kolkata" "india-date" 10
+      , Run DateZone "%H:%M" "de_DE.UTF-8" "America/Los_Angeles" "la-date" 10
       , Run Date "%a %b %_d %Y %H:%M:%S" "date" 10
       , Run Battery
           [ "--template" , "<acstatus>"
           , "--Low"      , "10" -- units: %
           , "--High"     , "80" -- units: %
-          , "--low"      , "darkred"
-          , "--normal"   , "darkorange"
-          , "--high"     , "darkgreen"
+          , "--low"      , "red"
+          , "--normal"   , "orange"
+          , "--high"     , "green"
           , "--"
           , "-o", "<left>% (<timeleft>)"
           , "-O", "<fc=#dAA520>Charging</fc>"
           ] 50
       , Run StdinReader
+      , Run Volume "default" "Master" [ "--template", "Vol: <status><volume>%" ] 5
+      , Run Brightness [ "--template", "Brightness: <percent>%", "--", "--device", "intel_backlight"] 5
       ]
   , sepChar = "%"
   , alignSep = "}{"
-  , template = "%StdinReader% | %battery% | %cpu% | %memory% }{ <fc=#ee9a00>%date%</fc> |"
+  , template = "%StdinReader% | %battery% | %cpu% | %memory% | %bright% }{ LA: %la-date% | IST: %india-date% | <fc=#ee9a00>%date%</fc> | %default:Master%"
   }
