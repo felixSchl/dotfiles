@@ -3,6 +3,7 @@ module Main where
 import Graphics.X11.ExtraTypes.XF86
 import System.IO
 import XMonad
+import XMonad.Layout.NoBorders (noBorders, smartBorders)
 import XMonad.Actions.WindowBringer (bringMenu, gotoMenu)
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
@@ -17,16 +18,16 @@ main = do
   xmproc <- spawnPipe "xmobar"
   xmonad $ desktopConfig
     { manageHook = manageDocks <+> manageHook def
-    , layoutHook = avoidStruts  $ layoutHook def
+    , layoutHook =
+        avoidStruts $
+          smartBorders $
+            Tall 1 (3 / 100) (1 / 2) |||
+            noBorders Full
     , terminal = "gnome-terminal"
     , handleEventHook = docksEventHook <+> handleEventHook def
+    , borderWidth = 2
+    , focusFollowsMouse = False
     , startupHook = docksStartupHook <+> startupHook def
-    , workspaces =
-        [ "1:surf"
-        , "2:tests"
-        , "3:emacs"
-        , "4:term"
-        ]
     , logHook =
         dynamicLogWithPP xmobarPP
           { ppOutput = hPutStrLn xmproc
@@ -35,9 +36,13 @@ main = do
     , modMask = mod4Mask
     } `additionalKeys`
     [
-      -- Start screen saver
-      ((mod4Mask .|. shiftMask, xK_z),
-      spawn "xscreensaver-command -lock; xset dpms force off")
+      -- Start a fresh emacsclient
+      ((mod4Mask .|. shiftMask, xK_e),
+      spawn "emacsclient25 --c")
+
+      -- Start a fresh firefox
+    , ((mod4Mask .|. shiftMask, xK_f),
+      spawn "firefox")
 
       -- Lock to greeter
     , ((mod4Mask .|. shiftMask, xK_l),
