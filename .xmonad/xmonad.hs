@@ -71,11 +71,11 @@ main = do
 
     -- Decrease volume.
     , ((0, xF86XK_AudioLowerVolume),
-      spawn "amixer -D pulse set Master 10%-")
+      spawn "amixer -D pulse set Master 5%-")
 
     -- Increase volume.
     , ((0, xF86XK_AudioRaiseVolume),
-      spawn "amixer -D pulse set Master unmute && amixer -D pulse set Master 10%+")
+      spawn "amixer -D pulse set Master unmute && amixer -D pulse set Master 5%+")
 
     -- Increase/decrease brightness
     -- Note: Requires small manual set up on new systems (see docs)
