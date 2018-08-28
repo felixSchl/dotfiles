@@ -9,14 +9,17 @@ import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import qualified XMonad.StackSet as W
 import qualified XMonad.Util.Brightness as Brightness
+import qualified XMonad.Actions.CycleWS
 import XMonad.Config.Desktop (desktopConfig)
 import XMonad.Util.Run (spawnPipe)
 import XMonad.Util.EZConfig (additionalKeys)
 import XMonad.Actions.CycleWindows
+import XMonad.Layout.IndependentScreens (countScreens)
 
 main :: IO ()
 main = do
-  xmproc <- spawnPipe "xmobar"
+  numScreens <- countScreens
+  xmprocs <- mapM (\x -> spawnPipe $ "xmobar -x " ++ show x) [0..numScreens-1]
   xmonad $
     let
       baseConf =
@@ -26,17 +29,19 @@ main = do
               avoidStruts $
                 smartBorders $
                   Tall 1 (3 / 100) (1 / 2) |||
-                  noBorders Full
+                    Full
           , terminal = "xterm" -- gnome-terminal"
           , handleEventHook = docksEventHook <+> handleEventHook def
           , borderWidth = 2
           , focusFollowsMouse = False
           , startupHook = docksStartupHook <+> startupHook def
-          , logHook =
-              dynamicLogWithPP xmobarPP
-                { ppOutput = hPutStrLn xmproc
-                , ppTitle = xmobarColor "green" "" . shorten 50
-                }
+          , logHook = do
+              mapM_ (\xmproc -> do
+                dynamicLogWithPP xmobarPP
+                  { ppOutput = hPutStrLn xmproc
+                  , ppTitle = xmobarColor "green" "" . shorten 50
+                  }
+                ) xmprocs
           , modMask = mod4Mask
           }
     in
@@ -97,8 +102,14 @@ main = do
               then current - 50
               else current
       )
-    ] ++ 
+    , ((mod4Mask, xK_grave), XMonad.Actions.CycleWS.toggleWS)
+    ]
+    ++
     -- mod-[1..9] %! Switch to workspace N (non-greedy)
     [((m .|. mod4Mask, k), windows $ f i)
         | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_9]
-        , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
+        , (f, m) <-
+            [ (W.view, 0)
+            , (W.shift, shiftMask)
+            , (W.greedyView, controlMask)
+            ]]
