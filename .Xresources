@@ -4,9 +4,8 @@ loginShell: true
 ! XTerm configuration
 !-------------------------------------------------------------------------------
 
-#ifdef XTERM_THEME_DARK
-xterm*font: *-fixed-*-*-*-18-*
-xterm*faceName: DejaVu Sans Mono:size=10:antialias=true
+xterm*font: *-fixed-*-*-*-22-*
+xterm*faceName: DejaVu Sans Mono:size=22:antialias=true
 xterm*termName: xterm-256color
 xterm*background: black
 xterm*foreground: lightblue
@@ -22,7 +21,8 @@ xterm*alwaysUseMods: true
 xterm*metaSendsEscape: true
 xterm*utf8Title: true
 Xterm*selectToClipboard: true
-#else
+
+#ifdef XTERM_THEME_LIGHT
 ! Atom One Light theme
 xterm*background: #f9f9f9
 xterm*foreground: #383a42
@@ -46,5 +46,5 @@ xterm*color15: #ffffff
 #endif
 
 xterm*VT100.Translations: #override \
-	Ctrl Shift <Key>V: insert-selection(CLIPBOARD) \n\
-        Ctrl Shift <Key>C: copy-selection(CLIPBOARD)
+    Ctrl Shift <Key>V: insert-selection(CLIPBOARD) \n\
+    Ctrl Shift <Key>C: copy-selection(CLIPBOARD)
