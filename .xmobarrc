@@ -3,7 +3,7 @@ Config
   , border = NoBorder
   , bgColor = "black"
   , fgColor = "grey"
-  , position = TopW L 90
+  , position = TopW L 100
   , lowerOnStart = False
   , hideOnStart = False
   , overrideRedirect = False
