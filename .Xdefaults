@@ -1,0 +1,50 @@
+loginShell: true
+
+!-------------------------------------------------------------------------------
+! XTerm configuration
+!-------------------------------------------------------------------------------
+
+#ifdef XTERM_THEME_DARK
+xterm*font: *-fixed-*-*-*-18-*
+xterm*faceName: DejaVu Sans Mono:size=10:antialias=true
+xterm*termName: xterm-256color
+xterm*background: black
+xterm*foreground: lightblue
+xterm*scrollBar: false
+xterm*rightScrollBar: false
+xterm*title: XTerm
+xterm*iconName: XTerm
+xterm*saveLines: 50000
+xterm*jumpScroll: true
+xterm*scrollTtyOutput: false
+xterm*scrollKey: true
+xterm*alwaysUseMods: true
+xterm*metaSendsEscape: true
+xterm*utf8Title: true
+Xterm*selectToClipboard: true
+#else
+! Atom One Light theme
+xterm*background: #f9f9f9
+xterm*foreground: #383a42
+xterm*cursorColor: #d0d0d0
+xterm*color0: #000000
+xterm*color1: #E45649
+xterm*color2: #50A14F
+xterm*color3: #986801
+xterm*color4: #4078F2
+xterm*color5: #A626A4
+xterm*color6: #0184BC
+xterm*color7: #A0A1A7
+xterm*color8: #5c6370
+xterm*color9: #e06c75
+xterm*color10: #50A14F
+xterm*color11: #986801
+xterm*color12: #4078F2
+xterm*color13: #A626A4
+xterm*color14: #0184BC
+xterm*color15: #ffffff
+#endif
+
+xterm*VT100.Translations: #override \
+	Ctrl Shift <Key>V: insert-selection(CLIPBOARD) \n\
+        Ctrl Shift <Key>C: copy-selection(CLIPBOARD)
