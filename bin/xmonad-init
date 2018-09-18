@@ -4,8 +4,8 @@
 # See: https://superuser.com/questions/1311722/synclient-does-not-affect-my-touchpad
 touchpad_ids=($(xinput list | grep Touchpad | cut -f2 | cut -d'=' -f2))
 for touchpad_id in ${touchpad_ids[@]}; do
-	# disable tap-to-click
-	xinput set-prop "$touchpad_id" "Synaptics Tap Action" 0
+	# disable single-finger tap-to-click (require at least 2)
+	xinput set-prop "$touchpad_id" "Synaptics Tap Action" 0 0 0 0 0 0 0
 	xinput set-prop "$touchpad_id" "Synaptics Palm Detection" 1
 
 	# enable natural scrolling
