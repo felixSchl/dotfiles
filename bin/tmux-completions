@@ -1,0 +1,124 @@
+#!/bin/bash
+#
+# Place this into your .bashrc after installing FZF,
+# Then update your .tmux.conf and create key-bindings. Example:
+#
+# unbind s
+# bind   s run "tmux new-window -n 'Switch Session' 'bash -ci tmux_select_session'"
+# unbind K
+# bind   K run "tmux new-window -n 'Kill Session' 'bash -ci tmux_kill_session'"
+# unbind C
+# bind   C run "tmux new-window -n 'Create Session' 'bash -ci tmux_create_session'"
+# unbind C-c
+# bind   C-c run "tmux new-window -n 'Create Session' 'bash -ci PROJECT_PATHS= tmux_create_session'"
+
+PROJECT_PATHS=~/projects
+
+if [[ -f ~/.fzf.bash ]]; then
+	source ~/.fzf.bash
+
+	_tmux_select_session () (
+		set -eo pipefail
+		local -r prompt=$1
+		local -r fmt='#{session_id}:|#S|(#{session_attached} attached)'
+		{ tmux display-message -p -F "$fmt" && tmux list-sessions -F "$fmt"; } \
+			| awk '!seen[$1]++' \
+			| column -t -s'|' \
+			| fzf -q'$' --reverse --prompt "$prompt> " \
+			| cut -d':' -f1
+	)
+
+	_find_existing_sid () (
+		set -eo pipefail
+		local -r name=$1
+		sid=$(tmux list-sessions -F '#{session_name}:#{session_id}' \
+			| grep "$name" \
+			| head -n 1 \
+			| cut -d ':' -f 2
+		)
+
+		if [ -n "$sid" ]; then
+			echo "$sid"
+			return 0
+		else
+			return 1
+		fi
+	)
+
+	# Select selected tmux session
+	# Note: To be bound to a tmux key in from .tmux.conf
+	# Example: bind-key s run "tmux new-window -n 'Switch Session' 'bash -ci tmux_select_session'"
+	tmux_select_session () (
+		set -eo pipefail
+		_tmux_select_session 'switch session' | xargs tmux switch-client -t
+	)
+
+	# Kill selected tmux session
+	# Note: To be bound to a tmux key in from .tmux.conf
+	# Example: bind-key K run "tmux new-window -n 'Kill Session' 'bash -ci tmux_kill_session'"
+	tmux_kill_session () (
+		set -eo pipefail
+		_tmux_select_session 'kill session' \
+			| {
+				read -r id
+				echo "$id"
+				next=$(tmux list-sessions -F '#{session_id}' | grep -v -F "$id" | head -n1)
+				if [ -n "$next" ]; then
+					tmux switch-client -t "$next"
+				fi && tmux kill-session -t "$id"
+			}
+	)
+
+	tmux_session_name () {
+		sed <<< "$1" 's/[.:]/-/g'
+	}
+
+	# Create a new tmux session
+	# Note: we must spawn the sessions in detached mode and the use
+	# `switch-client` to attach to them. Otherwise we'd get an error saying
+	# that the "terminal is not available"
+	# Note: To be bound to a tmux key in from .tmux.conf
+	# Example: bind-key C run "tmux new-window -n 'Create Session' 'bash -ci tmux_create_session'"
+	tmux_create_session () (
+		unset TMUX
+		set -eo pipefail
+		local new_session_id
+		{
+			new_session_id=$(
+				set -eo pipefail
+				if [ -z "$PROJECT_PATHS" ]; then
+					echo 'Create new session (Ctrl-C to cancel):'
+					echo 'Set $PROJECT_PATHS to streamline this process.'
+					echo
+					read -rep "Set working directory (default: \"$PWD\"):"$'\n> ' dir && \
+					if [ -z "$dir" ]; then dir=$PWD; fi && \
+					echo
+					read -rp "Set name (default \"${dir##*/}\"):"$'\n> ' name && \
+					if [ -z "$name" ]; then name=${dir##*/}; fi
+					tmux new-session -d -c "$dir" -n "$name" -s "$(tmux_session_name "$name")" -P -F "#{session_id}"
+				else
+					local projects=(${PROJECT_PATHS//:/ })
+					for dir in "${projects[@]}"; do
+						if [ -d "$dir" ]; then
+							find "${dir%*/}" -maxdepth 1 -type d | tail -n+2
+						fi
+					done \
+						| awk '!seen[$1]++' \
+						| fzf --reverse --prompt 'Create new session - choose project: ' --expect='~' \
+						| {
+							read -r key;
+							if [[ "$key" == '~' ]]; then
+								tmux new-session -d -c ~ -P -F "#{session_id}"
+							else
+								read -r dir;
+								name=${dir##*/}
+								_find_existing_sid "$name" || {
+									tmux new-session -d -c "$dir" -n "$name" -s "$(tmux_session_name "$name")" -P -F "#{session_id}"
+								}
+							fi
+						}
+				fi
+			) && tmux switch-client -t "$new_session_id"
+		}
+	)
+fi
