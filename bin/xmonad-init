@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-# TODO: Move this into bash profile
-PATH=/home/felix/.local/bin:/home/felix/bin:$PATH
-
 # Touchpad settings
 # See: https://superuser.com/questions/1311722/synclient-does-not-affect-my-touchpad
 touchpad_ids=($(xinput list | grep Touchpad | cut -f2 | cut -d'=' -f2))
@@ -30,23 +27,5 @@ emacs25 --daemon &
 
 # Start up tmux
 tmux new-session -s root -d
-
-# Network manager applet (tray)
-nm-applet &
-
-# Launch sound controls (tray)
-gnome-sound-applet &
-
-# Start a systray
-trayer \
-	--edge top \
-	--align right \
-	--SetDockType true \
-	--SetPartialStrut true \
-	--expand true \
-	--width 10 \
-	--height 36 \
-	--transparent true \
-	--tint 0x000000 &
 
 exec xmonad
