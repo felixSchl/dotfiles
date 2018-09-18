@@ -28,8 +28,9 @@ main = do
           , layoutHook =
               avoidStruts $
                 smartBorders $
-                  Tall 1 (3 / 100) (1 / 2) |||
-                    Full
+                  Full |||
+                    Tall 1 (3 / 100) (1 / 2) |||
+                      Mirror (Tall 1 (3 / 100) (1 / 2))
           , terminal = "xterm" -- gnome-terminal"
           , handleEventHook = docksEventHook <+> handleEventHook def
           , borderWidth = 2
