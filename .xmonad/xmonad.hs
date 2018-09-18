@@ -56,7 +56,7 @@ main = do
 
       -- Start a fresh firefox
     , ((mod4Mask .|. shiftMask, xK_f),
-      spawn "chromium-browser")
+      spawn "firefox")
 
       -- Lock to greeter
     , ((mod4Mask .|. shiftMask, xK_l),
