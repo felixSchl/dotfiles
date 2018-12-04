@@ -4,6 +4,8 @@ import Graphics.X11.ExtraTypes.XF86
 import System.IO
 import XMonad
 import XMonad.Layout.NoBorders (noBorders, smartBorders)
+import XMonad.Prompt
+import XMonad.Prompt.Pass
 import XMonad.Actions.WindowBringer (bringMenu, gotoMenu)
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
@@ -104,6 +106,13 @@ main = do
               else current
       )
     , ((mod4Mask, xK_grave), XMonad.Actions.CycleWS.toggleWS)
+
+    -- 'pass' integration
+    , ((mod4Mask .|. shiftMask, xK_p),
+       passPrompt def
+        { font = "xft:Deja Vu Sans Mono-10"
+        , height = 48
+        })
     ]
     ++
     -- mod-[1..9] %! Switch to workspace N (non-greedy)
