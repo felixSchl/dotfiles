@@ -32,7 +32,7 @@ if [[ -f ~/.fzf.bash ]]; then
 		set -eo pipefail
 		local -r name=$1
 		sid=$(tmux list-sessions -F '#{session_name}:#{session_id}' \
-			| grep "$name" \
+			| grep "$name:" \
 			| head -n 1 \
 			| cut -d ':' -f 2
 		)
