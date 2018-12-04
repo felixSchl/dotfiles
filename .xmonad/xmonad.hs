@@ -33,13 +33,13 @@ main = do
                   Full |||
                     Tall 1 (3 / 100) (1 / 2) |||
                       Mirror (Tall 1 (3 / 100) (1 / 2))
-          , terminal = "xterm" -- gnome-terminal"
+          , terminal = "xterm"
           , handleEventHook = docksEventHook <+> handleEventHook def
           , borderWidth = 2
           , focusFollowsMouse = False
           , startupHook = docksStartupHook <+> startupHook def
-          , logHook = do
-              mapM_ (\xmproc -> do
+          , logHook =
+              mapM_ (\xmproc ->
                 dynamicLogWithPP xmobarPP
                   { ppOutput = hPutStrLn xmproc
                   , ppTitle = xmobarColor "green" "" . shorten 50
