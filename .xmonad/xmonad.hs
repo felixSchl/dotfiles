@@ -1,3 +1,5 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 module Main where
 
 import Graphics.X11.ExtraTypes.XF86
@@ -6,6 +8,7 @@ import XMonad
 import XMonad.Layout.NoBorders (noBorders, smartBorders)
 import XMonad.Prompt
 import XMonad.Prompt.Pass
+import XMonad.Hooks.UrgencyHook
 import XMonad.Actions.WindowBringer (bringMenu, gotoMenu)
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
@@ -39,16 +42,19 @@ main = do
           , focusFollowsMouse = False
           , startupHook = docksStartupHook <+> startupHook def
           , logHook =
-              mapM_ (\xmproc ->
+              mapM_ (\(_, xmproc) ->
                 dynamicLogWithPP xmobarPP
                   { ppOutput = hPutStrLn xmproc
-                  , ppTitle = xmobarColor "green" "" . shorten 50
+                  , ppSort = getSortByXineramaPhysicalRule
                   }
                 ) xmprocs
           , modMask = mod4Mask
           }
     in
-      baseConf `additionalKeys` myAdditionalKeys baseConf
+      withUrgencyHookC
+        BorderUrgencyHook { urgencyBorderColor = "#ffa500" }
+        urgencyConfig { suppressWhen = Never } $
+          baseConf `additionalKeys` myAdditionalKeys baseConf
 
   where
   myAdditionalKeys conf =
@@ -57,6 +63,9 @@ main = do
       ((mod4Mask .|. shiftMask, xK_e),
       spawn "emacsclient --c")
 
+    , ((mod4Mask .|. shiftMask, xK_z),
+      spawn "xscreensaver-command -lock")
+
       -- Start a fresh firefox
     , ((mod4Mask .|. shiftMask, xK_f),
       spawn "firefox")
@@ -64,6 +73,10 @@ main = do
       -- Lock to greeter
     , ((mod4Mask .|. shiftMask, xK_l),
       spawn "dm-tool switch-to-greeter")
+
+      -- Urgents
+    , ((mod4Mask, xK_BackSpace), focusUrgent)
+    , ((mod4Mask .|. shiftMask, xK_BackSpace), clearUrgents)
 
     , ((mod4Mask, xK_s), cycleRecentWindows [xK_Super_L] xK_s xK_w)
     , ((mod4Mask, xK_z), rotOpposite)
