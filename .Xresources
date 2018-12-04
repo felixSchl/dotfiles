@@ -4,11 +4,15 @@ Xft.antialias: true
 Xft.hinting:   true
 Xft.rgba:      rgb
 Xft.hintstyle: hintfull
-Xft.dpi:       220
 
-! Dracula Xresources palette
-*.foreground: #F8F8F2
-*.background: #282A36
+! High-resolution specific settings
+#ifdef IS_4K
+Xft.dpi: 220
+#endif
+
+! Dracula Xresources palette (Modified)
+*.foreground: lightblue
+*.background: black
 *.color0:     #000000
 *.color8:     #4D4D4D
 *.color1:     #FF5555
@@ -35,9 +39,8 @@ xterm*BorderWidth: 8
 xterm*font: *-fixed-*-*-*-*-*
 xterm*faceName: DejaVu Sans Mono:size=10:antialias=true
 xterm*termName: xterm-256color
-xterm*background: black
-xterm*foreground: lightblue
 xterm*scrollBar: false
+xterm*internalBorder: 0
 xterm*rightScrollBar: false
 xterm*title: XTerm
 xterm*iconName: XTerm
@@ -49,30 +52,9 @@ xterm*alwaysUseMods: true
 xterm*metaSendsEscape: true
 xterm*utf8Title: true
 Xterm*selectToClipboard: true
-
-#ifdef XTERM_THEME_LIGHT
-! Atom One Light theme
-xterm*background: #f9f9f9
-xterm*foreground: #383a42
-xterm*cursorColor: #d0d0d0
-xterm*color0: #000000
-xterm*color1: #E45649
-xterm*color2: #50A14F
-xterm*color3: #986801
-xterm*color4: #4078F2
-xterm*color5: #A626A4
-xterm*color6: #0184BC
-xterm*color7: #A0A1A7
-xterm*color8: #5c6370
-xterm*color9: #e06c75
-xterm*color10: #50A14F
-xterm*color11: #986801
-xterm*color12: #4078F2
-xterm*color13: #A626A4
-xterm*color14: #0184BC
-xterm*color15: #ffffff
-#endif
-
-xterm*VT100.Translations: #override \
+xterm*visualbell: true
+xterm*bellIsUrgent: true
+xterm.vt100.bellIsUrgent: true
+xterm*vt100.Translations: #override \
     Ctrl Shift <Key>V: insert-selection(CLIPBOARD) \n\
     Ctrl Shift <Key>C: copy-selection(CLIPBOARD)
