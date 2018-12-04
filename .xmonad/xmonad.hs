@@ -9,6 +9,7 @@ import XMonad.Layout.NoBorders (noBorders, smartBorders)
 import XMonad.Prompt
 import XMonad.Prompt.Pass
 import XMonad.Hooks.UrgencyHook
+import XMonad.Layout.NoBorders (smartBorders)
 import XMonad.Actions.WindowBringer (bringMenu, gotoMenu)
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
@@ -20,11 +21,20 @@ import XMonad.Util.Run (spawnPipe)
 import XMonad.Util.EZConfig (additionalKeys)
 import XMonad.Actions.CycleWindows
 import XMonad.Layout.IndependentScreens (countScreens)
+import XMonad.Util.WorkspaceCompare
 
 main :: IO ()
 main = do
-  numScreens <- countScreens
-  xmprocs <- mapM (\x -> spawnPipe $ "xmobar -x " ++ show x) [0..numScreens-1]
+  xmprocs <- do
+    numScreens :: Integer <- countScreens
+    let
+      xmobarWorkspaces :: [WorkspaceId]
+      xmobarWorkspaces =
+        map show [0..numScreens-1]
+    mapM
+      (\wId -> do
+        process <- spawnPipe $ "xmobar -x " ++ wId
+        pure (wId, process)) xmobarWorkspaces
   xmonad $
     let
       baseConf =
