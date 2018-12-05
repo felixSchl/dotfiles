@@ -5,14 +5,16 @@ module Main where
 import Graphics.X11.ExtraTypes.XF86
 import System.IO
 import XMonad
-import XMonad.Layout.NoBorders (noBorders, smartBorders)
+import XMonad.Layout.NoBorders (smartBorders)
 import XMonad.Prompt
 import XMonad.Prompt.Pass
 import XMonad.Hooks.UrgencyHook
-import XMonad.Layout.NoBorders (smartBorders)
 import XMonad.Actions.WindowBringer (bringMenu, gotoMenu)
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
+import XMonad.Prompt.FuzzyMatch (fuzzyMatch)
+import XMonad.Prompt.Window (windowPrompt)
+import qualified XMonad.Prompt.Window as XPW
 import qualified XMonad.StackSet as W
 import qualified XMonad.Util.Brightness as Brightness
 import qualified XMonad.Actions.CycleWS
@@ -22,6 +24,14 @@ import XMonad.Util.EZConfig (additionalKeys)
 import XMonad.Actions.CycleWindows
 import XMonad.Layout.IndependentScreens (countScreens)
 import XMonad.Util.WorkspaceCompare
+
+xpconfig :: XPConfig
+xpconfig =
+  def
+    { font = "xft:Deja Vu Sans Mono-10"
+    , height = 48
+    , searchPredicate = fuzzyMatch
+    }
 
 main :: IO ()
 main = do
@@ -55,7 +65,7 @@ main = do
               mapM_ (\(_, xmproc) ->
                 dynamicLogWithPP xmobarPP
                   { ppOutput = hPutStrLn xmproc
-                  , ppSort = getSortByXineramaPhysicalRule
+                  , ppSort = getSortByXineramaPhysicalRule def
                   }
                 ) xmprocs
           , modMask = mod4Mask
@@ -70,39 +80,39 @@ main = do
   myAdditionalKeys conf =
     [
       -- Start a fresh emacsclient
-      ((mod4Mask .|. shiftMask, xK_e),
+      ((modMask conf .|. shiftMask, xK_e),
       spawn "emacsclient --c")
 
-    , ((mod4Mask .|. shiftMask, xK_z),
+    , ((modMask conf .|. shiftMask, xK_z),
       spawn "xscreensaver-command -lock")
 
       -- Start a fresh firefox
-    , ((mod4Mask .|. shiftMask, xK_f),
+    , ((modMask conf .|. shiftMask, xK_f),
       spawn "firefox")
 
       -- Lock to greeter
-    , ((mod4Mask .|. shiftMask, xK_l),
+    , ((modMask conf .|. shiftMask, xK_l),
       spawn "dm-tool switch-to-greeter")
 
       -- Urgents
-    , ((mod4Mask, xK_BackSpace), focusUrgent)
-    , ((mod4Mask .|. shiftMask, xK_BackSpace), clearUrgents)
+    , ((modMask conf, xK_BackSpace), focusUrgent)
+    , ((modMask conf .|. shiftMask, xK_BackSpace), clearUrgents)
 
-    , ((mod4Mask, xK_s), cycleRecentWindows [xK_Super_L] xK_s xK_w)
-    , ((mod4Mask, xK_z), rotOpposite)
-    , ((mod4Mask, xK_i), rotUnfocusedUp)
-    , ((mod4Mask, xK_u), rotUnfocusedDown)
-    , ((mod4Mask .|. controlMask, xK_i), rotFocusedUp)
-    , ((mod4Mask .|. controlMask, xK_u), rotFocusedDown)
+    , ((modMask conf, xK_s), cycleRecentWindows [xK_Super_L] xK_s xK_w)
+    , ((modMask conf, xK_z), rotOpposite)
+    , ((modMask conf, xK_i), rotUnfocusedUp)
+    , ((modMask conf, xK_u), rotUnfocusedDown)
+    , ((modMask conf .|. controlMask, xK_i), rotFocusedUp)
+    , ((modMask conf .|. controlMask, xK_u), rotFocusedDown)
 
       -- Bring up dmenu to go to window
-    , ((mod4Mask, xK_g), gotoMenu)
+    , ((modMask conf, xK_g), gotoMenu)
 
       -- Bring up dmenu to bring window here
-    , ((mod4Mask, xK_b), bringMenu)
+    , ((modMask conf, xK_b), bringMenu)
 
       -- Bring up dmenu to start apps
-    , ((mod4Mask, xK_p),
+    , ((modMask conf, xK_p),
       spawn "dmenu_run")
 
       -- Mute volume.
@@ -128,14 +138,11 @@ main = do
               then current - 50
               else current
       )
-    , ((mod4Mask, xK_grave), XMonad.Actions.CycleWS.toggleWS)
+    , ((modMask conf, xK_grave), XMonad.Actions.CycleWS.toggleWS)
 
     -- 'pass' integration
-    , ((mod4Mask .|. shiftMask, xK_p),
-       passPrompt def
-        { font = "xft:Deja Vu Sans Mono-10"
-        , height = 48
-        })
+    , ((modMask conf .|. shiftMask, xK_p), passPrompt xpconfig)
+    , ((modMask conf .|. shiftMask, xK_g), windowPrompt xpconfig XPW.Goto XPW.wsWindows)
     ]
     ++
     -- mod-[1..9] %! Switch to workspace N (non-greedy)
