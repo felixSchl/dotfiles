@@ -1,0 +1,20 @@
+[database]
+path=/home/felix/.mail
+
+[user]
+name=Felix Schlitter
+primary_email=felixschlitter@gmail.com
+other_email=felix@sylo.io;
+
+[new]
+tags=unread;inbox;
+ignore=
+
+[search]
+exclude_tags=deleted;spam;
+
+[maildir]
+synchronize_flags=true
+
+[crypto]
+gpg_path=gpg
