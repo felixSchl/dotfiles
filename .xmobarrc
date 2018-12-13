@@ -4,16 +4,15 @@ Config
   , bgColor = "black"
   , fgColor = "grey"
   , position = TopW L 100
-  , lowerOnStart = False
+  , lowerOnStart = True
   , hideOnStart = False
   , overrideRedirect = False
   , persistent = True
   , allDesktops = True
   , commands =
       [ Run Cpu ["-L","3","-H","50","--normal","green","--high","red"] 10
-      , Run Memory ["-t","Mem: <usedratio>%"] 10
+      , Run Memory ["-t","M: <usedratio>%"] 10
       , Run Swap [] 10
-      , Run DateZone "%H:%M" "de_DE.UTF-8" "Asia/Kolkata" "india-date" 10
       , Run DateZone "%H:%M" "de_DE.UTF-8" "America/New_York" "ny-date" 10
       , Run DateZone "%H:%M" "de_DE.UTF-8" "America/Los_Angeles" "la-date" 10
       , Run Date "%a %b %_d %Y %H:%M:%S" "date" 10
@@ -29,10 +28,12 @@ Config
           , "-O", "<fc=#dAA520>Charging</fc>"
           ] 50
       , Run StdinReader
+      , Run Com "sh" ["-c", "mu find maildir:/gmail/Inbox AND flag:unread | wc -l"] "gmail" 5
+      , Run Com "sh" ["-c", "mu find maildir:/fastmail/Inbox AND flag:unread | wc -l"] "fastmail" 5
       , Run Volume "default" "Master" [ "--template", "Vol: <volume>% <status>" ] 5
       , Run Brightness [ "--template", "Brightness: <percent>%", "--", "--device", "intel_backlight"] 5
       ]
   , sepChar = "%"
   , alignSep = "}{"
-  , template = "%StdinReader% | %battery% | %cpu% | %memory% | %bright% }{ NY: %ny-date% | LA: %la-date% | IST: %india-date% | <fc=#ee8a00>%date%</fc> | %default:Master%"
+  , template = "%StdinReader% | %battery% | %cpu% | %memory% | %bright% }{ Mail: %gmail%/%fastmail% | NY:%ny-date%/LA:%la-date% | <fc=#ee8a00>%date%</fc> | %default:Master%"
   }
