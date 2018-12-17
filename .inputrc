@@ -1,2 +1,57 @@
-set editing-mode vi
 set keymap vi-command
+"k": history-search-backward
+"j": history-search-forward
+
+set keymap vi-insert
+"\C-A": beginning-of-line
+"\C-B": backward-char
+"\C-D": delete-char
+"\C-E": end-of-line
+"\C-F": forward-char
+"\C-K": kill-line
+"\C-L": clear-screen
+"\C-N": next-history
+"\C-P": previous-history
+"\C-O": operate-and-get-next
+
+# Enable Readline not waiting for additional input when a key is pressed.
+# Needed for the mappings below.
+set keyseq-timeout 0
+
+# `yank-last-arg` does not work exactly as in emacs mode
+"\e.": yank-last-arg
+"\e\177": backward-kill-word
+"\e0": digit-argument
+"\e1": digit-argument
+"\e2": digit-argument
+"\e3": digit-argument
+"\e4": digit-argument
+"\e5": digit-argument
+"\e6": digit-argument
+"\e7": digit-argument
+"\e8": digit-argument
+"\e9": digit-argument
+"\eb": backward-word
+"\ec": capitalize-word
+"\ed": kill-word
+"\ef": forward-word
+"\el": downcase-word
+"\en": non-incremental-forward-search-history
+"\ep": non-incremental-reverse-search-history
+"\et": transpose-words
+"\eu": upcase-word
+"\ey": yank-pop
+
+# some other useful mappings
+
+"\e/": complete-filename
+"\ek": kill-whole-line
+"\eo": "\C-v\C-j"
+# quickly switch to "normal" mode
+"\C-[": vi-movement-mode
+# perserve the currently editing line so that we can 
+# do something else before restoring it.
+"\eg": insert-comment
+"\er": "\C-R#\C-A\C-D\C-E"
+
+set editing-mode vi
