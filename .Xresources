@@ -1,9 +1,18 @@
 loginShell: true
 
+*font: *-fixed-*-*-*-*-*
+*faceName: DejaVu Sans Mono:size=10:antialias=true
+
 Xft.antialias: true
 Xft.hinting:   true
 Xft.rgba:      rgb
 Xft.hintstyle: hintfull
+
+Emacs.menuBar: 0
+Emacs.toolBar: 0
+Emacs.verticalScrollBars: off
+Emacs.FontBackend: xft,x
+Emacs.font: DejaVu Sans Mono:size=15:antialias=true
 
 ! High-resolution specific settings
 #ifdef IS_4K
