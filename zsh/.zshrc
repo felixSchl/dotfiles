@@ -9,12 +9,9 @@ fi
 
 # load zplug and register / load plugins
 if [[ -f ~/.zplug/init.zsh ]]; then
-    rm -f ~/.zplug/zcompdump*
-
     source ~/.zplug/init.zsh
     zplug 'b4b4r07/zplug'
 
-    # zplug 'zsh-users/zsh-syntax-highlighting'
     zplug 'plugins/git', from:oh-my-zsh
     zplug 'hchbaw/opp.zsh', use:opp.zsh
 
@@ -22,20 +19,13 @@ if [[ -f ~/.zplug/init.zsh ]]; then
     export RPS1=" "
     zplug 'plugins/vi-mode', from:oh-my-zsh
 
-    # bindkey -M vicmd 'k' history-substring-search-up
-    # bindkey -M vicmd 'j' history-substring-search-down
-
     # Liquid prompt
     LP_ENABLE_TIME=1
     LP_USER_ALWAYS=1
     zplug 'nojhan/liquidprompt'
 
-    # Navigate to the .git project root
-    zplug 'mollifier/cd-gitroot'
-    alias cdu='cd-gitroot'
-
     # Install / load plugins
-    zplug check || zplug install
+    # note: install (new) plugins using 'zplug install'
     zplug load
 
     # Add <TAB> completion handlers for fzf *after* fzf is loaded
@@ -62,6 +52,7 @@ export EDITOR='vim'
 export KEYTIMEOUT=1
 export DISABLE_AUTO_TITLE=true
 export PATH="/usr/local/bin:$PATH"
+export PATH="~/.local/bin:$PATH"
 export COLORTERM=xterm-256color
 
 # Aliases
@@ -72,13 +63,6 @@ alias emacs='TERM=xterm-256color emacs -nw'
 alias cdu='cd-gitroot'
 if type rlwrap > /dev/null; then
     alias node='rlwrap node'
-fi
-
-# Less syntax highlighting
-# install on OSX: brew install source-highlight
-if [ "$(which src-hilite-lesspipe.sh)" ]; then
-    export LESSOPEN='| src-hilite-lesspipe.sh %s'
-    export LESS=' -R '
 fi
 
 # FZF
@@ -157,41 +141,30 @@ export GOPATH=~/go
 export PATH="$PATH:$GOPATH/bin"
 export PATH="/usr/local/bin:$PATH"
 export PATH="$PATH:/usr/local/opt/go/libexec/bin"
-export PATH="/Users/felix/.local/bin:$PATH"
+export PATH="~/.local/bin:$PATH"
 
 # Manpages
 # Set case-insensitve searching on man pages
 export MANPAGER='less -I'
 
-# Nvm - Node version manager
-export NVM_DIR=~/.nvm
-if [[ -f ~/.nvm/nvm.sh ]]; then
-    # echo '[zshrc] loading nvm...'
-    source ~/.nvm/nvm.sh
-    nvm alias default 6 > /dev/null
-    nvm use default     > /dev/null
-fi
+# note: nvm (node version manager) is /very/ slow to start up.
+#       it's faster to just put /some/ version of node onto the PATH and change
+#       it when needed. To change it:
+#       > source ~/.nvm/nvm.sh
+#       > nvm use <version>
+export PATH=$PATH:~/.nvm/versions/node/v8.5.0/bin
 
 # Android dev
 export ANDROID_HOME=~/Library/Android/sdk
 export ANDROID_NDK_HOME=$ANDROID_HOME/ndk-bundle
 export PATH=$PATH:${ANDROID_HOME}/tools
 export PATH=$PATH:${ANDROID_HOME}/platform-tools
+export PATH=$PATH:/usr/local/go/bin
 
-# Explicitely set language
+# Explicitly set language
 export LC_CTYPE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
-# weechat
-# TODO: Find a more sophisticated way...
-if [[ ! -f ~/.weechat/python/autoload/wee_slack.py ]]; then
-    echo '[zshrc] weechat: installing "wee_slack.py"...'
-    mkdir -p ~/.weechat/python/autoload
-    curl -fLo ~/.weechat/python/autoload/wee_slack.py \
-        https://raw.githubusercontent.com/rawdigits/wee-slack/master/wee_slack.py \
-        2> /dev/null
-fi
 
-alias nngg='npm run build && npm publish && git push && git push --tags'
-
-. /Users/felix/.nix-profile/etc/profile.d/nix.sh
+# Rust
+PATH=~/.cargo/bin:$PATH
