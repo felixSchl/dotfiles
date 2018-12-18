@@ -1,3 +1,7 @@
+################################################################################
+# Gmail - felixschlitter@gmail.com                                    :personal:
+################################################################################
+
 IMAPAccount      gmail
 Host             imap.gmail.com
 User             felixschlitter@gmail.com
@@ -27,11 +31,13 @@ SyncState *
 Channel gmail-trash
 Master :gmail-remote:"[Gmail]/Trash"
 Slave :gmail-local:Trash
+Sync Push Delete New ReNew Flags
 SyncState *
 
 Channel gmail-sent
 Master :gmail-remote:"[Gmail]/Sent Mail"
 Slave :gmail-local:Sent
+Sync All
 SyncState *
 
 Channel gmail-spam
@@ -45,3 +51,69 @@ Channel gmail-inbox
 Channel gmail-sent
 Channel gmail-trash
 Channel gmail-spam
+
+################################################################################
+# Fastmail - felixschlitter@fastmail.com                              :personal:
+################################################################################
+
+IMAPAccount      fastmail
+Host             imap.fastmail.com
+User             felixschlitter@fastmail.com
+Port             993
+PassCmd          "pass fastmail.com/felixschlitter@fastmail.com/app"
+UseIMAPS         yes
+CertificateFile  /etc/ssl/certs/ca-certificates.crt
+
+IMAPStore  fastmail-remote
+Account    fastmail
+
+CopyArrivalDate yes
+Sync All
+
+MaildirStore  fastmail-local
+Path          ~/mail/fastmail/
+Inbox         ~/mail/fastmail/Inbox
+Subfolders    Verbatim
+
+Channel fastmail-inbox
+Master :fastmail-remote:INBOX
+Slave :fastmail-local:Inbox
+SyncState *
+
+Channel fastmail-trash
+Master :fastmail-remote:"Trash"
+Slave :fastmail-local:Trash
+Sync All
+SyncState *
+
+Channel fastmail-archive
+Master :fastmail-remote:"Archive"
+Slave :fastmail-local:Archive
+Sync All
+SyncState *
+
+Channel fastmail-sent
+Master :fastmail-remote:"Sent"
+Slave :fastmail-local:Sent
+Sync All
+SyncState *
+
+Channel fastmail-drafts
+Master :fastmail-remote:"Drafts"
+Slave :fastmail-local:Sent
+Sync All
+SyncState *
+
+Channel fastmail-spam
+Master :fastmail-remote:"Spam"
+Slave :fastmail-local:Spam
+Sync Push Delete New ReNew Flags
+SyncState *
+
+Group fastmail
+Channel fastmail-inbox
+Channel fastmail-sent
+Channel fastmail-trash
+Channel fastmail-spam
+Channel fastmail-archive
+Channel fastmail-drafts
