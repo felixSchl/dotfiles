@@ -2,14 +2,21 @@
 
 module Main where
 
+import Data.Maybe (catMaybes, fromMaybe, listToMaybe)
+import Data.Char (toLower)
+import Data.Traversable (for)
+import Data.Foldable (find)
+import Control.Monad (join, filterM, guard)
 import Graphics.X11.ExtraTypes.XF86
 import System.IO
 import XMonad
+import qualified XMonad as X
 import XMonad.Layout.NoBorders (smartBorders)
 import XMonad.Prompt
 import XMonad.Prompt.Pass
 import XMonad.Hooks.UrgencyHook
 import XMonad.Actions.WindowBringer (bringMenu, gotoMenu)
+import XMonad.Actions.TagWindows (tagPrompt, addTag, focusUpTaggedGlobal)
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Prompt.FuzzyMatch (fuzzyMatch)
@@ -24,6 +31,8 @@ import XMonad.Util.EZConfig (additionalKeys)
 import XMonad.Actions.CycleWindows
 import XMonad.Layout.IndependentScreens (countScreens)
 import XMonad.Util.WorkspaceCompare
+import XMonad.Hooks.ManageHelpers
+import XMonad.Actions.WindowGo (runOrRaise)
 
 xpconfig :: XPConfig
 xpconfig =
@@ -49,7 +58,11 @@ main = do
     let
       baseConf =
         desktopConfig
-          { manageHook = manageDocks <+> manageHook def
+          { manageHook = composeAll
+            [ manageDocks
+            , isFullscreen --> doFullFloat
+            , manageHook def
+            ]
           , layoutHook =
               avoidStruts $
                 smartBorders $
@@ -57,8 +70,10 @@ main = do
                     Tall 1 (3 / 100) (1 / 2) |||
                       Mirror (Tall 1 (3 / 100) (1 / 2))
           , terminal = "xterm"
-          , handleEventHook = docksEventHook <+> handleEventHook def
-          , borderWidth = 2
+          , handleEventHook =
+              docksEventHook <+>
+              handleEventHook def
+          , borderWidth = 3
           , focusFollowsMouse = False
           , startupHook = docksStartupHook <+> startupHook def
           , logHook =
@@ -78,17 +93,18 @@ main = do
 
   where
   myAdditionalKeys conf =
-    [
-      -- Start a fresh emacsclient
-      ((modMask conf .|. shiftMask, xK_e),
-      spawn "emacsclient --c")
-
-    , ((modMask conf .|. shiftMask, xK_z),
+    [ ((modMask conf .|. shiftMask, xK_z),
       spawn "xscreensaver-command -lock")
 
-      -- Start a fresh firefox
-    , ((modMask conf .|. shiftMask, xK_f),
-      spawn "firefox")
+      -- Start a emacsclient
+    , ((modMask conf .|. shiftMask, xK_e), spawn "emacsclient --c")
+    , ((modMask conf, xK_e),
+      runOrRaise "emacsclient --c" (className =? "Emacs"))
+
+      -- Start firefox
+    , ((modMask conf .|. shiftMask, xK_f), spawn "firefox")
+    , ((modMask conf, xK_f),
+      runOrRaise "firefox" (className =? "Firefox" <||> className =? "Firefox-bin"))
 
       -- Lock to greeter
     , ((modMask conf .|. shiftMask, xK_l),
@@ -105,12 +121,6 @@ main = do
     , ((modMask conf .|. controlMask, xK_i), rotFocusedUp)
     , ((modMask conf .|. controlMask, xK_u), rotFocusedDown)
 
-      -- Bring up dmenu to go to window
-    , ((modMask conf, xK_g), gotoMenu)
-
-      -- Bring up dmenu to bring window here
-    , ((modMask conf, xK_b), bringMenu)
-
       -- Bring up dmenu to start apps
     , ((modMask conf, xK_p),
       spawn "dmenu_run")
@@ -120,14 +130,19 @@ main = do
       spawn "amixer -D pulse set Master 1+ toggle")
 
     -- Decrease volume.
-    -- , ((0, xF86XK_AudioLowerVolume),
-    , ((0, xK_F11),
+    , ((0, xF86XK_AudioLowerVolume),
+      spawn "amixer -D pulse set Master 5%-")
+    , ((0, xK_F11), -- XXX office keyboard
       spawn "amixer -D pulse set Master 5%-")
 
     -- Increase volume.
-    -- , ((0, xF86XK_AudioRaiseVolume),
-    , ((0, xK_F12),
+    , ((0, xF86XK_AudioRaiseVolume),
       spawn "amixer -D pulse set Master unmute && amixer -D pulse set Master 5%+")
+    , ((0, xK_F12), -- XXX office keyboard
+      spawn "amixer -D pulse set Master unmute && amixer -D pulse set Master 5%+")
+
+    -- Toggle struts (hide xmobar)
+    , ((mod4Mask .|. shiftMask, xK_F12), sendMessage ToggleStruts)
 
     -- Increase/decrease brightness
     -- Note: Requires small manual set up on new systems (see docs)
@@ -142,7 +157,13 @@ main = do
 
     -- 'pass' integration
     , ((modMask conf .|. shiftMask, xK_p), passPrompt xpconfig)
-    , ((modMask conf .|. shiftMask, xK_g), windowPrompt xpconfig XPW.Goto XPW.wsWindows)
+    , ((modMask conf, xK_o), windowPrompt xpconfig XPW.Goto XPW.allWindows)
+
+    -- tagging
+    , ((modMask conf .|. shiftMask, xK_a),
+       tagPrompt xpconfig (withFocused . addTag))
+    , ((modMask conf, xK_a),
+       tagPrompt xpconfig focusUpTaggedGlobal)
     ]
     ++
     -- mod-[1..9] %! Switch to workspace N (non-greedy)
