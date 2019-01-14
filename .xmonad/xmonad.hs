@@ -2,24 +2,22 @@
 
 module Main where
 
-import Data.Maybe (catMaybes, fromMaybe, listToMaybe)
-import Data.Char (toLower)
+import Data.Char (isSpace)
 import Data.Traversable (for)
-import Data.Foldable (find)
-import Control.Monad (join, filterM, guard)
+import Control.Monad (void)
 import Graphics.X11.ExtraTypes.XF86
 import System.IO
 import XMonad
-import qualified XMonad as X
 import XMonad.Layout.NoBorders (smartBorders)
 import XMonad.Prompt
 import XMonad.Prompt.Pass
 import XMonad.Hooks.UrgencyHook
-import XMonad.Actions.WindowBringer (bringMenu, gotoMenu)
-import XMonad.Actions.TagWindows (tagPrompt, addTag, focusUpTaggedGlobal)
+import XMonad.Actions.TagWindows (tagPrompt, delTag, addTag, focusUpTaggedGlobal)
+import XMonad.Actions.SpawnOn (spawnHere)
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Prompt.FuzzyMatch (fuzzyMatch)
+import XMonad.Prompt.Input
 import XMonad.Prompt.Window (windowPrompt)
 import qualified XMonad.Prompt.Window as XPW
 import qualified XMonad.StackSet as W
@@ -33,13 +31,15 @@ import XMonad.Layout.IndependentScreens (countScreens)
 import XMonad.Util.WorkspaceCompare
 import XMonad.Hooks.ManageHelpers
 import XMonad.Actions.WindowGo (runOrRaise)
+import XMonad.Actions.CycleWS
 
 xpconfig :: XPConfig
 xpconfig =
   def
     { font = "xft:Deja Vu Sans Mono-10"
-    , height = 48
+    , height = 32
     , searchPredicate = fuzzyMatch
+    , alwaysHighlight = True
     }
 
 main :: IO ()
@@ -58,11 +58,19 @@ main = do
     let
       baseConf =
         desktopConfig
-          { manageHook = composeAll
-            [ manageDocks
-            , isFullscreen --> doFullFloat
-            , manageHook def
-            ]
+          { manageHook =
+              let
+                myTitleFloats = []
+                myClassFloats = ["Pinentry"]
+              in
+                composeAll $
+                  (concat
+                    [ [ title =? t --> doFloat | t <- myTitleFloats]
+                    , [ className =? c --> doFloat | c <- myClassFloats ]
+                    ]) ++ [ manageDocks
+                          , manageHook def
+                          , isFullscreen --> doFullFloat
+                          ]
           , layoutHook =
               avoidStruts $
                 smartBorders $
@@ -98,7 +106,7 @@ main = do
 
       -- Start a emacsclient
     , ((modMask conf .|. shiftMask, xK_e), spawn "emacsclient --c")
-    , ((modMask conf, xK_e),
+    , ((modMask conf .|. shiftMask .|. controlMask, xK_e),
       runOrRaise "emacsclient --c" (className =? "Emacs"))
 
       -- Start firefox
@@ -157,16 +165,64 @@ main = do
 
     -- 'pass' integration
     , ((modMask conf .|. shiftMask, xK_p), passPrompt xpconfig)
+
+    -- window prompt
     , ((modMask conf, xK_o), windowPrompt xpconfig XPW.Goto XPW.allWindows)
 
     -- tagging
-    , ((modMask conf .|. shiftMask, xK_a),
-       tagPrompt xpconfig (withFocused . addTag))
     , ((modMask conf, xK_a),
        tagPrompt xpconfig focusUpTaggedGlobal)
+    , ((modMask conf .|. shiftMask, xK_a),
+       tagPrompt xpconfig (withFocused . addTag))
+    , ((modMask conf .|. shiftMask .|. controlMask, xK_a),
+       tagPrompt xpconfig (withFocused . delTag))
+
+    , ((modMask conf .|. controlMask, xK_h), moveTo Prev NonEmptyWS)
+    , ((modMask conf .|. controlMask, xK_l), moveTo Next NonEmptyWS)
+
+    , ((modMask conf .|. shiftMask, xK_o),
+        let
+          completions str =
+            return $ filter ((searchPredicate xpconfig) str) $
+              [ "dn3010/jasmy-call-service"
+              , "dn3010/js-ipfs-api"
+              , "dn3010/plug.js"
+              , "dn3010/psc-package-sets"
+              , "dn3010/purescript-aff-queue"
+              , "dn3010/purescript-indexedDB"
+              , "dn3010/purescript-ipfs-api"
+              , "dn3010/purescript-ipfs-log"
+              , "dn3010/purescript-lock"
+              , "dn3010/purescript-logging"
+              , "dn3010/purescript-node-sqlite3"
+              , "dn3010/purescript-node-sqlite3-extras"
+              , "dn3010/purescript-node-streams"
+              , "dn3010/purescript-plug-client"
+              , "dn3010/purescript-processor"
+              , "dn3010/purescript-signal-protocol"
+              , "dn3010/purescript-supervisor"
+              , "dn3010/purescript-webrtc"
+              , "dn3010/substrate-node-template"
+              , "dn3010/sylo-hub"
+              , "dn3010/sylo-mobile"
+              , "dn3010/sylo-plug-node"
+              , "dn3010/sylo-protocol"
+              , "dn3010/sylo-protocol-factory-browser"
+              , "dn3010/sylo-protocol-redux"
+              , "dn3010/sylo-pure-calling"
+              , "dn3010/sylo-pure-e2ee"
+              , "dn3010/sylo-redux"
+              ]
+        in do
+          inputPromptWithCompl xpconfig "Choose Url" completions
+            ?+ \url -> do
+              runOrRaise "firefox" (className =? "Firefox" <||> className =? "Firefox-bin")
+              spawnHere $ "firefox " ++ "https://github.com/" ++ trim' url
+      )
     ]
+
     ++
-    -- mod-[1..9] %! Switch to workspace N (non-greedy)
+    -- Switch to workspace N
     [((m .|. mod4Mask, k), windows $ f i)
         | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_9]
         , (f, m) <-
@@ -174,3 +230,6 @@ main = do
             , (W.shift, shiftMask)
             , (W.greedyView, controlMask)
             ]]
+trim' :: String -> String
+trim' = f . f
+   where f = reverse . dropWhile isSpace
