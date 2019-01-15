@@ -168,3 +168,12 @@ export LC_ALL=en_US.UTF-8
 
 # Rust
 PATH=~/.cargo/bin:$PATH
+
+export precmd () {
+	if [[ -n "$TMUX" ]]; then
+		print -Pn "\e]0;tmux - $(tmux display -p '#S')\a"
+	else
+		# XXX assuming xterm here
+		print -Pn "\e]0;xterm - %n@%m: %~\a"
+	fi
+}
