@@ -23,7 +23,6 @@ import qualified XMonad.Prompt.Window as XPW
 import qualified XMonad.StackSet as W
 import qualified XMonad.Util.Brightness as Brightness
 import qualified XMonad.Actions.CycleWS
-import XMonad.Config.Desktop (desktopConfig)
 import XMonad.Util.Run (spawnPipe)
 import XMonad.Util.EZConfig (additionalKeys)
 import XMonad.Actions.CycleWindows
@@ -32,12 +31,14 @@ import XMonad.Util.WorkspaceCompare
 import XMonad.Hooks.ManageHelpers
 import XMonad.Actions.WindowGo (runOrRaise)
 import XMonad.Actions.CycleWS
+import XMonad.Actions.WorkspaceNames
+import XMonad.Hooks.EwmhDesktops
 
 xpconfig :: XPConfig
 xpconfig =
   def
     { font = "xft:Deja Vu Sans Mono-10"
-    , height = 32
+    , height = 48
     , searchPredicate = fuzzyMatch
     , alwaysHighlight = True
     }
@@ -57,7 +58,7 @@ main = do
   xmonad $
     let
       baseConf =
-        desktopConfig
+        ewmh def
           { manageHook =
               let
                 myTitleFloats = []
@@ -75,8 +76,7 @@ main = do
               avoidStruts $
                 smartBorders $
                   Full |||
-                    Tall 1 (3 / 100) (1 / 2) |||
-                      Mirror (Tall 1 (3 / 100) (1 / 2))
+                    Tall 1 (3 / 100) (1 / 2)
           , terminal = "xterm"
           , handleEventHook =
               docksEventHook <+>
@@ -86,11 +86,12 @@ main = do
           , startupHook = docksStartupHook <+> startupHook def
           , logHook =
               mapM_ (\(_, xmproc) ->
-                dynamicLogWithPP xmobarPP
-                  { ppOutput = hPutStrLn xmproc
-                  , ppSort = getSortByXineramaPhysicalRule def
-                  }
-                ) xmprocs
+                workspaceNamesPP xmobarPP >>= \pp ->
+                  dynamicLogWithPP pp
+                    { ppOutput = hPutStrLn xmproc
+                    , ppSort = getSortByXineramaPhysicalRule def
+                    }
+              ) xmprocs
           , modMask = mod4Mask
           }
     in
@@ -180,45 +181,8 @@ main = do
     , ((modMask conf .|. controlMask, xK_h), moveTo Prev NonEmptyWS)
     , ((modMask conf .|. controlMask, xK_l), moveTo Next NonEmptyWS)
 
-    , ((modMask conf .|. shiftMask, xK_o),
-        let
-          completions str =
-            return $ filter ((searchPredicate xpconfig) str) $
-              [ "dn3010/jasmy-call-service"
-              , "dn3010/js-ipfs-api"
-              , "dn3010/plug.js"
-              , "dn3010/psc-package-sets"
-              , "dn3010/purescript-aff-queue"
-              , "dn3010/purescript-indexedDB"
-              , "dn3010/purescript-ipfs-api"
-              , "dn3010/purescript-ipfs-log"
-              , "dn3010/purescript-lock"
-              , "dn3010/purescript-logging"
-              , "dn3010/purescript-node-sqlite3"
-              , "dn3010/purescript-node-sqlite3-extras"
-              , "dn3010/purescript-node-streams"
-              , "dn3010/purescript-plug-client"
-              , "dn3010/purescript-processor"
-              , "dn3010/purescript-signal-protocol"
-              , "dn3010/purescript-supervisor"
-              , "dn3010/purescript-webrtc"
-              , "dn3010/substrate-node-template"
-              , "dn3010/sylo-hub"
-              , "dn3010/sylo-mobile"
-              , "dn3010/sylo-plug-node"
-              , "dn3010/sylo-protocol"
-              , "dn3010/sylo-protocol-factory-browser"
-              , "dn3010/sylo-protocol-redux"
-              , "dn3010/sylo-pure-calling"
-              , "dn3010/sylo-pure-e2ee"
-              , "dn3010/sylo-redux"
-              ]
-        in do
-          inputPromptWithCompl xpconfig "Choose Url" completions
-            ?+ \url -> do
-              runOrRaise "firefox" (className =? "Firefox" <||> className =? "Firefox-bin")
-              spawnHere $ "firefox " ++ "https://github.com/" ++ trim' url
-      )
+    , ((modMask conf .|. shiftMask, xK_r), renameWorkspace xpconfig)
+    , ((modMask conf, xK_i), workspaceNamePrompt xpconfig (windows . W.view))
     ]
 
     ++
@@ -230,6 +194,3 @@ main = do
             , (W.shift, shiftMask)
             , (W.greedyView, controlMask)
             ]]
-trim' :: String -> String
-trim' = f . f
-   where f = reverse . dropWhile isSpace
