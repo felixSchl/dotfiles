@@ -29,10 +29,12 @@ import XMonad.Actions.CycleWindows
 import XMonad.Layout.IndependentScreens (countScreens)
 import XMonad.Util.WorkspaceCompare
 import XMonad.Hooks.ManageHelpers
+import XMonad.Actions.SpawnOn
 import XMonad.Actions.WindowGo (runOrRaise)
 import XMonad.Actions.CycleWS
 import XMonad.Actions.WorkspaceNames
 import XMonad.Hooks.EwmhDesktops
+import XMonad.Actions.CopyWindow
 
 xpconfig :: XPConfig
 xpconfig =
@@ -183,6 +185,10 @@ main = do
 
     , ((modMask conf .|. shiftMask, xK_r), renameWorkspace xpconfig)
     , ((modMask conf, xK_i), workspaceNamePrompt xpconfig (windows . W.view))
+    -- , ((modMask conf, xK_comma), workspaceNamePrompt xpconfig (windows . W.view))
+
+    -- XMonad.Actions.CopyWindow
+    , ((modMask conf .|. shiftMask, xK_c), kill1)
     ]
 
     ++
@@ -193,4 +199,5 @@ main = do
             [ (W.view, 0)
             , (W.shift, shiftMask)
             , (W.greedyView, controlMask)
+            , (copy, shiftMask .|. controlMask)
             ]]
