@@ -35,6 +35,9 @@ import XMonad.Actions.CycleWS
 import XMonad.Actions.WorkspaceNames
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Actions.CopyWindow
+import XMonad.Layout.BinarySpacePartition
+import XMonad.Layout.ToggleLayouts
+import XMonad.Actions.Navigation2D
 
 xpconfig :: XPConfig
 xpconfig =
@@ -77,8 +80,7 @@ main = do
           , layoutHook =
               avoidStruts $
                 smartBorders $
-                  Full |||
-                    Tall 1 (3 / 100) (1 / 2)
+                  toggleLayouts Full emptyBSP
           , terminal = "xterm"
           , handleEventHook =
               docksEventHook <+>
@@ -125,12 +127,30 @@ main = do
     , ((modMask conf, xK_BackSpace), focusUrgent)
     , ((modMask conf .|. shiftMask, xK_BackSpace), clearUrgents)
 
-    , ((modMask conf, xK_s), cycleRecentWindows [xK_Super_L] xK_s xK_w)
-    , ((modMask conf, xK_z), rotOpposite)
-    , ((modMask conf, xK_i), rotUnfocusedUp)
-    , ((modMask conf, xK_u), rotUnfocusedDown)
-    , ((modMask conf .|. controlMask, xK_i), rotFocusedUp)
-    , ((modMask conf .|. controlMask, xK_u), rotFocusedDown)
+    , ((modMask conf, xK_space), sendMessage ToggleLayout)
+
+    -- Control EBSP
+    , ((modMask conf .|. shiftMask,                 xK_l), sendMessage $ ExpandTowards R)
+    , ((modMask conf .|. shiftMask,                 xK_h), sendMessage $ ExpandTowards L)
+    , ((modMask conf .|. shiftMask,                 xK_j), sendMessage $ ExpandTowards D)
+    , ((modMask conf .|. shiftMask,                 xK_k), sendMessage $ ExpandTowards U)
+    , ((modMask conf .|. shiftMask .|. controlMask, xK_l), sendMessage $ ShrinkFrom R)
+    , ((modMask conf .|. shiftMask .|. controlMask, xK_h), sendMessage $ ShrinkFrom L)
+    , ((modMask conf .|. shiftMask .|. controlMask, xK_j), sendMessage $ ShrinkFrom D)
+    , ((modMask conf .|. shiftMask .|. controlMask, xK_k), sendMessage $ ShrinkFrom U)
+    , ((modMask conf,                               xK_r), sendMessage Rotate)
+    , ((modMask conf,                               xK_s), sendMessage Swap)
+    , ((modMask conf,                               xK_n), sendMessage FocusParent)
+    , ((modMask conf .|. controlMask,               xK_n), sendMessage SelectNode)
+    , ((modMask conf .|. shiftMask,                 xK_n), sendMessage MoveNode)
+    , ((modMask conf,                               xK_b), sendMessage Balance)
+    , ((modMask conf .|. shiftMask,                 xK_b), sendMessage Equalize)
+
+   -- Directional navigation of screens
+   , ((modMask conf, xK_l), windowGo R False)
+   , ((modMask conf, xK_h), windowGo L False)
+   , ((modMask conf, xK_k), windowGo U False)
+   , ((modMask conf, xK_j), windowGo D False)
 
       -- Bring up dmenu to start apps
     , ((modMask conf, xK_p),
