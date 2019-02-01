@@ -2,9 +2,7 @@
 
 module Main where
 
-import Data.Char (isSpace)
-import Data.Traversable (for)
-import Control.Monad (void)
+import qualified Data.Map.Strict as Map
 import Graphics.X11.ExtraTypes.XF86
 import System.IO
 import XMonad
@@ -13,7 +11,6 @@ import XMonad.Prompt
 import XMonad.Prompt.Pass
 import XMonad.Hooks.UrgencyHook
 import XMonad.Actions.TagWindows (tagPrompt, delTag, addTag, focusUpTaggedGlobal)
-import XMonad.Actions.SpawnOn (spawnHere)
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Prompt.FuzzyMatch (fuzzyMatch)
@@ -23,21 +20,24 @@ import qualified XMonad.Prompt.Window as XPW
 import qualified XMonad.StackSet as W
 import qualified XMonad.Util.Brightness as Brightness
 import qualified XMonad.Actions.CycleWS
-import XMonad.Util.Run (spawnPipe)
+import XMonad.Util.Run (spawnPipe, safeSpawn)
 import XMonad.Util.EZConfig (additionalKeys)
 import XMonad.Actions.CycleWindows
 import XMonad.Layout.IndependentScreens (countScreens)
 import XMonad.Util.WorkspaceCompare
 import XMonad.Hooks.ManageHelpers
-import XMonad.Actions.SpawnOn
-import XMonad.Actions.WindowGo (runOrRaise)
 import XMonad.Actions.CycleWS
-import XMonad.Actions.WorkspaceNames
-import XMonad.Hooks.EwmhDesktops
 import XMonad.Actions.CopyWindow
 import XMonad.Layout.BinarySpacePartition
 import XMonad.Layout.ToggleLayouts
 import XMonad.Actions.Navigation2D
+import XMonad.Actions.WindowGo
+import XMonad.Hooks.EwmhDesktops (ewmh)
+import XMonad.Actions.WorkspaceNames (renameWorkspace, workspaceNamesPP, workspaceNamePrompt)
+import XMonad.Layout.Hidden
+import XMonad.Actions.Minimize
+import XMonad.Layout.Minimize
+import qualified XMonad.Layout.BoringWindows as BW
 
 xpconfig :: XPConfig
 xpconfig =
@@ -80,13 +80,15 @@ main = do
           , layoutHook =
               avoidStruts $
                 smartBorders $
-                  toggleLayouts Full emptyBSP
+                  toggleLayouts Full $
+                    minimize $
+                      BW.boringWindows emptyBSP
           , terminal = "xterm"
           , handleEventHook =
               docksEventHook <+>
               handleEventHook def
           , borderWidth = 3
-          , focusFollowsMouse = False
+          , focusFollowsMouse = True
           , startupHook = docksStartupHook <+> startupHook def
           , logHook =
               mapM_ (\(_, xmproc) ->
@@ -146,11 +148,21 @@ main = do
     , ((modMask conf,                               xK_b), sendMessage Balance)
     , ((modMask conf .|. shiftMask,                 xK_b), sendMessage Equalize)
 
+    -- hide windows
+    -- , ((modMask conf, xK_backslash), withFocused hideWindow)
+    -- , ((modMask conf .|. shiftMask, xK_backslash), popOldestHiddenWindow)
+    , ((modMask conf,               xK_backslash), withFocused minimizeWindow)
+    , ((modMask conf .|. shiftMask, xK_backslash), withLastMinimized maximizeWindowAndFocus)
+
    -- Directional navigation of screens
+   -- TODO: rebind j/k to windowGo/focus{Down,Up} based on current layout.
+   --       The former works well with BSP, the latter is required in "Full"
    , ((modMask conf, xK_l), windowGo R False)
    , ((modMask conf, xK_h), windowGo L False)
    , ((modMask conf, xK_k), windowGo U False)
    , ((modMask conf, xK_j), windowGo D False)
+   , ((modMask conf .|. controlMask, xK_j), windows W.focusDown)
+   , ((modMask conf .|. controlMask, xK_k), windows W.focusUp  )
 
       -- Bring up dmenu to start apps
     , ((modMask conf, xK_p),
@@ -192,7 +204,7 @@ main = do
     -- window prompt
     , ((modMask conf, xK_o), windowPrompt xpconfig XPW.Goto XPW.allWindows)
 
-    -- tagging
+    -- Window tagging
     , ((modMask conf, xK_a),
        tagPrompt xpconfig focusUpTaggedGlobal)
     , ((modMask conf .|. shiftMask, xK_a),
@@ -200,15 +212,61 @@ main = do
     , ((modMask conf .|. shiftMask .|. controlMask, xK_a),
        tagPrompt xpconfig (withFocused . delTag))
 
+    -- Window cloning
+    , ((modMask conf .|. shiftMask, xK_c), kill1)
+
+    -- Workspace management
     , ((modMask conf .|. controlMask, xK_h), moveTo Prev NonEmptyWS)
     , ((modMask conf .|. controlMask, xK_l), moveTo Next NonEmptyWS)
-
     , ((modMask conf .|. shiftMask, xK_r), renameWorkspace xpconfig)
     , ((modMask conf, xK_i), workspaceNamePrompt xpconfig (windows . W.view))
-    -- , ((modMask conf, xK_comma), workspaceNamePrompt xpconfig (windows . W.view))
+    , ((modMask conf, xK_comma), workspaceNamePrompt xpconfig (windows . W.view))
 
-    -- XMonad.Actions.CopyWindow
-    , ((modMask conf .|. shiftMask, xK_c), kill1)
+    , ((modMask conf .|. shiftMask, xK_o),
+        let
+          mapping = Map.fromList $
+            fmap (\x -> (x, "https://github.com/" ++ x))
+              [ "dn3010/psc-package-sets"
+              , "dn3010/purescript-aff-queue"
+              , "dn3010/purescript-indexedDB"
+              , "dn3010/purescript-ipfs-api"
+              , "dn3010/purescript-ipfs-log"
+              , "dn3010/purescript-lock"
+              , "dn3010/purescript-logging"
+              , "dn3010/purescript-node-sqlite3"
+              , "dn3010/purescript-node-sqlite3-extras"
+              , "dn3010/purescript-node-streams"
+              , "dn3010/purescript-plug-client"
+              , "dn3010/purescript-processor"
+              , "dn3010/purescript-signal-protocol"
+              , "dn3010/purescript-supervisor"
+              , "dn3010/purescript-webrtc"
+              , "dn3010/substrate-node-template"
+              , "dn3010/sylo-hub"
+              , "dn3010/sylo-mobile"
+              , "dn3010/sylo-plug-node"
+              , "dn3010/sylo-protocol"
+              , "dn3010/sylo-protocol-factory-browser"
+              , "dn3010/sylo-protocol-redux"
+              , "dn3010/sylo-pure-calling"
+              , "dn3010/sylo-pure-e2ee"
+              , "dn3010/sylo-redux"
+              ] ++ [ ("dn3010/wiki", "https://github.com/dn3010/wiki/wiki") ]
+          completions str =
+            return $ filter ((searchPredicate xpconfig) str) $
+              fmap fst $ Map.toList mapping
+        in
+          inputPromptWithCompl xpconfig "Choose Url" completions
+            ?+ \key ->
+              case Map.lookup key mapping of
+                Nothing ->
+                  pure ()
+                Just url ->
+                  raiseAndDo
+                    (safeSpawn "firefox" [url])
+                    (className =? "Firefox" <||> className =? "Firefox-bin")
+                    (\_ -> safeSpawn "firefox" [url])
+      )
     ]
 
     ++
