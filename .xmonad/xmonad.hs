@@ -159,10 +159,19 @@ main = do
    --       The former works well with BSP, the latter is required in "Full"
    , ((modMask conf, xK_l), windowGo R False)
    , ((modMask conf, xK_h), windowGo L False)
-   , ((modMask conf, xK_k), windowGo U False)
-   , ((modMask conf, xK_j), windowGo D False)
-   , ((modMask conf .|. controlMask, xK_j), windows W.focusDown)
-   , ((modMask conf .|. controlMask, xK_k), windows W.focusUp  )
+
+   -- context-sensitive j/k.
+   -- TODO: also do `focusUp` if only two windows in layout.
+   , ((modMask conf, xK_k), do
+         ws <- W.workspace . W.current . windowset <$> get
+         if description (W.layout ws) == "Full"
+           then windows W.focusUp
+           else windowGo U False)
+   , ((modMask conf, xK_j), do
+         ws <- W.workspace . W.current . windowset <$> get
+         if description (W.layout ws) == "Full"
+           then windows W.focusDown
+           else windowGo D False)
 
       -- Bring up dmenu to start apps
     , ((modMask conf, xK_p),
