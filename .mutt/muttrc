@@ -1,0 +1,46 @@
+folder-hook "gmail"  'source ~/.mutt/felix'
+folder-hook "sylo" 'source ~/.mutt/sylo'
+
+set folder = "~/mail"
+
+set mbox_type=Maildir
+
+# default to private mail account
+source ~/.mutt/felix
+
+# Macros for switching accounts with ALT-1,2...
+macro index <f1> '<sync-mailbox><enter-command>source ~/.mutt/felix<enter><change-folder>!<enter>'
+macro index <f2> '<sync-mailbox><enter-command>source ~/.mutt/sylo<enter><change-folder>!<enter>'
+
+set header_cache=~/.mutt/cache/headers
+set message_cachedir=~/.mutt/cache/messages
+
+# Vim like binds
+bind attach,index,pager \CD next-page
+bind attach,index,pager \CU previous-page
+bind pager g top
+bind pager G bottom
+bind attach,index g first-entry
+bind attach,index G last-entry
+
+# config
+set sleep_time = 0
+set mail_check_stats
+set sort=threads
+set sort_aux=reverse-date-sent
+
+# sidebar
+set sidebar_visible
+set sidebar_format = "%B%?F? [%F]?%* %?N?%N/?%S"
+bind index,pager \CP sidebar-prev
+bind index,pager \CN sidebar-next
+bind index,pager \CO sidebar-open
+bind index,pager B sidebar-toggle-visible
+
+# composing
+set editor = vim
+set edit_headers = yes  # See the headers when editing
+set charset = UTF-8
+
+# theme
+source "~/.mutt/theme"

@@ -1,0 +1,26 @@
+#!/bin/bash
+set -eo pipefail
+
+account=$1
+
+if [[ -z "$account" ]]; then
+	echo >&2 "usage: report-new-mail <account>"
+	exit 1
+fi
+
+if ! [[ -d ~/mail/"$account" ]]; then
+	echo >&2 "Unknown account: $account"
+	exit 1
+fi
+
+maildir=~/mail/$account
+export NOTMUCH_CONFIG=~/.notmuch.$account
+
+notmuch new
+n_mail=$(notmuch count folder:INBOX tag:new)
+if [[ "$n_mail" -gt 0 ]]; then
+	notify-send\
+		"New Email for ${account}"\
+		"${n_mail} new messages"
+fi
+notmuch tag -new +inbox +unread folder:INBOX tag:new

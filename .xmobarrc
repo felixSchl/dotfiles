@@ -15,6 +15,8 @@ Config
       , Run Swap [] 10
       , Run DateZone "%H:%M" "de_DE.UTF-8" "America/New_York" "ny-date" 10
       , Run DateZone "%H:%M" "de_DE.UTF-8" "America/Los_Angeles" "la-date" 10
+      , Run DateZone "%H:%M" "de_DE.UTF-8" "Africa/Johannesburg" "sa-date" 10
+      , Run DateZone "%H:%M" "de_DE.UTF-8" "America/Menominee" "nf-date" 10
       , Run Date "%a %b %_d %Y %H:%M:%S" "date" 10
       , Run Battery
           [ "--template" , "<acstatus>"
@@ -28,12 +30,13 @@ Config
           , "-O", "<fc=#dAA520>Charging</fc>"
           ] 50
       , Run StdinReader
-      , Run Com "sh" ["-c", "mu find maildir:/gmail/Inbox AND flag:unread | wc -l"] "gmail" 5
-      , Run Com "sh" ["-c", "mu find maildir:/fastmail/Inbox AND flag:unread | wc -l"] "fastmail" 5
+      , Run Com "sh" ["-c", "~/projects/dotfiles/xmobar/nw"] "nw" 5
+      , Run Com "sh" ["-c", "notmuch --config ~/.notmuch.felix count folder:INBOX tag:unread"] "mail:felix" 5
+      , Run Com "sh" ["-c", "notmuch --config ~/.notmuch.sylo count folder:INBOX tag:unread"] "mail:sylo" 5
       , Run Volume "default" "Master" [ "--template", "Vol: <volume>% <status>" ] 5
-      , Run Brightness [ "--template", "Brightness: <percent>%", "--", "--device", "intel_backlight"] 5
+      , Run Brightness [ "--template", "B: <percent>%", "--", "--device", "intel_backlight"] 5
       ]
   , sepChar = "%"
   , alignSep = "}{"
-  , template = "%StdinReader% | %battery% | %cpu% | %memory% | %bright% }{ Mail: %gmail%/%fastmail% | NY:%ny-date%/LA:%la-date% | <fc=#ee8a00>%date%</fc> | %default:Master%"
+  , template = "%StdinReader% | %battery% | %cpu% | %memory% | %bright% | %nw% }{ ✉ felix: %mail:felix%, sylo: %mail:sylo% | NF:%nf-date%/SA:%sa-date%/NY:%ny-date%/LA:%la-date% | <fc=#ee8a00>%date%</fc> | %default:Master%"
   }

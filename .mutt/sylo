@@ -1,0 +1,17 @@
+set realname = "Felix Schlitter"
+set folder = "~/mail/sylo"
+set from = "felix@sylo.io"
+set smtp_url = "smtp://felix@sylo.io@smtp.gmail.com:587/"
+set postponed = "+Drafts"
+set trash = "+Trash"
+set virtual_spoolfile = yes
+set spoolfile = UNREAD
+set smtp_authenticators = "oauthbearer"
+set smtp_oauth_refresh_command = "gmail-oauth2-token sylo"
+
+unmailboxes *
+unvirtual-mailboxes *
+virtual-mailboxes "UNREAD" "notmuch:///home/felix/mail/sylo?query=folder:INBOX tag:unread"
+named-mailboxes "Inbox" =INBOX
+named-mailboxes "Sent" =Sent
+named-mailboxes "Sylo Protocol" =github.sylo-protocol

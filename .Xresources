@@ -1,23 +1,20 @@
 loginShell: true
 
 *font: *-fixed-*-*-*-*-*
-*faceName: DejaVu Sans Mono:size=10:antialias=true
+*faceName: DejaVu Sans Mono:size=12:antialias=true
+*faceSize: 12
 
 Xft.antialias: true
 Xft.hinting:   true
 Xft.rgba:      rgb
 Xft.hintstyle: hintfull
+Xft.dpi:       180
 
 Emacs.menuBar: 0
 Emacs.toolBar: 0
 Emacs.verticalScrollBars: off
 Emacs.FontBackend: xft,x
 Emacs.font: DejaVu Sans Mono:size=15:antialias=true
-
-! High-resolution specific settings
-#ifdef IS_4K
-Xft.dpi: 220
-#endif
 
 ! Dracula Xresources palette (Modified)
 *.foreground: lightblue
@@ -44,9 +41,13 @@ Xft.dpi: 220
 !-------------------------------------------------------------------------------
 
 xterm*BorderWidth: 8
-
-xterm*font: *-fixed-*-*-*-*-*
-xterm*faceName: DejaVu Sans Mono:size=10:antialias=true
+xterm*faceName: DejaVu Sans Mono:antialias=true
+Xterm*faceSize: 8
+xterm*faceSize1: 8
+xterm*faceSize2: 10
+xterm*faceSize3: 12
+xterm*faceSize4: 14
+xterm*faceSize5: 22
 xterm*termName: xterm-256color
 xterm*scrollBar: false
 xterm*internalBorder: 0
@@ -64,6 +65,12 @@ Xterm*selectToClipboard: true
 xterm*visualbell: true
 xterm*bellIsUrgent: true
 xterm.vt100.bellIsUrgent: true
-xterm*vt100.Translations: #override \
+xterm.vt100.Translations: #override \
     Ctrl Shift <Key>V: insert-selection(CLIPBOARD) \n\
-    Ctrl Shift <Key>C: copy-selection(CLIPBOARD)
+    Ctrl Shift <Key>C: copy-selection(CLIPBOARD) \n\
+    Ctrl <Key> minus: smaller-vt-font() \n\
+    Ctrl <Key> plus: larger-vt-font() \n\
+    Ctrl <Key> 0: set-vt-font(d)
+
+xcursor.theme: whiteglass
+xcursor.size: 48

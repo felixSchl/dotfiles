@@ -1,0 +1,10 @@
+[Unit]
+Description=Poll email service for account %i
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/poll-email %i
+TimeoutStopSec=120
+
+[Install]
+WantedBy=default.target

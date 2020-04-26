@@ -2,42 +2,51 @@
 
 module Main where
 
-import qualified Data.Map.Strict as Map
-import Graphics.X11.ExtraTypes.XF86
-import System.IO
-import XMonad
-import XMonad.Layout.NoBorders (smartBorders)
-import XMonad.Prompt
-import XMonad.Prompt.Pass
-import XMonad.Hooks.UrgencyHook
-import XMonad.Actions.TagWindows (tagPrompt, delTag, addTag, focusUpTaggedGlobal)
-import XMonad.Hooks.DynamicLog
-import XMonad.Hooks.ManageDocks
-import XMonad.Prompt.FuzzyMatch (fuzzyMatch)
-import XMonad.Prompt.Input
-import XMonad.Prompt.Window (windowPrompt)
-import qualified XMonad.Prompt.Window as XPW
-import qualified XMonad.StackSet as W
-import qualified XMonad.Util.Brightness as Brightness
+import           Control.Exception                  (SomeException, catch)
+import           Control.Monad                      (void)
+import qualified Data.Map                           as M
+import qualified Data.Map.Strict                    as Map
+import           Graphics.X11.ExtraTypes.XF86
+import           System.IO
+import           XMonad
+import           XMonad.Actions.CopyWindow
+import           XMonad.Actions.CycleWindows
+import           XMonad.Actions.CycleWS
 import qualified XMonad.Actions.CycleWS
-import XMonad.Util.Run (spawnPipe, safeSpawn)
-import XMonad.Util.EZConfig (additionalKeys)
-import XMonad.Actions.CycleWindows
-import XMonad.Layout.IndependentScreens (countScreens)
-import XMonad.Util.WorkspaceCompare
-import XMonad.Hooks.ManageHelpers
-import XMonad.Actions.CycleWS
-import XMonad.Actions.CopyWindow
-import XMonad.Layout.BinarySpacePartition
-import XMonad.Layout.ToggleLayouts
-import XMonad.Actions.Navigation2D
-import XMonad.Actions.WindowGo
-import XMonad.Hooks.EwmhDesktops (ewmh)
-import XMonad.Actions.WorkspaceNames (renameWorkspace, workspaceNamesPP, workspaceNamePrompt)
-import XMonad.Layout.Hidden
-import XMonad.Actions.Minimize
-import XMonad.Layout.Minimize
-import qualified XMonad.Layout.BoringWindows as BW
+import           XMonad.Actions.Minimize
+import           XMonad.Actions.Navigation2D
+import           XMonad.Actions.TagWindows          (addTag, delTag,
+                                                     focusUpTaggedGlobal,
+                                                     tagPrompt)
+import           XMonad.Actions.WindowGo
+import           XMonad.Actions.WorkspaceNames      (renameWorkspace,
+                                                     workspaceNamePrompt,
+                                                     workspaceNamesPP)
+import           XMonad.Hooks.DynamicLog
+import           XMonad.Hooks.EwmhDesktops          (ewmh)
+import           XMonad.Hooks.ManageDocks
+import           XMonad.Hooks.ManageHelpers
+import           XMonad.Hooks.UrgencyHook
+import           XMonad.Layout.BinarySpacePartition
+import qualified XMonad.Layout.BoringWindows        as BW
+import           XMonad.Layout.Hidden
+import           XMonad.Layout.IndependentScreens   (countScreens)
+import           XMonad.Layout.Minimize
+import           XMonad.Layout.NoBorders            (smartBorders)
+import           XMonad.Layout.ToggleLayouts
+import           XMonad.Prompt
+import qualified XMonad.Prompt                      as XP
+import           XMonad.Prompt.FuzzyMatch           (fuzzyMatch)
+import           XMonad.Prompt.Input
+import           XMonad.Prompt.Pass
+import           XMonad.Prompt.Window               (windowPrompt)
+import qualified XMonad.Prompt.Window               as XPW
+import qualified XMonad.StackSet                    as W
+import qualified XMonad.Util.Brightness             as Brightness
+import           XMonad.Util.EZConfig               (additionalKeys)
+import           XMonad.Util.Run                    (runProcessWithInput,
+                                                     safeSpawn, spawnPipe)
+import           XMonad.Util.WorkspaceCompare
 
 xpconfig :: XPConfig
 xpconfig =
@@ -46,6 +55,16 @@ xpconfig =
     , height = 48
     , searchPredicate = fuzzyMatch
     , alwaysHighlight = True
+    , promptKeymap =
+          M.fromList
+            [ ((controlMask, xK_y), do
+                  clip <-
+                    liftIO $
+                      catch
+                        (runProcessWithInput "xclip" ["-sel", "clip", "-o" ] "")
+                        (\(_ :: SomeException) -> return "")
+                  XP.insertString clip)
+            ] `M.union` promptKeymap def
     }
 
 main :: IO ()
@@ -68,21 +87,24 @@ main = do
               let
                 myTitleFloats = []
                 myClassFloats = ["Pinentry"]
+                myClassFullFloats = ["csgo_linux64", "hl2_linux", "portal2_linux"]
               in
                 composeAll $
                   (concat
                     [ [ title =? t --> doFloat | t <- myTitleFloats]
                     , [ className =? c --> doFloat | c <- myClassFloats ]
+                    , [ className =? c --> doFullFloat | c <- myClassFullFloats ]
                     ]) ++ [ manageDocks
                           , manageHook def
                           , isFullscreen --> doFullFloat
                           ]
           , layoutHook =
-              avoidStruts $
-                smartBorders $
-                  toggleLayouts Full $
-                    minimize $
-                      BW.boringWindows emptyBSP
+              BW.boringWindows $
+                avoidStruts $
+                  smartBorders $
+                    toggleLayouts Full $
+                      minimize $
+                        emptyBSP
           , terminal = "xterm"
           , handleEventHook =
               docksEventHook <+>
@@ -116,10 +138,14 @@ main = do
     , ((modMask conf .|. shiftMask .|. controlMask, xK_e),
       runOrRaise "emacsclient --c" (className =? "Emacs"))
 
-      -- Start firefox
-    , ((modMask conf .|. shiftMask, xK_f), spawn "firefox")
+      -- Start chromium
+    , ((modMask conf .|. shiftMask, xK_f), spawn "chromium-browser")
     , ((modMask conf, xK_f),
-      runOrRaise "firefox" (className =? "Firefox" <||> className =? "Firefox-bin"))
+      runOrRaise "chromium-browser" (className =? "chromium-browser"))
+
+      -- Screenshots
+    , ((modMask conf .|. shiftMask, xK_u),
+      spawn "sh -c 'sleep 0.2; scrot -s /tmp/clip.png && xclip -selection c -t image/png < /tmp/clip.png'")
 
       -- Lock to greeter
     , ((modMask conf .|. shiftMask, xK_l),
@@ -148,29 +174,29 @@ main = do
     , ((modMask conf,                               xK_b), sendMessage Balance)
     , ((modMask conf .|. shiftMask,                 xK_b), sendMessage Equalize)
 
+    -- boring windows
+    , ((modMask conf, xK_backslash), BW.markBoring)
+    , ((modMask conf .|. shiftMask, xK_backslash), BW.clearBoring)
+
     -- hide windows
-    -- , ((modMask conf, xK_backslash), withFocused hideWindow)
-    -- , ((modMask conf .|. shiftMask, xK_backslash), popOldestHiddenWindow)
-    , ((modMask conf,               xK_backslash), withFocused minimizeWindow)
-    , ((modMask conf .|. shiftMask, xK_backslash), withLastMinimized maximizeWindowAndFocus)
+    -- , ((modMask conf .|. controlMask .| shiftMask, xK_), withFocused hideWindow)
 
    -- Directional navigation of screens
-   -- TODO: rebind j/k to windowGo/focus{Down,Up} based on current layout.
-   --       The former works well with BSP, the latter is required in "Full"
    , ((modMask conf, xK_l), windowGo R False)
    , ((modMask conf, xK_h), windowGo L False)
 
    -- context-sensitive j/k.
-   -- TODO: also do `focusUp` if only two windows in layout.
    , ((modMask conf, xK_k), do
          ws <- W.workspace . W.current . windowset <$> get
-         if description (W.layout ws) == "Full"
-           then windows W.focusUp
+         if description (W.layout ws) == "Full" || length (W.integrate' $ W.stack ws) <= 2
+           then BW.focusUp
+           -- then windows W.focusUp
            else windowGo U False)
    , ((modMask conf, xK_j), do
          ws <- W.workspace . W.current . windowset <$> get
-         if description (W.layout ws) == "Full"
-           then windows W.focusDown
+         if description (W.layout ws) == "Full" || length (W.integrate' $ W.stack ws) <= 2
+           then BW.focusDown
+           -- then windows W.focusDown
            else windowGo D False)
 
       -- Bring up dmenu to start apps
@@ -207,6 +233,21 @@ main = do
       )
     , ((modMask conf, xK_grave), XMonad.Actions.CycleWS.toggleWS)
 
+    -- search haskell lts
+    , ((modMask conf .|. shiftMask, xK_s),
+        let
+          completions str =
+            return []
+        in do
+          inputPromptWithCompl (xpconfig { alwaysHighlight = False }) "Search stackage" completions
+            ?+ \query -> do
+              let url = "https://www.stackage.org/lts-12.26/hoogle?q=" ++ query
+              raiseAndDo
+                (safeSpawn "chromium-browser" [url])
+                (className =? "chromium-browser")
+                (\_ -> safeSpawn "chromium-browser" [url])
+      )
+
     -- 'pass' integration
     , ((modMask conf .|. shiftMask, xK_p), passPrompt xpconfig)
 
@@ -238,6 +279,7 @@ main = do
               [ "dn3010/psc-package-sets"
               , "dn3010/purescript-aff-queue"
               , "dn3010/purescript-indexedDB"
+              , "dn3010/purescript-libp2p"
               , "dn3010/purescript-ipfs-api"
               , "dn3010/purescript-ipfs-log"
               , "dn3010/purescript-lock"
@@ -246,16 +288,21 @@ main = do
               , "dn3010/purescript-node-sqlite3-extras"
               , "dn3010/purescript-node-streams"
               , "dn3010/purescript-plug-client"
+              , "dn3010/purescript-protobuffers"
+              , "dn3010/purescript-oplog-sync"
               , "dn3010/purescript-processor"
               , "dn3010/purescript-signal-protocol"
               , "dn3010/purescript-supervisor"
               , "dn3010/purescript-webrtc"
               , "dn3010/substrate-node-template"
               , "dn3010/sylo-hub"
+              , "dn3010/node-libp2p"
               , "dn3010/sylo-mobile"
               , "dn3010/sylo-plug-node"
               , "dn3010/sylo-protocol"
+              , "dn3010/sylo-protocol-client"
               , "dn3010/sylo-protocol-factory-browser"
+              , "dn3010/sylo-protocol-factory-rn"
               , "dn3010/sylo-protocol-redux"
               , "dn3010/sylo-pure-calling"
               , "dn3010/sylo-pure-e2ee"
@@ -272,9 +319,9 @@ main = do
                   pure ()
                 Just url ->
                   raiseAndDo
-                    (safeSpawn "firefox" [url])
-                    (className =? "Firefox" <||> className =? "Firefox-bin")
-                    (\_ -> safeSpawn "firefox" [url])
+                    (safeSpawn "chromium-browser" [url])
+                    (className =? "chromium-browser")
+                    (\_ -> safeSpawn "chromium-browser" [url])
       )
     ]
 

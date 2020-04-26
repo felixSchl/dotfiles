@@ -1,29 +1,3 @@
-# TODO: Set up multiple accounts switching. See:
-#       http://www.howtodoityourself.org/how-to-use-mutt-with-multiple-email-accounts.html
-
-# gmail account
-set imap_user='felixschlitter@gmail.com'
-set folder=~/mail/gmail
-set spoolfile=~/mail/gmail/Inbox
-
-# fastmail account
-# set imap_user='felixschlitter@fastmail.com'
-# set folder=~/mail/fastmail
-# set spoolfile=~/mail/fastmail/Inbox
-
-mailboxes gmail fastmail
-set spoolfile
-set mark_old=no
-set new_mail_command="tput bel"
-set sort=threads
-set sort_aux=reverse-date-sent
-
-unset confirmappend
-folder-hook . set trash="=Trash"
-folder-hook trash$ unset trash
-
-macro index S "<save-message>Spam<enter>" "mark message as spam"
-
 ###############################################################################
 # Dracula Theme for Mutt: https://draculatheme.com/
 #

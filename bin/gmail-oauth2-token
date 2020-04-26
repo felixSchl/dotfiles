@@ -1,0 +1,64 @@
+#!/bin/bash
+# retrieve an access token to gmail.
+set -eo pipefail
+
+# Google oauth2 info. Can be retrieved from here at any time:
+# https://console.cloud.google.com/apis/credentials
+OAUTH_CLIENT_ID='153322685357-4rjb09o5go4r1f7elcggc35jrgkdrnk2.apps.googleusercontent.com'
+OAUTH_CLIENT_SECRET=
+
+# accounts
+accounts=(felix sylo)
+
+accounts_felix_user=felixschlitter@gmail.com
+accounts_sylo_user=felix@sylo.io
+
+# XXX these are sensitive. we must not keep them here! perhaps in an ENV var?
+#     like: GMAIL_OAUTH2_REFRESH_TOKEN__felix=...
+#     those could then be loaded up using 'pass' in a session env.
+accounts_felix_refresh_token=
+accounts_sylo_refresh_token=
+
+die () { echo >&2 "$@"; exit 1; }
+
+help () { echo 'usage: get-oauth-token <account>'; }
+
+check_params () {
+	for p in "$@"; do
+		if [[ -z "${!p}" ]]; then
+			help >&2; echo >&2 "<$p> missing"; exit 1;
+		fi
+	done
+}
+
+account=$1
+check_params account
+
+if ! command > /dev/null -v 'oauth2.py'; then
+	die 'oauth2.py not found. Please place oauth2.py in PATH'
+fi
+
+user_var="accounts_${account}_user"
+user="${!user_var}"
+if [[ -z "${user}" ]]; then
+	die "Account '${account}' not known. Available accounts are ${accounts[@]}"
+fi
+
+refresh_token_var="accounts_${account}_refresh_token"
+refresh_token="${!refresh_token_var}"
+if [[ -z "$refresh_token" ]]; then
+	die "Account '${account}' refresh token not found. Please obtain and set it first."
+fi
+
+access_token=$(oauth2.py \
+	--quiet \
+	--client_id="$OAUTH_CLIENT_ID" \
+	--client_secret="$OAUTH_CLIENT_SECRET" \
+	--refresh_token="$refresh_token")
+echo "$access_token"
+
+# oauth2.py \
+# 	--quiet \
+# 	--generate_oauth2_string \
+# 	--access_token="$access_token" \
+# 	--user="$user"

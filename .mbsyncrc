@@ -1,119 +1,109 @@
 ################################################################################
-# Gmail - felixschlitter@gmail.com                                    :personal:
+# felixschlitter@gmail.com                                            :personal:
 ################################################################################
 
-IMAPAccount      gmail
-Host             imap.gmail.com
-User             felixschlitter@gmail.com
-PassCmd          "pass mail.google.com/felixschlitter@gmail.com"
-UseIMAPS         yes
-CertificateFile  /etc/ssl/certs/ca-certificates.crt
+IMAPAccount felix
+  Host imap.gmail.com
+  User felixschlitter@gmail.com
+  CertificateFile /etc/ssl/certs/ca-certificates.crt
+  PassCmd "gmail-oauth2-token felix"
+  AuthMech XOAUTH2
+  SSLType IMAPS
 
-IMAPStore  gmail-remote
-Account    gmail
+IMAPStore felix-remote
+  Account felix
 
-CopyArrivalDate yes
-Sync All
-Expunge Both
-Create Both
+MaildirStore felix-local
+  Path ~/mail/felix/
+  Inbox ~/mail/felix/INBOX
 
-MaildirStore  gmail-local
-Path          ~/mail/gmail/
-Inbox         ~/mail/gmail/Inbox
-Trash         ~/mail/gmail/Trash
-Subfolders    Verbatim
+Channel felix-inbox
+  Master :felix-remote:INBOX
+  Slave :felix-local:INBOX
+  Create Slave
+  SyncState *
+  Expunge Both
 
-Channel gmail-inbox
-Master :gmail-remote:INBOX
-Slave :gmail-local:Inbox
-SyncState *
+Channel felix-sent
+  Master :felix-remote:"[Gmail]/Sent Mail"
+  Slave :felix-local:Sent
+  Create Slave
+  Sync All
+  SyncState *
+  Expunge Both
 
-Channel gmail-trash
-Master :gmail-remote:"[Gmail]/Trash"
-Slave :gmail-local:Trash
-Sync Push Delete New ReNew Flags
-SyncState *
+Channel felix-drafts
+  Master :felix-remote:"[Gmail]/Drafts"
+  Slave :felix-local:Drafts
+  Create Slave
+  Sync All
+  SyncState *
+  Expunge Both
 
-Channel gmail-sent
-Master :gmail-remote:"[Gmail]/Sent Mail"
-Slave :gmail-local:Sent
-Sync All
-SyncState *
+Channel felix-trash
+  Master :felix-remote:"[Gmail]/Trash"
+  Slave :felix-local:Trash
+  Create Slave
+  Sync Push All
+  SyncState *
 
-Channel gmail-spam
-Master :gmail-remote:"[Gmail]/Spam"
-Slave :gmail-local:Spam
-Sync Push Delete New ReNew Flags
-SyncState *
+Group felix
+  Channel felix-inbox
+  Channel felix-sent
+  Channel felix-drafts
+  Channel felix-trash
 
-Group gmail
-Channel gmail-inbox
-Channel gmail-sent
-Channel gmail-trash
-Channel gmail-spam
-
+# ################################################################################
+# felix@sylo.io                                                           :work:
 ################################################################################
-# Fastmail - felixschlitter@fastmail.com                              :personal:
-################################################################################
 
-IMAPAccount      fastmail
-Host             imap.fastmail.com
-User             felixschlitter@fastmail.com
-Port             993
-PassCmd          "pass fastmail.com/felixschlitter@fastmail.com/app"
-UseIMAPS         yes
-CertificateFile  /etc/ssl/certs/ca-certificates.crt
+IMAPAccount sylo
+  Host imap.gmail.com
+  User felix@sylo.io
+  CertificateFile /etc/ssl/certs/ca-certificates.crt
+  PassCmd "gmail-oauth2-token sylo"
+  AuthMech XOAUTH2
+  SSLType IMAPS
 
-IMAPStore  fastmail-remote
-Account    fastmail
+IMAPStore sylo-remote
+  Account sylo
 
-CopyArrivalDate yes
-Sync All
+MaildirStore sylo-local
+  Path ~/mail/sylo/
+  Inbox ~/mail/sylo/INBOX
 
-MaildirStore  fastmail-local
-Path          ~/mail/fastmail/
-Inbox         ~/mail/fastmail/Inbox
-Subfolders    Verbatim
+Channel sylo-inbox
+  Master :sylo-remote:INBOX
+  Slave :sylo-local:INBOX
+  Create Slave
+  SyncState *
+  Expunge Both
 
-Channel fastmail-inbox
-Master :fastmail-remote:INBOX
-Slave :fastmail-local:Inbox
-SyncState *
+Channel sylo-sent
+  Master :sylo-remote:"[Gmail]/Sent Mail"
+  Slave :sylo-local:Sent
+  Create Slave
+  Sync All
+  SyncState *
+  Expunge Both
 
-Channel fastmail-trash
-Master :fastmail-remote:"Trash"
-Slave :fastmail-local:Trash
-Sync All
-SyncState *
+Channel sylo-drafts
+  Master :sylo-remote:"[Gmail]/Drafts"
+  Slave :sylo-local:Drafts
+  Create Slave
+  Sync All
+  SyncState *
+  Expunge Both
 
-Channel fastmail-archive
-Master :fastmail-remote:"Archive"
-Slave :fastmail-local:Archive
-Sync All
-SyncState *
+Channel sylo-trash
+  Master :sylo-remote:"[Gmail]/Trash"
+  Slave :sylo-local:Trash
+  Create Slave
+  Sync Push All
+  SyncState *
 
-Channel fastmail-sent
-Master :fastmail-remote:"Sent"
-Slave :fastmail-local:Sent
-Sync All
-SyncState *
-
-Channel fastmail-drafts
-Master :fastmail-remote:"Drafts"
-Slave :fastmail-local:Sent
-Sync All
-SyncState *
-
-Channel fastmail-spam
-Master :fastmail-remote:"Spam"
-Slave :fastmail-local:Spam
-Sync Push Delete New ReNew Flags
-SyncState *
-
-Group fastmail
-Channel fastmail-inbox
-Channel fastmail-sent
-Channel fastmail-trash
-Channel fastmail-spam
-Channel fastmail-archive
-Channel fastmail-drafts
+Group sylo
+  Channel sylo-inbox
+  Channel sylo-sent
+  Channel sylo-drafts
+  Channel sylo-trash

@@ -1,0 +1,9 @@
+[Unit]
+Description=Poll email timer for account %i
+
+[Timer]
+OnBootSec=1m
+OnUnitInactiveSec=15
+
+[Install]
+WantedBy=default.target

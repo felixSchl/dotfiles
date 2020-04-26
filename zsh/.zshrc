@@ -1,3 +1,5 @@
+unset MAILCHECK
+
 # disable oh-my-zsh update prompts
 DISABLE_UPDATE_PROMPT=true
 
@@ -51,9 +53,12 @@ bindkey "^N" down-line-or-history
 export EDITOR='vim'
 export KEYTIMEOUT=1
 export DISABLE_AUTO_TITLE=true
-export PATH="/usr/local/bin:$PATH"
+export PATH="/usr/local/bin:/snap/bin:$PATH"
 export PATH="~/.local/bin:$PATH"
 export COLORTERM=xterm-256color
+
+# Qutebrowser
+export QT_AUTO_SCREEN_SCALE_FACTOR=2
 
 # Aliases
 alias ll='ls -lh'
@@ -61,9 +66,6 @@ alias _='sudo'
 alias tmux='tmux -2'
 alias emacs='TERM=xterm-256color emacs -nw'
 alias cdu='cd-gitroot'
-if type rlwrap > /dev/null; then
-    alias node='rlwrap node'
-fi
 
 # FZF
 if [[ -f ~/.fzf.zsh ]]; then
@@ -141,7 +143,11 @@ export GOPATH=~/go
 export PATH="$PATH:$GOPATH/bin"
 export PATH="/usr/local/bin:$PATH"
 export PATH="$PATH:/usr/local/opt/go/libexec/bin"
+export PATH="~/bin:$PATH"
 export PATH="~/.local/bin:$PATH"
+
+# Editor
+function e { TERM=screen-256color emacsclient -nw "$@"; }
 
 # Manpages
 # Set case-insensitve searching on man pages
@@ -177,3 +183,7 @@ export precmd () {
 		print -Pn "\e]0;xterm - %n@%m: %~\a"
 	fi
 }
+export $(dbus-launch 2>/dev/null)
+
+eval $(keychain 2>/dev/null --eval)
+
