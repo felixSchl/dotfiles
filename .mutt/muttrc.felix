@@ -1,0 +1,26 @@
+set my_account = felix
+set realname = "Felix Schlitter"
+set folder = "~/mail/felix"
+set from = "felixschlitter@gmail.com"
+set smtp_url = "smtps://felixschlitter@gmail.com@smtp.gmail.com:465/"
+set postponed = "+Drafts"
+set trash = "+Trash"
+set record = "+Sent"
+set virtual_spoolfile = no
+unset smtp_pass
+set smtp_authenticators = "oauthbearer"
+set smtp_oauth_refresh_command = "gmail-oauth2-token felix"
+set spoolfile = 'Inbox'
+
+unmailboxes *
+unvirtual-mailboxes *
+named-mailboxes "Inbox" '=INBOX'
+virtual-mailboxes "UNREAD_" "notmuch:///home/felix/mail/felix?query=folder:INBOX tag:unread"
+named-mailboxes "Sent" '=Sent'
+named-mailboxes "Drafts" '=Drafts'
+
+macro index,pager $ '<sync-mailbox><shell-escape>sync-email felix local<enter><sync-mailbox>'
+macro index,pager S '<sync-mailbox><shell-escape>sync-email felix push<enter><sync-mailbox>'
+macro index,pager gu "<change-vfolder>UNREAD_<enter>" "go to unread"
+
+# vim: syntax=neomuttrc

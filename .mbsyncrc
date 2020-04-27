@@ -53,7 +53,7 @@ Group felix
   Channel felix-drafts
   Channel felix-trash
 
-# ################################################################################
+################################################################################
 # felix@sylo.io                                                           :work:
 ################################################################################
 
@@ -107,3 +107,59 @@ Group sylo
   Channel sylo-sent
   Channel sylo-drafts
   Channel sylo-trash
+
+################################################################################
+# felixschlitter@protonmail.com (via bridge)                          :personal:
+################################################################################
+
+IMAPAccount proton
+  Host 127.0.0.1
+  Port 1143
+  User felixschlitter@protonmail.com
+  CertificateFile /etc/ssl/certs/ca-certificates.crt
+  Pass d5Hq0lIBXDZblz-GRAUeTw
+  AuthMech LOGIN
+  SSLType None
+
+IMAPStore proton-remote
+  Account proton
+
+MaildirStore proton-local
+  Path ~/mail/proton/
+  Inbox ~/mail/proton/INBOX
+
+Channel proton-inbox
+  Master :proton-remote:INBOX
+  Slave :proton-local:INBOX
+  Create Slave
+  SyncState *
+  Expunge Both
+
+Channel proton-sent
+  Master :proton-remote:Sent
+  Slave :proton-local:sent
+  Create Slave
+  Sync All
+  SyncState *
+  Expunge Both
+
+Channel proton-drafts
+  Master :proton-remote:Drafts
+  Slave :proton-local:drafts
+  Create Slave
+  Sync All
+  SyncState *
+  Expunge Both
+
+Channel proton-trash
+  Master :proton-remote:Trash
+  Slave :proton-local:trash
+  Create Slave
+  Sync PullNew PullDelete Push
+  SyncState *
+
+Group proton
+  Channel proton-inbox
+  Channel proton-sent
+  Channel proton-trash
+  Channel proton-drafts

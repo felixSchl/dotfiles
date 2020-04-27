@@ -1,27 +1,38 @@
-folder-hook "gmail"  'source ~/.mutt/felix'
-folder-hook "sylo" 'source ~/.mutt/sylo'
-
 set folder = "~/mail"
+
+set debug_level = 2
+set debug_file = ~/neomutt.log
 
 set mbox_type=Maildir
 
-# default to private mail account
-source ~/.mutt/felix
-
-# Macros for switching accounts with ALT-1,2...
-macro index <f1> '<sync-mailbox><enter-command>source ~/.mutt/felix<enter><change-folder>!<enter>'
-macro index <f2> '<sync-mailbox><enter-command>source ~/.mutt/sylo<enter><change-folder>!<enter>'
+macro index,pager U "<enter-command>set pipe_decode = yes<enter><pipe-message>urlview<enter><enter-command>set pipe_decode = no<enter>""view URLs"
 
 set header_cache=~/.mutt/cache/headers
 set message_cachedir=~/.mutt/cache/messages
 
 # Vim like binds
+bind attach,index,pager g noop
 bind attach,index,pager \CD next-page
 bind attach,index,pager \CU previous-page
-bind pager g top
+bind pager gg top
 bind pager G bottom
-bind attach,index g first-entry
+bind attach,index gg first-entry
 bind attach,index G last-entry
+
+# Macros for switching accounts with ALT-1,2 and g 1, g 2, etc...
+macro index \e1 '<sync-mailbox><enter-command>source ~/.mutt/muttrc.felix<enter><change-folder>!<enter>'
+macro index \e2 '<sync-mailbox><enter-command>source ~/.mutt/muttrc.sylo<enter><change-folder>!<enter>'
+macro index \e3 '<sync-mailbox><enter-command>source ~/.mutt/muttrc.proton<enter><change-folder>!<enter>'
+
+macro index g1 '<sync-mailbox><enter-command>source  ~/.mutt/muttrc.felix<enter><change-folder>!<enter>'
+macro index g2 '<sync-mailbox><enter-command>source  ~/.mutt/muttrc.sylo<enter><change-folder>!<enter>'
+macro index g3 '<sync-mailbox><enter-command>source  ~/.mutt/muttrc.proton<enter><change-folder>!<enter>'
+
+# Macros for switching to various inboxes (assuming all accounts have these.)
+macro index,pager gi "<change-folder>=INBOX<enter>" "go to inbox"
+macro index,pager gs "<change-folder>=Sent<enter>" "go to sent"
+macro index,pager gd "<change-folder>=Drafts<enter>" "go to drafts"
+macro index,pager gt "<change-folder>=Trash<enter>" "go to trash"
 
 # config
 set sleep_time = 0
@@ -44,3 +55,6 @@ set charset = UTF-8
 
 # theme
 source "~/.mutt/theme"
+
+# default to private mail account
+source ~/.mutt/muttrc.felix

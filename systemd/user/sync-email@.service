@@ -1,0 +1,10 @@
+[Unit]
+Description=Sync email service for account %i
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/sync-email %i full
+TimeoutStopSec=120
+
+[Install]
+WantedBy=default.target

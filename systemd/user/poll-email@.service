@@ -3,7 +3,7 @@ Description=Poll email service for account %i
 
 [Service]
 Type=oneshot
-ExecStart=%h/.local/bin/poll-email %i
+ExecStart=%h/.local/bin/sync-email %i pull
 TimeoutStopSec=120
 
 [Install]

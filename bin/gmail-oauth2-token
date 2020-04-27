@@ -50,15 +50,8 @@ if [[ -z "$refresh_token" ]]; then
 	die "Account '${account}' refresh token not found. Please obtain and set it first."
 fi
 
-access_token=$(oauth2.py \
+oauth2.py \
 	--quiet \
 	--client_id="$OAUTH_CLIENT_ID" \
 	--client_secret="$OAUTH_CLIENT_SECRET" \
-	--refresh_token="$refresh_token")
-echo "$access_token"
-
-# oauth2.py \
-# 	--quiet \
-# 	--generate_oauth2_string \
-# 	--access_token="$access_token" \
-# 	--user="$user"
+	--refresh_token="$refresh_token"

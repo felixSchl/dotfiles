@@ -1,0 +1,9 @@
+[Unit]
+Description=Sync email timer for account %i
+
+[Timer]
+OnBootSec=1m
+OnUnitInactiveSec=5m
+
+[Install]
+WantedBy=default.target

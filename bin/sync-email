@@ -1,0 +1,52 @@
+#!/bin/bash
+# usage: sync-email (<account>|all) [pull|push|full|local]
+set -eo pipefail
+
+account=$1
+mode=full
+if [[ -n "$2" ]]; then
+	case "$2" in
+		full|push|pull|local)
+			mode=$2
+			;;
+		*)
+			echo >&2 "unsupported mode: $2. available modes: pull, push, full, local"
+			exit 1
+			;;
+	esac
+fi
+
+if [[ -z "$account" ]]; then
+	echo >&2 "usage: sync-email (<account>|all) [pull|push|full|local]"
+	exit 1
+fi
+
+if [[ "$account" == all ]]; then
+	accounts=(felix sylo proton)
+else
+	accounts=($account)
+fi
+
+for account in "${accounts[@]}"; do
+	{
+		if ! [[ -d ~/mail/"$account" ]]; then
+			echo >&2 "Unknown account: $account"
+			exit 1
+		fi
+
+		case "$mode" in
+			pull)
+				# NOTE this assumes the custom '-inbox' convention in .mbsyncrc
+				mbsync -q -L "$account"-inbox
+				;;
+			push)
+				mbsync -q -H "$account"
+				;;
+			full)
+				mbsync -q "$account"
+				;;
+		esac
+		report-new-mail "$account"
+	} &
+done
+wait

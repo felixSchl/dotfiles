@@ -1,6 +1,8 @@
 #!/bin/bash
 set -eo pipefail
 
+BODY_MAXLEN=100
+
 account=$1
 
 if [[ -z "$account" ]]; then
@@ -13,14 +15,38 @@ if ! [[ -d ~/mail/"$account" ]]; then
 	exit 1
 fi
 
-maildir=~/mail/$account
 export NOTMUCH_CONFIG=~/.notmuch.$account
 
 notmuch new
-n_mail=$(notmuch count folder:INBOX tag:new)
-if [[ "$n_mail" -gt 0 ]]; then
-	notify-send\
-		"New Email for ${account}"\
-		"${n_mail} new messages"
-fi
+
+# show notifications for the latest 3 messages
+export IFS=$'\n'
+new_mails=(
+	$(notmuch show \
+		--format json \
+		folder:INBOX tag:new |\
+		jq -r 'flatten[] | .id + "\t" + .headers.Subject + "\t" + .headers.From' |\
+		head -n 3))
+
+for mail in "${new_mails[@]}"; do
+	id=$(cut <<< "$mail" -d$'\t' -f1)
+	subject=$(cut <<< "$mail" -d$'\t' -f2)
+	from=$(cut <<< "$mail" -d$'\t' -f3 | sed 's/"//g')
+	body=$(notmuch show --format json id:"$id" | jq -r '
+		flatten |
+			.[0].body[] |
+			select(."content-type" == "text/plain") |
+			.content' |\
+			   sed -e 's/^[[:space:]]*//')
+	if [[ "${#body}" -gt "$BODY_MAXLEN" ]]; then
+		body=$(head <<< "$body" -c "$BODY_MAXLEN" | sed -e 's/^[[:space:]]*//')
+		body+="..."
+	fi
+	notify-send \
+		-t 3000 \
+		-u normal \
+		-i /usr/share/pixmaps/pidgin/tray/hicolor/48x48/status/pidgin-tray-email.png \
+		"$subject" "${body}\nfrom: ${from}"
+done
+
 notmuch tag -new +inbox +unread folder:INBOX tag:new

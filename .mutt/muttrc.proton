@@ -1,0 +1,26 @@
+set my_account = proton
+set realname = "Felix Schlitter"
+set folder = "~/mail/proton"
+set from = "felixschlitter@protonmail.com"
+set smtp_url = "smtp://felixschlitter@protonmail.com@127.0.0.1:1025/"
+set postponed = "+Drafts"
+set trash = "+Trash"
+set record = "+Sent"
+set virtual_spoolfile = no
+unset smtp_authenticators
+unset smtp_oauth_refresh_command
+set smtp_pass = "d5Hq0lIBXDZblz-GRAUeTw"
+set spoolfile = 'Inbox  '
+
+unmailboxes *
+unvirtual-mailboxes *
+named-mailboxes "Inbox  " '=INBOX'
+virtual-mailboxes "UNREAD__" "notmuch:///home/felix/mail/proton?query=folder:INBOX tag:unread"
+named-mailboxes "Sent" '=Sent'
+named-mailboxes "Drafts" '=Drafts'
+
+macro index,pager $ '<sync-mailbox><shell-escape>sync-email proton local<enter><sync-mailbox>'
+macro index,pager S '<sync-mailbox><shell-escape>sync-email proton push<enter><sync-mailbox>'
+macro index,pager gu "<change-vfolder>UNREAD_<enter>" "go to unread"
+
+# vim: syntax=neomuttrc

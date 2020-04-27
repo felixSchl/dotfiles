@@ -33,10 +33,11 @@ Config
       , Run Com "sh" ["-c", "~/projects/dotfiles/xmobar/nw"] "nw" 5
       , Run Com "sh" ["-c", "notmuch --config ~/.notmuch.felix count folder:INBOX tag:unread"] "mail:felix" 5
       , Run Com "sh" ["-c", "notmuch --config ~/.notmuch.sylo count folder:INBOX tag:unread"] "mail:sylo" 5
+      , Run Com "sh" ["-c", "notmuch --config ~/.notmuch.proton count folder:INBOX tag:unread"] "mail:proton" 5
       , Run Volume "default" "Master" [ "--template", "Vol: <volume>% <status>" ] 5
       , Run Brightness [ "--template", "B: <percent>%", "--", "--device", "intel_backlight"] 5
       ]
   , sepChar = "%"
   , alignSep = "}{"
-  , template = "%StdinReader% | %battery% | %cpu% | %memory% | %bright% | %nw% }{ ✉ felix: %mail:felix%, sylo: %mail:sylo% | NF:%nf-date%/SA:%sa-date%/NY:%ny-date%/LA:%la-date% | <fc=#ee8a00>%date%</fc> | %default:Master%"
+  , template = "%StdinReader% | %battery% | %cpu% | %memory% | %bright% | %nw% }{ ✉ F: %mail:felix% / P: %mail:proton% / S: %mail:sylo% | NF:%nf-date%/SA:%sa-date%/NY:%ny-date%/LA:%la-date% | <fc=#ee8a00>%date%</fc> | %default:Master%"
   }
