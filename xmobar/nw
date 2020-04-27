@@ -1,0 +1,27 @@
+#!/bin/bash
+set -eo pipefail
+
+IFS=$'\n' connections=(
+	$(nmcli -t \
+			-f NAME,TYPE,DEVICE \
+			c show \
+			--active \
+			--order \
+			active:type | { grep -v ':bridge:' || { :; }; }))
+if [[ "${#connections[@]}" -eq 0 ]]; then
+	echo 'No active connections'
+else
+	for i in "${!connections[@]}"; do
+		if [[ $i -gt 0 ]]; then echo -n '/'; fi
+		t=$(cut <<< "${connections[$i]}" -d':' -f2)
+		case "$t" in
+			*-wireless) echo -n '[W]' ;;
+			bluetooth) echo -n '<fc=#ffb891>[B]' ;;
+		esac
+		echo -n "$(cut <<< "${connections[$i]}" -d':' -f1)"
+		case "$t" in
+			bluetooth) echo -n '</fc>' ;;
+		esac
+	done
+	echo
+fi

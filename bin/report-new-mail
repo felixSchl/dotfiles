@@ -42,6 +42,7 @@ for mail in "${new_mails[@]}"; do
 		body=$(head <<< "$body" -c "$BODY_MAXLEN" | sed -e 's/^[[:space:]]*//')
 		body+="..."
 	fi
+	if [[ -z "$subject" ]]; then subject='<no subject>'; fi
 	notify-send \
 		-t 3000 \
 		-u normal \

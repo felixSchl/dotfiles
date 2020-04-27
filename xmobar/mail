@@ -1,0 +1,17 @@
+#!/bin/bash
+set -eo pipefail
+
+accounts=(felix:F sylo:S proton:P)
+i=0
+for a in "${accounts[@]}"; do
+	((i+=1))
+	account=$(cut <<< "$a" -d':' -f1)
+	label=$(cut <<< "$a" -d':' -f2)
+	count=$(notmuch --config "$HOME/.notmuch.$account" count folder:INBOX tag:unread)
+	if [[ "$count" -gt 0 ]]; then
+		echo -n "<fc=green>$label:$count</fc> ";
+	else
+		echo -n "$label:$count ";
+	fi
+done
+echo
