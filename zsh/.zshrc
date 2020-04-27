@@ -166,6 +166,7 @@ export ANDROID_NDK_HOME=$ANDROID_HOME/ndk-bundle
 export PATH=$PATH:${ANDROID_HOME}/tools
 export PATH=$PATH:${ANDROID_HOME}/platform-tools
 export PATH=$PATH:/usr/local/go/bin
+export PATH=$PATH:~/.local/bin
 
 # Explicitly set language
 export LC_CTYPE=en_US.UTF-8
