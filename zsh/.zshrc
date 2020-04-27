@@ -186,5 +186,13 @@ export precmd () {
 }
 export $(dbus-launch 2>/dev/null)
 
-eval $(keychain 2>/dev/null --eval)
+export configure_systemctl () {
+	for e in \
+		OAUTH_CLIENT_SECRET \
+		OAUTH_REFRESH_TOKEN_felix \
+		OAUTH_REFRESH_TOKEN_sylo; do
+		env "$e"=$(pass "$e") systemctl --user import-environment "$e"
+	done
+}
 
+eval $(keychain 2>/dev/null --eval)
