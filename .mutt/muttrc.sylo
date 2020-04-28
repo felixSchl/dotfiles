@@ -12,16 +12,17 @@ unset smtp_pass
 set smtp_authenticators = "oauthbearer"
 set smtp_oauth_refresh_command = "gmail-oauth2-token sylo"
 set spoolfile = 'Inbox ' # don't remove space
+set nm_default_url = "notmuch:///home/felix/mail/sylo"
 
 unmailboxes *
 unvirtual-mailboxes *
 named-mailboxes "Inbox " =INBOX
-virtual-mailboxes "UNREAD" "notmuch:///home/felix/mail/sylo?query=folder:INBOX tag:unread"
-named-mailboxes "Sent" =Sent
+virtual-mailboxes UNREAD "notmuch://?query=folder:INBOX tag:unread"
+named-mailboxes Sent =Sent
 named-mailboxes "Sylo Protocol" =github.sylo-protocol
 
-macro index,pager $ '<sync-mailbox><shell-escape>sync-email sylo local<enter><sync-mailbox>'
-macro index,pager S '<sync-mailbox><shell-escape>sync-email sylo push<enter><sync-mailbox>'
+macro index,pager $ '<sync-mailbox><enter><shell-escape>sync-email sylo local<enter><sync-mailbox>'
+macro index,pager S '<sync-mailbox><enter><shell-escape>sync-email sylo push<enter><sync-mailbox>'
 macro index,pager gu "<change-vfolder>UNREAD<enter>" "go to unread"
 
 # vim: syntax=neomuttrc

@@ -5,13 +5,15 @@ set debug_file = ~/neomutt.log
 
 set mbox_type=Maildir
 
-macro index,pager U "<enter-command>set pipe_decode = yes<enter><pipe-message>urlview<enter><enter-command>set pipe_decode = no<enter>""view URLs"
+macro index,pager U "<enter-command>set pipe_decode = yes<enter><pipe-message>urlview<enter><enter-command>set pipe_decode = no<enter>" "view URLs"
 
 set header_cache=~/.mutt/cache/headers
 set message_cachedir=~/.mutt/cache/messages
 
+timeout-hook 'exec sync-mailbox'
+
 # Vim like binds
-bind attach,index,pager g noop
+unbind attach,index,pager g
 bind attach,index,pager \CD next-page
 bind attach,index,pager \CU previous-page
 bind pager gg top
@@ -34,19 +36,30 @@ macro index,pager gs "<change-folder>=Sent<enter>" "go to sent"
 macro index,pager gd "<change-folder>=Drafts<enter>" "go to drafts"
 macro index,pager gt "<change-folder>=Trash<enter>" "go to trash"
 
+macro index,pager gR "<enter-command>source ~/.mutt/muttrc<enter>"
+
+# sidebar
+set sidebar_visible
+set sidebar_format = "%B%?F? [%F]?%* %?N?%N/?%S"
+bind index,pager \ep sidebar-prev
+bind index,pager \en sidebar-next
+bind index,pager \eo sidebar-open
+bind index,pager gb sidebar-toggle-visible
+
 # config
 set sleep_time = 0
 set mail_check_stats
 set sort=threads
 set sort_aux=reverse-date-sent
+auto_view text/html
+alternative_order text/plain text/enriched text/html
 
-# sidebar
-set sidebar_visible
-set sidebar_format = "%B%?F? [%F]?%* %?N?%N/?%S"
-bind index,pager \CP sidebar-prev
-bind index,pager \CN sidebar-next
-bind index,pager \CO sidebar-open
-bind index,pager B sidebar-toggle-visible
+set nm_exclude_tags = ""
+set nm_open_timeout = 5
+set nm_query_type = messages
+set nm_record = yes
+set nm_record_tags = "-inbox,archive,sent"
+set nm_unread_tag = unread
 
 # composing
 set editor = vim
@@ -55,6 +68,7 @@ set charset = UTF-8
 
 # theme
 source "~/.mutt/theme"
+color index_author white black '~f"Germar Rudolf"'
 
 # default to private mail account
 source ~/.mutt/muttrc.felix
