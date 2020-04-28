@@ -1,8 +1,5 @@
 set folder = "~/mail"
 
-set debug_level = 2
-set debug_file = ~/neomutt.log
-
 set mbox_type=Maildir
 
 macro index,pager U "<enter-command>set pipe_decode = yes<enter><pipe-message>urlview<enter><enter-command>set pipe_decode = no<enter>" "view URLs"
