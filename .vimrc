@@ -269,7 +269,7 @@ function! LightLineReadonly()
 endfunction
 
 function! ResolveStatusbarFilepath()
-  let dir=fugitive#extract_git_dir(expand('%:p'))
+  let dir=fugitive#ExtractGitDir(expand('%:p'))
   if dir !=# ''
     " remove `.git` from the end:
     let dir = strpart(dir, 0, len(dir) - 4)

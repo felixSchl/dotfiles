@@ -8,7 +8,7 @@ Xft.antialias: true
 Xft.hinting:   true
 Xft.rgba:      rgb
 Xft.hintstyle: hintfull
-Xft.dpi:       180
+! Xft.dpi:       180
 
 Emacs.menuBar: 0
 Emacs.toolBar: 0

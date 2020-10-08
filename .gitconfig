@@ -3,3 +3,5 @@
 	name = Felix Schlitter
 [push]
 	default = simple
+[core]
+	excludesfile = /home/felix/.gitignore

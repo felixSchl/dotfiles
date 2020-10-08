@@ -9,5 +9,6 @@ executable xmonad
                      , xmonad
                      , xmonad-contrib
                      , xmonad-extras >= 0.13.3
+                     , containers
                      , X11
   default-language:    Haskell2010

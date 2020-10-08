@@ -153,13 +153,6 @@ function e { TERM=screen-256color emacsclient -nw "$@"; }
 # Set case-insensitve searching on man pages
 export MANPAGER='less -I'
 
-# note: nvm (node version manager) is /very/ slow to start up.
-#       it's faster to just put /some/ version of node onto the PATH and change
-#       it when needed. To change it:
-#       > source ~/.nvm/nvm.sh
-#       > nvm use <version>
-export PATH=$PATH:~/.nvm/versions/node/v8.5.0/bin
-
 # Android dev
 export ANDROID_HOME=~/Library/Android/sdk
 export ANDROID_NDK_HOME=$ANDROID_HOME/ndk-bundle
@@ -196,3 +189,7 @@ export configure_systemctl () {
 }
 
 eval $(keychain 2>/dev/null --eval)
+
+if [[ -f ~/.nvm/nvm.sh ]]; then
+	source ~/.nvm/nvm.sh
+fi
