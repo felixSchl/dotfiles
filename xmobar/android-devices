@@ -1,0 +1,12 @@
+#!/bin/bash
+set -eo pipefail
+
+n=$(adb devices -l | tail -n +2 | sed '/^$/d' | wc -l)
+echo -n ' '
+if [[ "$n" -eq 0 ]]; then
+	echo '<fc=orange>not connected</fc>'
+elif [[ "$n" -eq 1 ]]; then
+	echo '<fc=green>connected</fc>'
+else
+	echo "<fc=green>multiple connected (${n})</fc>"
+fi

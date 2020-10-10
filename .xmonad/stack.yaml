@@ -1,4 +1,4 @@
-resolver: nightly-2018-12-04
+resolver: lts-16.17
 
 flags:
   xmonad-extras:

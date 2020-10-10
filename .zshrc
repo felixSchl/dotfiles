@@ -54,7 +54,7 @@ export EDITOR='vim'
 export KEYTIMEOUT=1
 export DISABLE_AUTO_TITLE=true
 export PATH="/usr/local/bin:/snap/bin:$PATH"
-export PATH="~/.local/bin:$PATH"
+export PATH="~/.local/bin:$PATH:~/dev/dotfiles/bin"
 export COLORTERM=xterm-256color
 
 # Qutebrowser
@@ -155,7 +155,7 @@ export MANPAGER='less -I'
 
 # Android dev
 export ANDROID_HOME=~/Library/Android/sdk
-export ANDROID_NDK_HOME=$ANDROID_HOME/ndk-bundle
+export ANDROID_NDK_HOME=$ANDROID_HOME/sdk/ndk/21.3.6528147/
 export PATH=$PATH:${ANDROID_HOME}/tools
 export PATH=$PATH:${ANDROID_HOME}/platform-tools
 export PATH=$PATH:/usr/local/go/bin
@@ -193,3 +193,4 @@ eval $(keychain 2>/dev/null --eval)
 if [[ -f ~/.nvm/nvm.sh ]]; then
 	source ~/.nvm/nvm.sh
 fi
+[ -f "/home/felix/.ghcup/env" ] && source "/home/felix/.ghcup/env" # ghcup-env

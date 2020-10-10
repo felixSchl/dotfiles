@@ -1,5 +1,5 @@
 Config
-  { font = "xft:Deja Vu Sans Mono-10"
+  { font = "xft:Deja Vu Sans Mono-10,FontAwesome:size=10"
   , border = NoBorder
   , bgColor = "black"
   , fgColor = "grey"
@@ -14,9 +14,6 @@ Config
       , Run Memory ["-t","M: <usedratio>%"] 10
       , Run Swap [] 10
       , Run DateZone "%H:%M" "de_DE.UTF-8" "America/New_York" "ny-date" 10
-      , Run DateZone "%H:%M" "de_DE.UTF-8" "America/Los_Angeles" "la-date" 10
-      , Run DateZone "%H:%M" "de_DE.UTF-8" "Africa/Johannesburg" "sa-date" 10
-      , Run DateZone "%H:%M" "de_DE.UTF-8" "America/Menominee" "nf-date" 10
       , Run Date "%a %b %_d %Y %H:%M:%S" "date" 10
       , Run Battery
           [ "--template" , "<acstatus>"
@@ -30,12 +27,13 @@ Config
           , "-O", "<fc=#dAA520>Charging</fc>"
           ] 50
       , Run StdinReader
-      , Run Com "sh" ["-c", "~/projects/dotfiles/xmobar/nw"] "nw" 5
-      , Run Com "sh" ["-c", "~/projects/dotfiles/xmobar/mail"] "mail" 5
+      , Run Com "sh" ["-c", "~/dev/dotfiles/xmobar/nw"] "nw" 5
+      , Run Com "sh" ["-c", "~/dev/dotfiles/xmobar/mail"] "mail" 5
+      , Run Com "sh" ["-c", "~/dev/dotfiles/xmobar/android-devices"] "android-devices" 5
       , Run Volume "default" "Master" [ "--template", "Vol: <volume>% <status>" ] 5
       , Run Brightness [ "--template", "B: <percent>%", "--", "--device", "intel_backlight"] 5
       ]
   , sepChar = "%"
   , alignSep = "}{"
-  , template = "%StdinReader% | %battery% | %cpu% | %memory% | %bright% | %nw% }{ %mail% | NF:%nf-date%/SA:%sa-date%/NY:%ny-date%/LA:%la-date% | <fc=#ee8a00>%date%</fc> | %default:Master%"
+  , template = "%StdinReader% | %battery% | %cpu% | %memory% | %bright% | %nw% }{ %android-devices% | %mail% | NY:%ny-date% | <fc=#ee8a00>%date%</fc> | %default:Master%"
   }

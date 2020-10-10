@@ -10,7 +10,7 @@
 # unbind C
 # bind C run "tmux new-window -n 'Create Session' 'bash -ci "'"tmux-completions create_session"'"'"
 
-PROJECT_PATHS=~/dev:~/dev/dn3010
+PROJECT_PATHS=~/dev:~/dev/dn3010:~/dev/codoh
 
 if ! command -v > /dev/null fzf; then
 	if [[ -f ~/.fzf.bash ]]; then

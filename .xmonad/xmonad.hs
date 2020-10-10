@@ -3,17 +3,13 @@
 module Main where
 
 import           Control.Exception                  (SomeException, catch)
-import           Control.Monad                      (void)
 import qualified Data.Map                           as M
 import qualified Data.Map.Strict                    as Map
 import           Graphics.X11.ExtraTypes.XF86
 import           System.IO
 import           XMonad
 import           XMonad.Actions.CopyWindow
-import           XMonad.Actions.CycleWindows
 import           XMonad.Actions.CycleWS
-import qualified XMonad.Actions.CycleWS
-import           XMonad.Actions.Minimize
 import           XMonad.Actions.Navigation2D
 import           XMonad.Actions.TagWindows          (addTag, delTag,
                                                      focusUpTaggedGlobal,
@@ -29,7 +25,6 @@ import           XMonad.Hooks.ManageHelpers
 import           XMonad.Hooks.UrgencyHook
 import           XMonad.Layout.BinarySpacePartition
 import qualified XMonad.Layout.BoringWindows        as BW
-import           XMonad.Layout.Hidden
 import           XMonad.Layout.IndependentScreens   (countScreens)
 import           XMonad.Layout.Minimize
 import           XMonad.Layout.NoBorders            (smartBorders)
@@ -236,7 +231,7 @@ main = do
     -- search haskell lts
     , ((modMask conf .|. shiftMask, xK_s),
         let
-          completions str =
+          completions _str =
             return []
         in do
           inputPromptWithCompl (xpconfig { alwaysHighlight = False }) "Search stackage" completions
