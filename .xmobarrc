@@ -30,10 +30,11 @@ Config
       , Run Com "sh" ["-c", "~/dev/dotfiles/xmobar/nw"] "nw" 5
       , Run Com "sh" ["-c", "~/dev/dotfiles/xmobar/mail"] "mail" 5
       , Run Com "sh" ["-c", "~/dev/dotfiles/xmobar/android-devices"] "android-devices" 5
+      , Run Com "sh" ["-c", "~/dev/dotfiles/xmobar/orgclock"] "orgclock" 5
       , Run Volume "default" "Master" [ "--template", "Vol: <volume>% <status>" ] 5
       , Run Brightness [ "--template", "B: <percent>%", "--", "--device", "intel_backlight"] 5
       ]
   , sepChar = "%"
   , alignSep = "}{"
-  , template = "%StdinReader% | %battery% | %cpu% | %memory% | %bright% | %nw% }{ %android-devices% | %mail% | NY:%ny-date% | <fc=#ee8a00>%date%</fc> | %default:Master%"
+  , template = "%StdinReader% | %battery% | %cpu% | %memory% | %bright% | %nw% }{ %android-devices% | %orgclock% | NY:%ny-date% | <fc=#ee8a00>%date%</fc> | %default:Master%"
   }

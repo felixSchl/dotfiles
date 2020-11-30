@@ -1,0 +1,16 @@
+#!/bin/bash
+set -eo pipefail
+
+emacsclient -e "$(cat << EOF
+(progn
+  (require 'org-clock)
+  (require 'subr-x)
+  (if (org-clock-is-active)
+      (let* ((txt    (org-clock-get-clock-string))
+             (start  0)
+             (end    (length txt)))
+        (set-text-properties start end nil txt)
+        (string-trim-left txt))
+    "N/A"))
+EOF
+)" | sed 's/^"\|"$//g'
