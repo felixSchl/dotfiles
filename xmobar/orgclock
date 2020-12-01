@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eo pipefail
 
-emacsclient -e "$(cat << EOF
+emacsclient -n -e "$(cat << EOF
 (progn
   (require 'org-clock)
   (require 'subr-x)
